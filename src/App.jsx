@@ -1,10 +1,16 @@
 // src/App.jsx
+import Header from './components/layout/Header';
+import Home from './pages/public/Home';
+import Footer from './components/layout/Footer';
+
 function App() {
   return (
     <div>
-      <h1>Portal ASIC - Setup Inicial</h1>
+      <Header />
+      <Home />
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
