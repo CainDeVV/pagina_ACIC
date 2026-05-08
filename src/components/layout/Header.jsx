@@ -9,7 +9,17 @@ function Header() {
         
         <nav className="nav-menu">
           <ul>
-            <li>Institucional</li>
+            <li className="dropdown">
+              Institucional
+              <div className="dropdown-content">
+                <a href="#quem-somos">Quem Somos</a>
+                <a href="#diretoria">Diretoria</a>
+                <a href="#estatuto">Estatuto</a>
+                <a href="#estrutura">Estrutura Organizacional</a>
+                <a href="#cmec">CMEC</a>
+                <a href="#contatos">Contatos</a>
+              </div>
+            </li>
             <li>Serviços</li>
             <li>Eventos</li>
           </ul>

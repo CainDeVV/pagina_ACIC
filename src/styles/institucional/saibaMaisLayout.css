@@ -1,0 +1,102 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.institucional-page {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.breadcrumb {
+  font-size: 0.9rem;
+  color: #0266b0;
+  margin-bottom: 30px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.breadcrumb .atual {
+  color: #0266b0;
+  font-weight: bold;
+}
+
+/* Layout principal com Flexbox */
+.institucional-container {
+  display: flex;
+  flex-direction: row; /* Desktop: lado a lado */
+  gap: 80px;
+}
+
+/* Sidebar "Saiba Mais" */
+.sidebar {
+  flex: 0 0 250px; /* Largura fixa de 250px */
+}
+
+.sidebar h3 {
+  display: flex; /* Para jogar a setinha pro canto direito */
+  justify-content: space-between;
+  align-items: center;
+  color: #333;
+  font-size: 1.1rem; /* Um pouco menor para ficar mais discreto */
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0; /* Linha um pouco mais fina/clara */
+  padding-bottom: 15px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li {
+  margin-bottom: 5px;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #777; /* Cinza um pouco mais claro */
+  font-weight: 400; /* Sem negrito por padrão */
+  display: block;
+  padding: 10px 0;
+  transition: color 0.3s;
+}
+
+.sidebar a:hover, .sidebar a.ativo {
+  color: #00509E;
+  font-weight: bold;
+}
+
+/* Conteúdo Principal */
+.institucional-content {
+  flex: 1; /* Ocupa o restante do espaço */
+}
+
+.institucional-content h1 {
+  color: #4A148C; /* Cor roxa baseada na imagem que você enviou */
+  margin-top: 10px;
+}
+
+.institucional-content p {
+  line-height: 1.6;
+  color: #444;
+  margin-bottom: 16px;
+  text-align: justify;
+}
+
+/* Responsividade: Celular */
+@media (max-width: 768px) {
+  .institucional-container {
+    /* column-reverse faz o sidebar (que vem primeiro no HTML) ir pro fundo */
+    flex-direction: column-reverse; 
+  }
+  
+  .sidebar {
+    margin-top: 40px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+  }
+}
