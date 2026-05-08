@@ -11,7 +11,7 @@ function App() {
       <Header />
       <Home />
       <QuemSomos />
-      <QuemSomos />
+      <Cmec />
       <Footer />
     </div>
   );

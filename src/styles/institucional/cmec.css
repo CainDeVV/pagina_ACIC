@@ -1,3 +1,18 @@
+.cmec-titulo {
+  color: #333333;
+  margin-top: 0;
+  margin-bottom: 24px;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.cmec-subtitulo {
+  color: #333333;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
 .cmec-banner {
   width: 100%;
   border-radius: 8px;

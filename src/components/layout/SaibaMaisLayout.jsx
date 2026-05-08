@@ -7,7 +7,9 @@ function SaibaMaisLayout({ titulo, children }) {
       
       {/* Breadcrumb */}
       <div className="breadcrumb">
-        Institucional &gt; <span className="atual">{titulo}</span>
+        <a href="#institucional">Institucional</a> 
+        <span className="separador">&gt;</span> 
+        <span className="atual">{titulo}</span>
       </div>
 
       <div className="institucional-container">

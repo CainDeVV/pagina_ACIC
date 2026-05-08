@@ -1,8 +1,9 @@
 .quem-somos-titulo {
   color: #4d4d4d;
-  margin-top: 0;
+  margin-top: 0 !important;
   margin-bottom: 24px;
   font-size: 2rem;
+  line-height: 1;
 }
 
 .quem-somos-subtitulo {
@@ -10,6 +11,8 @@
   margin-top: 40px;
   margin-bottom: 20px;
   font-size: 1.5rem;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 /* Container semântico para imagem com legenda */
