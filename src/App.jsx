@@ -8,9 +8,13 @@ import Cmec from './pages/public/institucional/Cmec';
 import Contatos from './pages/public/institucional/Contatos';
 import Footer from './components/layout/Footer';
 
+import Navbar from './components/Navbar/Navbar';
+
 function App() {
   return (
     <div>
+      <Navbar />
+
       <Header />
       <Home />
       <QuemSomos />
