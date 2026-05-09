@@ -1,14 +1,14 @@
 import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
 import BlockRenderer from '../../../components/BlockRenderer';
-import { cmecPageMock } from '../../../mocks/institucionalMock';
+import { estatutoPageMock } from '../../../mocks/institucionalMock';
 import '../../../styles/institucional/institucional.css';
 
-function Cmec() {
+function Estatuto() {
   return (
-    <SaibaMaisLayout titulo={cmecPageMock.pageTitle}>
-      <BlockRenderer blocks={cmecPageMock.blocks} />
+    <SaibaMaisLayout titulo={estatutoPageMock.pageTitle}>
+      <BlockRenderer blocks={estatutoPageMock.blocks} />
     </SaibaMaisLayout>
   );
 }
 
-export default Cmec;
+export default Estatuto;

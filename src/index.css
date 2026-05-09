@@ -1,5 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
+/* PALETA DE CORES GLOBAL */
+:root {
+  --color-primary: #0266B0;
+  --color-primary-hover: #004d80;
+  --color-primary-light : #1a89c1;
+  --color-primary-button: #0266b0;
+  
+  --text-primary: #4d4d4d;
+  --text-gray: #6d7278;
+  --text-white: #ffffff;
+
+  /* Cores da Marca */
+  --color-secondary-blue: #0066b0;
+  --color-secondary-yellow: #fdc300;
+  --color-secondary-green: #008668;
+}
+
 * {
   margin: 0;
   padding: 0;

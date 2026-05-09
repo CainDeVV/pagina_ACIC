@@ -1,14 +1,14 @@
 import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
 import BlockRenderer from '../../../components/BlockRenderer';
-import { cmecPageMock } from '../../../mocks/institucionalMock';
+import { contatosPageMock } from '../../../mocks/institucionalMock';
 import '../../../styles/institucional/institucional.css';
 
-function Cmec() {
+function Contatos() {
   return (
-    <SaibaMaisLayout titulo={cmecPageMock.pageTitle}>
-      <BlockRenderer blocks={cmecPageMock.blocks} />
+    <SaibaMaisLayout titulo={contatosPageMock.pageTitle}>
+      <BlockRenderer blocks={contatosPageMock.blocks} />
     </SaibaMaisLayout>
   );
 }
 
-export default Cmec;
+export default Contatos;

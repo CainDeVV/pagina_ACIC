@@ -14,19 +14,19 @@
 }
 
 .breadcrumb a {
-  color: #0266b0; /* Azul vibrante da imagem */
+  color: var(--color-primary); /* Azul vibrante da imagem */
   text-decoration: none;
   font-weight: 400;
 }
 
 .breadcrumb .separador {
-  color: #0266b0;
+  color: var(--color-primary);
   font-weight: 600;
   font-size: 1rem;
 }
 
 .breadcrumb .atual {
-  color: #0266b0;
+  color: var(--color-primary);
   font-weight: 700; /* Negrito na página atual */
 }
 
@@ -51,7 +51,7 @@
   display: flex; /* Para jogar a setinha pro canto direito */
   justify-content: space-between;
   align-items: center;
-  color: #333;
+  color: var(--text-primary);
   font-size: 1.1rem; /* Um pouco menor para ficar mais discreto */
   margin-top: 0;
   margin-bottom: 20px;
@@ -72,7 +72,7 @@
 
 .sidebar a {
   text-decoration: none;
-  color: #777; /* Cinza um pouco mais claro */
+  color: var(--text-gray); /* Cinza um pouco mais claro */
   font-weight: 400; /* Sem negrito por padrão */
   display: block;
   padding: 10px 0;
@@ -80,7 +80,7 @@
 }
 
 .sidebar a:hover, .sidebar a.ativo {
-  color: #0266b0;
+  color: var(--color-primary);
   font-weight: bold;
 }
 
@@ -96,7 +96,7 @@
 
 .institucional-content p {
   line-height: 1.6;
-  color: #555555;
+  color: var(--text-primary);
   margin-bottom: 24px;
   font-size: 1.1rem;
   text-align: justify;
