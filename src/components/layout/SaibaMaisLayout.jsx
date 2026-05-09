@@ -18,13 +18,13 @@ function SaibaMaisLayout({ titulo, children }) {
         <aside className="sidebar">
           <h3>Saiba Mais <span>&#709;</span></h3>
           <ul>
-            <li><a href="#quem-somos">Quem Somos</a></li>
-            <li><a href="#diretoria">Diretoria</a></li>
-            <li><a href="#estatuto">Estatuto</a></li>
-            <li><a href="#estrutura">Estrutura Organizacional</a></li>
+            <li><a href="#quem-somos" className={titulo === "Quem Somos" ? "ativo" : ""}>Quem Somos</a></li>
+            <li><a href="#diretoria" className={titulo === "Diretoria" ? "ativo" : ""}>Diretoria</a></li>
+            <li><a href="#estatuto" className={titulo === "Estatuto" ? "ativo" : ""}>Estatuto</a></li>
+            <li><a href="#estrutura" className={titulo === "Estrutura Organizacional" ? "ativo" : ""}>Estrutura Organizacional</a></li>
             <li><a href="#cmec" className={titulo === "CMEC" ? "ativo" : ""}>CMEC</a></li>
-            <li><a href="#contatos">Contatos</a></li>
-            <li><a href="#identidade">Identidade Visual</a></li>
+            <li><a href="#contatos" className={titulo === "Contatos" ? "ativo" : ""}>Contatos</a></li>
+            <li><a href="#identidade" className={titulo === "Identidade Visual" ? "ativo" : ""}>Identidade Visual</a></li>
           </ul>
         </aside>
 

@@ -1,6 +1,6 @@
 /* Títulos e Subtítulos */
 .institutional-title {
-  color: var(--text-primary);
+  color: var(--color-gray-dark);
   margin-top: 0;
   margin-bottom: 24px;
   font-size: 2rem;
@@ -8,7 +8,7 @@
 }
 
 .institutional-subtitle {
-  color: var(--text-primary);
+  color: var(--color-gray-dark);
   margin-top: 40px;
   margin-bottom: 20px;
   font-size: 1.5rem;
@@ -65,7 +65,7 @@
 
 /* Links Genéricos e Botão de PDF */
 .institutional-link {
-  color: var(--color-primary);
+  color: var(--color-gray-dark);
   text-decoration: none;
   font-weight: bold;
 }

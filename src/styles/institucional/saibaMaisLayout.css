@@ -14,19 +14,19 @@
 }
 
 .breadcrumb a {
-  color: var(--color-primary); /* Azul vibrante da imagem */
+  color: var(--color-gray-dark); /* Azul vibrante da imagem */
   text-decoration: none;
   font-weight: 400;
 }
 
 .breadcrumb .separador {
-  color: var(--color-primary);
+  color: var(--color-gray-dark);
   font-weight: 600;
   font-size: 1rem;
 }
 
 .breadcrumb .atual {
-  color: var(--color-primary);
+  color: var(--color-gray-dark);
   font-weight: 700; /* Negrito na página atual */
 }
 
@@ -51,7 +51,7 @@
   display: flex; /* Para jogar a setinha pro canto direito */
   justify-content: space-between;
   align-items: center;
-  color: var(--text-primary);
+  color: var(--color-gray-dark);
   font-size: 1.1rem; /* Um pouco menor para ficar mais discreto */
   margin-top: 0;
   margin-bottom: 20px;
@@ -72,7 +72,7 @@
 
 .sidebar a {
   text-decoration: none;
-  color: var(--text-gray); /* Cinza um pouco mais claro */
+  color: var(--color-gray-medium); /* Cinza um pouco mais claro */
   font-weight: 400; /* Sem negrito por padrão */
   display: block;
   padding: 10px 0;
@@ -80,7 +80,7 @@
 }
 
 .sidebar a:hover, .sidebar a.ativo {
-  color: var(--color-primary);
+  color: var(--color-gray-dark);
   font-weight: bold;
 }
 
@@ -96,7 +96,7 @@
 
 .institucional-content p {
   line-height: 1.6;
-  color: var(--text-primary);
+  color: var(--color-gray-dark);
   margin-bottom: 24px;
   font-size: 1.1rem;
   text-align: justify;
