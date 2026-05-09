@@ -69,7 +69,7 @@ function BlockRenderer({ blocks }) {
                 <img src={block.url} alt={block.alt} />
                 {/* Se existir uma legenda no mock, renderiza o figcaption. Se não, ignora. */}
                 {block.caption && (
-                  <figcaption className="quem-somos-legenda">
+                  <figcaption className="institutional-caption">
                     {block.caption}
                   </figcaption>
                 )}

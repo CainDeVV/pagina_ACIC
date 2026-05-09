@@ -42,8 +42,8 @@
 
 .institutional-caption {
   margin-top: 12px;
-  font-size: 0.9rem;
-  color: var(--text-gray);
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
   font-style: italic;
   text-align: center;
   max-width: 90%;

@@ -1,4 +1,4 @@
-export const QuemSomosPageMock = {
+export const quemSomosPageMock = {
   pageTitle: "Quem Somos",
   blocks: [
     { type: "heading", level: 1, content: "A CACB", className: "institutional-title" },

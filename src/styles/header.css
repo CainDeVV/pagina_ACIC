@@ -70,7 +70,7 @@
   z-index: 10;
   border-radius: 12px; /* Bordas arredondadas no menu inteiro */
   padding: 2px; /* Espaço interno para o menu não grudar nas bordas */
-  margin-top: 2px;
+  margin-top: 0;
   border-top: none;
 }
 
