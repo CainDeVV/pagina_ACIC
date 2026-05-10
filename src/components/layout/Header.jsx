@@ -1,20 +1,13 @@
 // src/components/Header/Header.jsx
-
+import { Link, useLocation } from 'react-router-dom';
+import { FaCalendarAlt } from 'react-icons/fa';
 import '../../styles/header.css';
 import Navbar from '../Navbar/Navbar';
-import { FaCalendarAlt } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
-
 import logo from '../../assets/logo2.png';
 
 function Header() {
   const location = useLocation();
 
-  /*
-    Exibe o bloco inferior (header-showcase)
-    somente quando NÃO estiver na página inicial.
-    Na Home ("/"), apenas o menu superior é exibido.
-  */
   const showHeaderShowcase = location.pathname !== '/';
 
   return (
@@ -34,7 +27,6 @@ function Header() {
               {/* INSTITUCIONAL */}
               <li className="dropdown">
                 <span>Institucional</span>
-
                 <div className="dropdown-content">
                   <Link to="/quem-somos">Quem Somos</Link>
                   <Link to="/estatuto">Estatuto</Link>
@@ -49,7 +41,6 @@ function Header() {
               {/* SERVIÇOS */}
               <li className="dropdown">
                 <span>Serviços</span>
-
                 <div className="dropdown-content">
                    <Link to="/servicos">Ver todos os serviços</Link>
                 </div>
@@ -58,7 +49,6 @@ function Header() {
               {/* EVENTOS */}
               <li className="dropdown">
                 <span>Eventos</span>
-
                 <div className="dropdown-content">
                   <Link to="/eventos">Ver todos os eventos</Link>
                 </div>
@@ -88,7 +78,6 @@ function Header() {
               aria-label="Ir para eventos"
             >
               <span className="eventos-text">Eventos</span>
-
               <span className="eventos-icon">
                 <FaCalendarAlt />
               </span>
@@ -97,7 +86,6 @@ function Header() {
             {/* Título Serviços + botão Ver todos */}
             <div className="services-header">
               <h3>Serviços</h3>
-
               <Link to="/servicos" className="ver-todos-btn">
                 <span className="arrow">→</span>
                 <span>Ver todos</span>
