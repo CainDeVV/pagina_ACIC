@@ -109,3 +109,25 @@
 .dropdown:hover .dropdown-content {
   display: block;
 }
+
+@media (max-width: 768px) {
+  /* Esconde completamente o menu superior do Header */
+  .nav-menu {
+    display: none;
+  }
+
+  /* Centraliza a logo quando o menu superior desaparece */
+  .header-content {
+    justify-content: center;
+  }
+
+  /* Ajusta o tamanho da logo no mobile */
+  .logo {
+    height: 50px;
+  }
+
+  /* Reduz o espaçamento do header no celular */
+  .header-container {
+    padding: 10px 20px;
+  }
+}

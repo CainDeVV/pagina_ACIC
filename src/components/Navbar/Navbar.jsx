@@ -1,164 +1,124 @@
-/* import './Navbar.css'
-import{ useState} from 'react'
-import logo from '../../assets/logo.png'
+// src/components/Navbar/Navbar.jsx
 
-import{
-    FaBars,
-    FaTimes, 
-    FaChevronDown,
-    FaHome,
-    FaSearch,
-    FaGlobeAmericas
-} from 'react-icons/fa'
-
-// ... seus imports permanecem iguais
-
-function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
-
-    return (
-        <>
-            <header className="header">
-                <nav className="navbar">
-                    <div className="logo">
-                        <img src={logo} alt="CACB" />
-                    </div>
-                    <ul className="nav-links">
-                        <li>INSTITUCIONAL</li>
-                        <li>SERVIÇOS</li>
-                        <li>EVENTOS</li>
-                    </ul>
-                </nav>
-                <div className="linha-azul"></div>
-            </header>
-
-            {/* Menu que "sobe" ou aparece quando clicamos no sanduíche /}
-            <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
-                <div className="menu-item">
-                    <span>Institucional</span>
-                    <FaChevronDown />
-                </div>
-                
-                <div className="menu-item">
-                    <span>Serviços</span>
-                    <FaChevronDown />
-                </div>
-                <div className="menu-item">
-                    <span>Eventos</span>
-                    <FaChevronDown />
-                </div>
-            </div>
-
-            {/* NAVBAR INFERIOR FIXA (Igual à imagem) /}
-            <div className="bottom-navbar">
-                {/* BOTÃO SANDUÍCHE / X - Agora dentro da barra inferior /}
-                <div 
-                    className="bottom-item toggle-btn" 
-                    onClick={() => setMenuOpen(!menuOpen)}
-                >
-                    <div className="circle-icon">
-                        {menuOpen ? <FaTimes /> : <FaBars />}
-                    </div>
-                </div>
-
-                <div className="bottom-item">
-                    <FaHome />
-                </div>
-                <div className="bottom-item">
-                    <span>Serviços</span>
-                </div>
-                <div className="bottom-item">
-                    <span>Notícias</span>
-                </div>
-                <div className="bottom-item">
-                    <FaSearch />
-                </div>
-                <div className="bottom-item">
-                    <FaGlobeAmericas />
-                </div>
-            </div>
-        </>
-    );
-}
-
-export default Navbar;
-
-*/
-
-import './Navbar.css'
-import { useState } from 'react'
-import logo from '../../assets/logo.png'
+import './Navbar.css';
+import { useState } from 'react';
 import {
-    FaBars,
-    FaTimes, 
-    FaChevronDown,
-    FaHome,
-    FaSearch,
-    FaGlobeAmericas
-} from 'react-icons/fa'
+  FaBars,
+  FaTimes,
+  FaChevronDown,
+  FaHome,
+  FaSearch,
+  FaGlobeAmericas
+} from 'react-icons/fa';
 
 function Navbar() {
-    const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [openSection, setOpenSection] = useState(null);
 
-    return (
-        <>
-            <header className="header">
-                <nav className="navbar">
-                    <div className="logo">
-                        <img src={logo} alt="CACB" />
-                    </div>
-                    
-                    {/* Navegação Desktop com Dropdown integrado do antigo Header */}
-                    <ul className="nav-links">
-                        <li className="dropdown">
-                            INSTITUCIONAL <FaChevronDown size={12} />
-                            <div className="dropdown-content">
-                                <a href="#quem-somos">Quem Somos</a>
-                                <a href="#diretoria">Diretoria</a>
-                                <a href="#estatuto">Estatuto</a>
-                                <a href="#estrutura">Estrutura Organizacional</a>
-                                <a href="#cmec">CMEC</a>
-                                <a href="#contatos">Contatos</a>
-                            </div>
-                        </li>
-                        <li>SERVIÇOS</li>
-                        <li>EVENTOS</li>
-                    </ul>
-                </nav>
-                <div className="linha-azul"></div>
-            </header>
+  const toggleMenu = () => setMenuOpen(!menuOpen);
 
-            {/* Menu Mobile (Sobe ao clicar no sanduíche) */}
-            <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
-                <div className="menu-item">
-                    <span>Institucional</span>
-                    <FaChevronDown />
-                </div>
-                <div className="menu-item">
-                    <span>Serviços</span>
-                    <FaChevronDown />
-                </div>
-                <div className="menu-item">
-                    <span>Eventos</span>
-                    <FaChevronDown />
-                </div>
-            </div>
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setOpenSection(null);
+  };
 
-            {/* Barra Inferior Fixa */}
-            <div className="bottom-navbar">
-                <div className="bottom-item toggle-btn" onClick={() => setMenuOpen(!menuOpen)}>
-                    <div className="circle-icon">
-                        {menuOpen ? <FaTimes /> : <FaBars />}
-                    </div>
-                </div>
-                <div className="bottom-item"><FaHome /></div>
-                <div className="bottom-item"><span>Serviços</span></div>
-                <div className="bottom-item"><span>Notícias</span></div>
-                <div className="bottom-item"><FaSearch /></div>
-                <div className="bottom-item"><FaGlobeAmericas /></div>
-            </div>
-        </>
-    );
+  const toggleSection = (section) => {
+    setOpenSection(openSection === section ? null : section);
+  };
+
+  return (
+    <>
+      {/* Painel do menu mobile */}
+      <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
+        {/* INSTITUCIONAL */}
+        <div
+          className="menu-item"
+          onClick={() => toggleSection('institucional')}
+        >
+          <span>Institucional</span>
+          <FaChevronDown />
+        </div>
+
+        {openSection === 'institucional' && (
+          <div className="submenu">
+            <a href="#quem-somos" onClick={closeMenu}>Quem Somos</a>
+            <a href="#diretoria" onClick={closeMenu}>Diretoria</a>
+            <a href="#estatuto" onClick={closeMenu}>Estatuto</a>
+            <a href="#estrutura" onClick={closeMenu}>
+              Estrutura Organizacional
+            </a>
+            <a href="#cmec" onClick={closeMenu}>CMEC</a>
+            <a href="#contatos" onClick={closeMenu}>Contatos</a>
+          </div>
+        )}
+
+        {/* SERVIÇOS */}
+        <div
+          className="menu-item"
+          onClick={() => toggleSection('servicos')}
+        >
+          <span>Serviços</span>
+          <FaChevronDown />
+        </div>
+
+        {openSection === 'servicos' && (
+          <div className="submenu">
+            <a href="#servicos" onClick={closeMenu}>
+              Ver Serviços
+            </a>
+          </div>
+        )}
+
+        {/* EVENTOS */}
+        <div
+          className="menu-item eventos"
+          onClick={() => toggleSection('eventos')}
+        >
+          <span>Eventos</span>
+          <FaChevronDown />
+        </div>
+
+        {openSection === 'eventos' && (
+          <div className="submenu">
+            <a href="#eventos" onClick={closeMenu}>
+              Ver Eventos
+            </a>
+          </div>
+        )}
+      </div>
+
+      {/* Barra inferior fixa */}
+      <div className="bottom-navbar">
+        <button
+          type="button"
+          className="bottom-item toggle-btn"
+          onClick={toggleMenu}
+        >
+          {menuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
+        <a href="#" className="bottom-item" onClick={closeMenu}>
+          <FaHome />
+        </a>
+
+        <a href="#servicos" className="bottom-item" onClick={closeMenu}>
+          <span>Serviços</span>
+        </a>
+
+        <a href="#noticias" className="bottom-item" onClick={closeMenu}>
+          <span>Notícias</span>
+        </a>
+
+        <a href="#busca" className="bottom-item" onClick={closeMenu}>
+          <FaSearch />
+        </a>
+
+        <a href="#quem-somos" className="bottom-item" onClick={closeMenu}>
+          <FaGlobeAmericas />
+        </a>
+      </div>
+    </>
+  );
 }
 
 export default Navbar;
