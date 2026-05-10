@@ -3,7 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { FaCalendarAlt } from 'react-icons/fa';
 import '../../styles/header.css';
 import Navbar from '../Navbar/Navbar';
-import logo from '../../assets/logo2.png';
+
+import logo from '../../assets/ACIC.png'; 
 
 function Header() {
   const location = useLocation();
@@ -18,7 +19,7 @@ function Header() {
         <div className="header-content">
           {/* Logo com link para a página inicial */}
           <Link to="/" className="logo-link">
-            <img src={logo} alt="Logo ASIC" className="logo" />
+            <img src={logo} alt="Logo ACIC" className="logo" />
           </Link>
 
           {/* Menu superior */}

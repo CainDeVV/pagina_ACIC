@@ -1,5 +1,5 @@
 import '../../styles/footer.css';
-import logo from '../../assets/logo.png';
+import logo from "../../assets/ACIC.png";
 
 function Footer() {
   return (
