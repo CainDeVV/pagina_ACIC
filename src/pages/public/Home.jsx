@@ -13,7 +13,7 @@ function Home() {
   }, []);
 
   return (
-    <main>
+    <main className="home-page">
       {/* SEÇÃO 1: SLIDE PRINCIPAL  */}
       <section className="slide-container">
         <div className="slide-item fade-animacao">

@@ -2,7 +2,7 @@
   background-color: #ffffff;
   border-bottom: 3px solid #00509E; /* Azul corporativo */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px 20px;
+  padding: 15px 20px;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -23,19 +23,111 @@
 .nav-menu ul {
   list-style: none;
   display: flex;
-  gap: 24px;
+  gap: 8px;
   margin: 0;
   padding: 0;
 }
 
 .nav-menu li {
   font-weight: bold;
-  color: #003366;
+  color: #4d4d4d;
   cursor: pointer;
   text-transform: uppercase;
   font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 30px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .nav-menu li:hover {
   color: #0088cc;
+  background-color: #f4f6f8;
+}
+
+
+
+
+
+/* Estilos para o Dropdown */
+.dropdown {
+  position: relative;
+  display: inline-block; 
+}
+
+.dropdown span {
+  font-size: 0.8em;
+  margin-left: 4px;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ffffff;
+  min-width: 280px; /* Deixei mais largo para caber os textos novos */
+  box-shadow: 0px 4px 24px rgba(0,0,0,0.08); /* Sombra mais difusa e elegante */
+  z-index: 10;
+  border-radius: 12px; /* Bordas arredondadas no menu inteiro */
+  padding: 2px; /* Espaço interno para o menu não grudar nas bordas */
+  margin-top: 0;
+  border-top: none;
+}
+
+.dropdown-content::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 30px; /* Alinhado com o texto 'Institucional' */
+  width: 14px;
+  height: 14px;
+  background-color: #ffffff;
+  transform: rotate(45deg);
+  border-top-left-radius: 3px; /* Deixa a pontinha do triângulo suave */
+}
+
+.dropdown-content a {
+  color: #555555;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  font-weight: 400;
+  text-transform: none;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  margin-bottom: 2px;
+  transition: background-color 0.2s;
+  position: relative;
+  z-index: 2;
+}
+
+.dropdown-content a:hover {
+  background-color: #f5f5f5;
+  color: #333333;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  /* Esconde completamente o menu superior do Header */
+  .nav-menu {
+    display: none;
+  }
+
+  /* Centraliza a logo quando o menu superior desaparece */
+  .header-content {
+    justify-content: center;
+  }
+
+  /* Ajusta o tamanho da logo no mobile */
+  .logo {
+    height: 50px;
+  }
+
+  /* Reduz o espaçamento do header no celular */
+  .header-container {
+    padding: 10px 20px;
+  }
 }

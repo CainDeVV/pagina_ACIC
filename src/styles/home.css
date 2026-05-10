@@ -1,20 +1,16 @@
-* {
-  box-sizing: border-box;
-  font-family: sans-serif; 
-}
-
-main {
+.home-page {
   padding: 16px;
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: sans-serif;
 }
 
-section {
+.home-page section {
   margin-bottom: 32px;
   text-align: center; 
 }
 
-h2 {
+.home-page h2 {
   color: #003366; 
   margin-bottom: 16px;
   border-bottom: 2px solid #ccc;
@@ -225,7 +221,7 @@ h2 {
 }
 
 @media (min-width: 768px) {
-  main {
+  .home-page {
     max-width: 1200px;
     margin: 0 auto;
     padding: 32px 16px;
