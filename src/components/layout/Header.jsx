@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import '../../styles/header.css';
 import logo from '../../assets/logo.png'; 
 
@@ -5,23 +6,22 @@ function Header() {
   return (
     <header className="header-container">
       <div className="header-content">
-        <img src={logo} alt="Logo ACIC" className="logo" />
+        <Link to="/"><img src={logo} alt="Logo ACIC" className="logo" /></Link>
         
         <nav className="nav-menu">
           <ul>
             <li className="dropdown">
               Institucional
               <div className="dropdown-content">
-                <a href="#quem-somos">Quem Somos</a>
-                <a href="#diretoria">Diretoria</a>
-                <a href="#estatuto">Estatuto</a>
-                <a href="#estrutura">Estrutura Organizacional</a>
-                <a href="#cmec">CMEC</a>
-                <a href="#contatos">Contatos</a>
+                <Link to="/quem-somos">Quem Somos</Link>
+                <Link to="/estatuto">Estatuto</Link>
+                <Link to="/estrutura-organizacional">Estrutura Organizacional</Link>
+                <Link to="/cmec">CMEC</Link>
+                <Link to="/contatos">Contatos</Link>
               </div>
             </li>
-            <li>Serviços</li>
-            <li>Eventos</li>
+            <li><Link to="/servicos">Serviços</Link></li>
+            <li><Link to="/eventos">Eventos</Link></li>
           </ul>
         </nav>
       </div>

@@ -1,4 +1,4 @@
-// src/App.jsx
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Home from './pages/public/Home';
 import QuemSomos from './pages/public/institucional/QuemSomos';
@@ -12,12 +12,14 @@ function App() {
   return (
     <div>
       <Header />
-      <Home />
-      <QuemSomos />
-      <Estatuto />
-      <EstruturaOrganizacional />
-      <Cmec />
-      <Contatos />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/quem-somos" element={<QuemSomos />} />
+        <Route path="/estatuto" element={<Estatuto />} />
+        <Route path="/estrutura-organizacional" element={<EstruturaOrganizacional />} />
+        <Route path="/cmec" element={<Cmec />} />
+        <Route path="/contatos" element={<Contatos />} />
+      </Routes>
       <Footer />
     </div>
   );

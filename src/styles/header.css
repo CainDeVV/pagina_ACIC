@@ -20,6 +20,11 @@
   height: 60px; /* Ajuste o tamanho da sua logo aqui */
 }
 
+.nav-menu li a {
+  text-decoration: none;
+  color: inherit; /* Puxa a cor exata que está definida no <li> pai */
+}
+
 .nav-menu ul {
   list-style: none;
   display: flex;
