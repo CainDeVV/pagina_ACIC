@@ -1,44 +1,58 @@
-/* ==========================================
-   DESKTOP: ESCONDE COMPLETAMENTE A NAVBAR MOBILE
-========================================== */
+/* ==========================================================
+   NAVBAR RESPONSIVA - ESTILO CACB
+   MOBILE: menu lateral + barra inferior
+   DESKTOP: pílulas + barra azul Eventos + Serviços/Ver todos
+========================================================== */
 
-.mobile-menu,
-.bottom-navbar {
+/* ==========================================================
+   CONFIGURAÇÃO INICIAL
+========================================================== */
+.desktop-navbar,
+.desktop-services-section {
   display: none;
 }
 
-/* ==========================================
+/* ==========================================================
    PAINEL DO MENU MOBILE
-========================================== */
-
+========================================================== */
 .mobile-menu {
   position: fixed;
   left: 0;
   right: 0;
-  top: 80px; /* abaixo do header */
+  top: 80px;
   bottom: 0;
   background: #f3f4f6;
   padding: 24px 20px 120px;
   overflow-y: auto;
   z-index: 999;
 
+  display: block;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   transform: translateY(100%);
-  transition: transform 0.35s ease;
+
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease,
+    visibility 0.35s ease;
 }
 
 .mobile-menu.active {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
   transform: translateY(0);
 }
 
-/* ==========================================
-   BOTÕES PRINCIPAIS
-========================================== */
-
+/* ==========================================================
+   BOTÕES MOBILE
+========================================================== */
 .menu-item {
   width: 100%;
   min-height: 72px;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
   padding: 0 28px;
 
   display: flex;
@@ -46,36 +60,90 @@
   align-items: center;
 
   background: #ffffff;
-  border-radius: 36px;
+  border-radius: 999px;
   cursor: pointer;
 
   font-size: 1.05rem;
   font-weight: 700;
   color: #005aa9;
+  text-decoration: none;
 
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.menu-item:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .menu-item svg {
   font-size: 1.1rem;
+  color: #4b5563;
   flex-shrink: 0;
 }
 
-.menu-item.eventos {
-  background: linear-gradient(90deg, #1b8fd1, #1f9fe2);
-  color: #ffffff;
+/* ==========================================================
+   EVENTOS MOBILE
+========================================================== */
+.eventos-link,
+.eventos-link:link,
+.eventos-link:visited,
+.eventos-link:hover,
+.eventos-link:active,
+.eventos-link:focus {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+
+  width: 100%;
+  min-height: 72px;
+  margin-bottom: 16px;
+  padding: 0 28px;
+
+  background: linear-gradient(90deg, #178fcb, #1d98d7) !important;
+  border-radius: 999px;
+
+  color: #ffffff !important;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-decoration: none !important;
+
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* ==========================================
-   SUBMENUS
-========================================== */
+.eventos-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
 
+.eventos-link span,
+.eventos-link svg {
+  color: #ffffff !important;
+}
+
+.eventos-link svg {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* ==========================================================
+   SUBMENUS MOBILE
+========================================================== */
 .submenu {
   background: #ffffff;
   border-radius: 18px;
-  margin: -4px 0 18px;
+  margin: -6px 0 18px;
   padding: 8px 0;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
@@ -86,6 +154,9 @@
   color: #555555;
   font-size: 0.95rem;
   font-weight: 400;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .submenu a:hover {
@@ -93,10 +164,83 @@
   color: #333333;
 }
 
-/* ==========================================
-   BARRA INFERIOR FIXA
-========================================== */
+/* ==========================================================
+   SERVIÇOS + VER TODOS (MOBILE)
+========================================================== */
+.mobile-services-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 
+  margin-top: 12px;
+  margin-bottom: 24px;
+  padding: 0 4px;
+}
+
+.mobile-services-header h3 {
+  margin: 0;
+  padding-bottom: 6px;
+
+  color: #005aa9;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1;
+  position: relative;
+}
+
+.mobile-services-header h3::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  width: 55%;
+  height: 3px;
+
+  background: #005aa9;
+  border-radius: 2px;
+}
+
+.mobile-ver-todos-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  border: none;
+
+  background: linear-gradient(90deg, #006fbe, #0d80d4);
+  color: #ffffff;
+
+  padding: 12px 22px;
+  border-radius: 999px;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+
+  box-shadow:
+    0 8px 18px rgba(0, 90, 169, 0.18),
+    0 2px 4px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.mobile-ver-todos-btn:hover {
+  transform: translateY(-2px);
+}
+
+.mobile-ver-todos-btn .arrow {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* ==========================================================
+   BARRA INFERIOR MOBILE
+========================================================== */
 .bottom-navbar {
   position: fixed;
   left: 12px;
@@ -109,6 +253,7 @@
   background: #003f78;
   border-radius: 40px;
 
+  display: flex;
   align-items: center;
   justify-content: space-between;
 
@@ -134,15 +279,20 @@
   font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.bottom-item:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
 }
 
 .bottom-item svg {
   font-size: 1.35rem;
 }
-
-/* ==========================================
-   BOTÃO CIRCULAR DO MENU
-========================================== */
 
 .toggle-btn {
   width: 54px;
@@ -156,6 +306,7 @@
   justify-content: center;
 
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(11, 123, 214, 0.35);
 }
 
 .toggle-btn svg {
@@ -163,16 +314,224 @@
   color: #ffffff;
 }
 
-/* ==========================================
-   MOBILE: MOSTRA A NAVBAR APENAS EM TELAS PEQUENAS
-========================================== */
+/* ==========================================================
+   MOBILE E TABLET
+========================================================== */
+@media (max-width: 1200px) {
+  .mobile-menu {
+    display: block !important;
+  }
 
-@media (max-width: 768px) {
   .bottom-navbar {
-    display: flex;
+    display: flex !important;
+  }
+
+  .desktop-navbar,
+  .desktop-services-section {
+    display: none !important;
   }
 
   body {
     padding-bottom: 100px;
+  }
+}
+
+/* ==========================================================
+   MOBILE PEQUENO
+========================================================== */
+@media (max-width: 480px) {
+  .bottom-navbar {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    height: 64px;
+    padding: 0 14px;
+  }
+
+  .bottom-item {
+    font-size: 0.72rem;
+  }
+
+  .bottom-item svg {
+    font-size: 1.2rem;
+  }
+
+  .toggle-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .toggle-btn svg {
+    font-size: 1.25rem;
+  }
+
+  .menu-item,
+  .eventos-link {
+    min-height: 68px;
+    padding: 0 24px;
+  }
+}
+
+/* ==========================================================
+   DESKTOP - ESTILO CACB HARMONIOSO
+========================================================== */
+@media (min-width: 1201px) {
+  /* Esconde elementos mobile */
+  .mobile-menu,
+  .bottom-navbar {
+    display: none !important;
+  }
+
+  /* Exibe a navbar desktop */
+  .desktop-navbar {
+    display: flex !important;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 14px;
+    flex-wrap: wrap;
+
+    width: 100%;
+    max-width: 1720px;
+    margin: 24px auto 16px;
+    padding: 0 80px;
+    box-sizing: border-box;
+  }
+
+  /* Botões brancos */
+  .desktop-navbar a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 56px;
+    padding: 0 24px;
+
+    background: #ffffff;
+    border-radius: 999px;
+
+    color: #005aa9;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+    white-space: nowrap;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .desktop-navbar a:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
+    color: #005aa9;
+  }
+
+  /* Barra azul de Eventos */
+  .desktop-navbar a:last-child {
+    width: 100%;
+    height: 64px;
+    margin-top: 10px;
+    padding: 0 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: linear-gradient(90deg, #178fcb, #1d98d7);
+    color: #ffffff !important;
+
+    border-radius: 32px;
+    font-size: 1rem;
+    font-weight: 700;
+
+    box-shadow: 0 10px 28px rgba(23, 143, 203, 0.22);
+  }
+
+  .desktop-navbar a:last-child:hover {
+    color: #ffffff !important;
+  }
+
+  /* Ícone do calendário à extrema direita */
+  .eventos-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: auto;
+    font-size: 1.35rem;
+    color: #ffffff;
+    flex-shrink: 0;
+  }
+
+  /* Seção Serviços + Ver todos */
+  .desktop-services-section {
+    display: flex !important;
+    align-items: center;
+    gap: 18px;
+
+    width: 100%;
+    max-width: 1720px;
+    margin: 0 auto 28px;
+    padding: 0 100px;
+    box-sizing: border-box;
+  }
+
+  .desktop-services-section h3 {
+    margin: 0;
+    padding-bottom: 4px;
+
+    color: #005aa9;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1;
+    position: relative;
+  }
+
+  .desktop-services-section h3::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+
+    width: 70%;
+    height: 3px;
+
+    background: #005aa9;
+    border-radius: 2px;
+  }
+
+  .desktop-services-section a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    height: 46px;
+    padding: 0 22px;
+
+    background: linear-gradient(90deg, #006fbe, #0d80d4);
+    color: #ffffff;
+    text-decoration: none;
+
+    border-radius: 999px;
+
+    font-size: 0.92rem;
+    font-weight: 600;
+
+    box-shadow:
+      0 8px 18px rgba(0, 90, 169, 0.18),
+      0 2px 4px rgba(0, 0, 0, 0.06);
+
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease;
+  }
+
+  .desktop-services-section a:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 12px 24px rgba(0, 90, 169, 0.22),
+      0 4px 8px rgba(0, 0, 0, 0.08);
   }
 }

@@ -1,36 +1,113 @@
+// src/components/Header/Header.jsx
+
 import '../../styles/header.css';
-import logo from '../../assets/logo.png';
 import Navbar from '../Navbar/Navbar';
+import { FaCalendarAlt } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
+
+import logo from '../../assets/logo2.png';
 
 function Header() {
+  const location = useLocation();
+
+  /*
+    Exibe o bloco inferior (header-showcase)
+    somente quando NÃO estiver na página inicial.
+    Na Home ("/"), apenas o menu superior é exibido.
+  */
+  const showHeaderShowcase = location.pathname !== '/';
+
   return (
     <>
-      {/* Header original - permanece igual no desktop */}
+      {/* HEADER DESKTOP */}
       <header className="header-container">
+        {/* Linha superior: logo + menu */}
         <div className="header-content">
-          <img src={logo} alt="Logo ACIC" className="logo" />
+          {/* Logo com link para a página inicial */}
+          <Link to="/" className="logo-link">
+            <img src={logo} alt="Logo ASIC" className="logo" />
+          </Link>
 
+          {/* Menu superior */}
           <nav className="nav-menu">
             <ul>
+              {/* INSTITUCIONAL */}
               <li className="dropdown">
-                Institucional
+                <span>Institucional</span>
+
                 <div className="dropdown-content">
-                  <a href="#quem-somos">Quem Somos</a>
-                  <a href="#diretoria">Diretoria</a>
-                  <a href="#estatuto">Estatuto</a>
-                  <a href="#estrutura">Estrutura Organizacional</a>
-                  <a href="#cmec">CMEC</a>
-                  <a href="#contatos">Contatos</a>
+                  <Link to="/quem-somos">Quem Somos</Link>
+                  <Link to="/estatuto">Estatuto</Link>
+                  <Link to="/estrutura-organizacional">
+                    Estrutura Organizacional
+                  </Link>
+                  <Link to="/cmec">CMEC</Link>
+                  <Link to="/contatos">Contatos</Link>
                 </div>
               </li>
-              <li>Serviços</li>
-              <li>Eventos</li>
+
+              {/* SERVIÇOS */}
+              <li className="dropdown">
+                <span>Serviços</span>
+
+                <div className="dropdown-content">
+                   <Link to="/servicos">Ver todos os serviços</Link>
+                </div>
+              </li>
+
+              {/* EVENTOS */}
+              <li className="dropdown">
+                <span>Eventos</span>
+
+                <div className="dropdown-content">
+                  <Link to="/eventos">Ver todos os eventos</Link>
+                </div>
+              </li>
             </ul>
           </nav>
         </div>
+
+        {/* BLOCO INFERIOR - APENAS FORA DA HOME */}
+        {showHeaderShowcase && (
+          <div className="header-showcase">
+            {/* Botões em pílula */}
+            <div className="header-pills">
+              <Link to="/quem-somos" className="pill-button">
+                Institucional
+              </Link>
+
+              <Link to="/servicos" className="pill-button">
+                Serviços
+              </Link>
+            </div>
+
+            {/* Banner de Eventos */}
+            <Link
+              to="/eventos"
+              className="eventos-banner"
+              aria-label="Ir para eventos"
+            >
+              <span className="eventos-text">Eventos</span>
+
+              <span className="eventos-icon">
+                <FaCalendarAlt />
+              </span>
+            </Link>
+
+            {/* Título Serviços + botão Ver todos */}
+            <div className="services-header">
+              <h3>Serviços</h3>
+
+              <Link to="/servicos" className="ver-todos-btn">
+                <span className="arrow">→</span>
+                <span>Ver todos</span>
+              </Link>
+            </div>
+          </div>
+        )}
       </header>
 
-      {/* Navbar mobile (aparece apenas via CSS em telas pequenas) */}
+      {/* NAVBAR MOBILE - aparece apenas em telas menores via CSS */}
       <Navbar />
     </>
   );

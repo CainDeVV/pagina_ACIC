@@ -1,6 +1,7 @@
 // src/components/Navbar/Navbar.jsx
 
 import './Navbar.css';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import {
   FaBars,
@@ -8,14 +9,17 @@ import {
   FaChevronDown,
   FaHome,
   FaSearch,
-  FaGlobeAmericas
+  FaGlobeAmericas,
+  FaCalendarAlt
 } from 'react-icons/fa';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSection, setOpenSection] = useState(null);
 
-  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   const closeMenu = () => {
     setMenuOpen(false);
@@ -28,7 +32,7 @@ function Navbar() {
 
   return (
     <>
-      {/* Painel do menu mobile */}
+      {/* PAINEL DO MENU MOBILE */}
       <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
         {/* INSTITUCIONAL */}
         <div
@@ -41,14 +45,24 @@ function Navbar() {
 
         {openSection === 'institucional' && (
           <div className="submenu">
-            <a href="#quem-somos" onClick={closeMenu}>Quem Somos</a>
-            <a href="#diretoria" onClick={closeMenu}>Diretoria</a>
-            <a href="#estatuto" onClick={closeMenu}>Estatuto</a>
-            <a href="#estrutura" onClick={closeMenu}>
+            <Link to="/quem-somos" onClick={closeMenu}>
+              Quem Somos
+            </Link>
+            <Link to="/diretoria" onClick={closeMenu}>
+              Diretoria
+            </Link>
+            <Link to="/estatuto" onClick={closeMenu}>
+              Estatuto
+            </Link>
+            <Link to="/estrutura-organizacional" onClick={closeMenu}>
               Estrutura Organizacional
-            </a>
-            <a href="#cmec" onClick={closeMenu}>CMEC</a>
-            <a href="#contatos" onClick={closeMenu}>Contatos</a>
+            </Link>
+            <Link to="/cmec" onClick={closeMenu}>
+              CMEC
+            </Link>
+            <Link to="/contatos" onClick={closeMenu}>
+              Contatos
+            </Link>
           </div>
         )}
 
@@ -63,32 +77,61 @@ function Navbar() {
 
         {openSection === 'servicos' && (
           <div className="submenu">
-            <a href="#servicos" onClick={closeMenu}>
+            <Link to="/servicos" onClick={closeMenu}>
               Ver Serviços
-            </a>
+            </Link>
           </div>
         )}
 
         {/* EVENTOS */}
-        <div
-          className="menu-item eventos"
-          onClick={() => toggleSection('eventos')}
+        <Link
+          to="/eventos"
+          className="menu-item eventos-link"
+          onClick={closeMenu}
         >
           <span>Eventos</span>
-          <FaChevronDown />
-        </div>
+          <FaCalendarAlt />
+        </Link>
 
-        {openSection === 'eventos' && (
-          <div className="submenu">
-            <a href="#eventos" onClick={closeMenu}>
-              Ver Eventos
-            </a>
-          </div>
-        )}
+        {/* SERVIÇOS + VER TODOS */}
+        <div className="mobile-services-header">
+          <h3>Serviços</h3>
+
+          <Link
+            to="/servicos"
+            className="mobile-ver-todos-btn"
+            onClick={closeMenu}
+          >
+            <span className="arrow">→</span>
+            <span>Ver todos</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Barra inferior fixa */}
+      {/* MENU DESKTOP */}
+      <nav className="desktop-navbar">
+        {/* Institucional */}
+        <Link to="/quem-somos">
+          <span>Institucional</span>
+        </Link>
+
+        {/* Serviços */}
+        <Link to="/servicos">
+          <span>Serviços</span>
+        </Link>
+
+        {/* Eventos com calendário à extrema direita */}
+        <Link to="/eventos">
+          <span>Eventos</span>
+          <span className="eventos-icon">
+            <FaCalendarAlt />
+          </span>
+        </Link>
+      </nav>
+
+      {/* BARRA INFERIOR MOBILE */}
       <div className="bottom-navbar">
+        {/* Botão Menu */}
         <button
           type="button"
           className="bottom-item toggle-btn"
@@ -97,25 +140,30 @@ function Navbar() {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </button>
 
-        <a href="#" className="bottom-item" onClick={closeMenu}>
+        {/* Home */}
+        <Link to="/" className="bottom-item" onClick={closeMenu}>
           <FaHome />
-        </a>
+        </Link>
 
-        <a href="#servicos" className="bottom-item" onClick={closeMenu}>
+        {/* Serviços */}
+        <Link to="/servicos" className="bottom-item" onClick={closeMenu}>
           <span>Serviços</span>
-        </a>
+        </Link>
 
-        <a href="#noticias" className="bottom-item" onClick={closeMenu}>
+        {/* Notícias */}
+        <Link to="/noticias" className="bottom-item" onClick={closeMenu}>
           <span>Notícias</span>
-        </a>
+        </Link>
 
-        <a href="#busca" className="bottom-item" onClick={closeMenu}>
+        {/* Busca */}
+        <Link to="/busca" className="bottom-item" onClick={closeMenu}>
           <FaSearch />
-        </a>
+        </Link>
 
-        <a href="#quem-somos" className="bottom-item" onClick={closeMenu}>
+        {/* Institucional */}
+        <Link to="/quem-somos" className="bottom-item" onClick={closeMenu}>
           <FaGlobeAmericas />
-        </a>
+        </Link>
       </div>
     </>
   );
