@@ -15,7 +15,7 @@ function App() {
     <div>
       <Navbar />
 
-      <Header />
+      
       <Home />
       <QuemSomos />
       <Estatuto />
