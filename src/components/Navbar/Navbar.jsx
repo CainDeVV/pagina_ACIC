@@ -1,8 +1,10 @@
 // src/components/Navbar/Navbar.jsx
 
 import './Navbar.css';
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+import {Link, useLocation} from 'react-router-dom';
+
 import {
   FaBars,
   FaTimes,
@@ -17,6 +19,8 @@ function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openSection, setOpenSection] = useState(null);
 
+  const [showDesktopNavbar, setShowDesktopNavbar] = useState(false);
+
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
@@ -29,6 +33,35 @@ function Navbar() {
   const toggleSection = (section) => {
     setOpenSection(openSection === section ? null : section);
   };
+
+  const location = useLocation();
+  const isHome = location.pathname === '/';
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Se o menu mobile estiver aberto e a tela for expandida para desktop,
+      // mostra a navbar desktop
+      if (menuOpen && window.innerWidth >= 1201) {
+        setShowDesktopNavbar(true);
+      }
+
+      // Se voltar para mobile, esconde a navbar desktop
+      if (window.innerWidth < 1201) {
+        setShowDesktopNavbar(false);
+      }
+    };
+
+    // Executa ao carregar
+    handleResize();
+
+    // Escuta mudanças de tamanho da tela
+    window.addEventListener('resize', handleResize);
+
+    // Limpeza
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [menuOpen]);
 
   return (
     <>
@@ -109,25 +142,52 @@ function Navbar() {
       </div>
 
       {/* MENU DESKTOP */}
+      {!isHome && showDesktopNavbar && (
       <nav className="desktop-navbar">
-        {/* Institucional */}
-        <Link to="/quem-somos">
-          <span>Institucional</span>
-        </Link>
+      {/* Institucional com submenu */}
+      <div className="desktop-dropdown">
+         <div className="desktop-dropdown-trigger">
+            <span>Institucional</span>
+          </div>
 
-        {/* Serviços */}
-        <Link to="/servicos">
-          <span>Serviços</span>
-        </Link>
+          <div className="desktop-dropdown-menu">
+            <Link to="/quem-somos">Quem Somos</Link>
+            <Link to="/estatuto">Estatuto</Link>
+            <Link to="/estrutura-organizacional">Estrutura Organizacional</Link>
+            <Link to="/cmec">CMEC</Link>
+            <Link to="/contatos">Contatos</Link>
+          </div>
+        </div>
+
+      {/* Serviços com submenu */}
+        <div className="desktop-dropdown">
+            <div className="desktop-dropdown-trigger">
+              <span>Serviços</span>
+            </div>
+
+
+          <div className="desktop-dropdown-menu">
+            <Link to="/servicos">Ver Todos os Serviços</Link>
+          </div>
+        </div>
 
         {/* Eventos com calendário à extrema direita */}
-        <Link to="/eventos">
+        <Link to="/eventos" className="desktop-eventos-link">
           <span>Eventos</span>
           <span className="eventos-icon">
             <FaCalendarAlt />
           </span>
         </Link>
-      </nav>
+
+        <div className="desktop-services-section">
+          <h3>Serviços</h3>
+
+          <Link to="/servicos" className="mobile-ver-todos-btn">
+            <span className="arrow">→</span>
+            <span>Ver todos</span>
+          </Link>
+        </div>
+      </nav> )}
 
       {/* BARRA INFERIOR MOBILE */}
       <div className="bottom-navbar">
