@@ -1,0 +1,96 @@
+.institucional-intro {
+  font-size: 1.1rem;
+  color: var(--color-gray-dark);
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.presidentes-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.presidente-card {
+  display: flex;
+  background-color: var(--color-white);
+  border: 1px solid #eaeaea;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  align-items: flex-start; /* NOVO: Impede que a foto estique para acompanhar o texto */
+}
+
+.presidente-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+}
+
+.presidente-foto-container {
+  flex: 0 0 280px; /* Largura da foto no PC */
+  background-color: var(--color-gray-light);
+}
+
+.presidente-foto {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* NOVO: Trava a proporção da imagem (3 de largura por 4 de altura) */
+  object-fit: cover;
+  object-position: top center; /* NOVO: Foca na parte superior da foto (rosto) caso haja cortes mínimos */
+  display: block;
+}
+
+.presidente-info {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1; /* Garante que o texto ocupe todo o resto do espaço */
+}
+
+.presidente-periodo {
+  display: inline-block;
+  background-color: var(--color-primary-light);
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  width: fit-content;
+}
+
+.presidente-nome {
+  font-size: 1.6rem;
+  color: var(--color-primary);
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.presidente-texto {
+  font-size: 1rem;
+  color: var(--color-gray-medium);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Responsividade: Celular (empilha a foto e o texto) */
+@media (max-width: 768px) {
+  .presidente-card {
+    flex-direction: column;
+    align-items: stretch; /* No celular queremos que a foto ocupe 100% da largura */
+  }
+  
+  .presidente-foto-container {
+    flex: auto; 
+    width: 100%;
+  }
+
+  .presidente-foto {
+    aspect-ratio: 1 / 1; /* NOVO: No celular, uma foto quadrada (1 por 1) fica mais elegante */
+  }
+
+  .presidente-info {
+    padding: 24px;
+  }
+}

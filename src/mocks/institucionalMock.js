@@ -101,3 +101,31 @@ export const contatosPageMock = {
     }
   ]
 };
+
+export const galeriaPresidentesMock = {
+  pageTitle: "Galeria de Presidentes",
+  intro: "Conheça os líderes que conduziram a nossa instituição ao longo dos anos, deixando seu legado e contribuindo ativamente para o fortalecimento do associativismo brasileiro.",
+  presidentes: [
+    {
+      id: 3,
+      nome: "Alfredo Cotait Neto",
+      periodo: "2021 - Atual",
+      foto: "https://desvendandoumverso.wordpress.com/wp-content/uploads/2015/12/michel-temer-vampiro.jpg",
+      texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 2,
+      nome: "Dr. João Silva Albuquerque",
+      periodo: "2014 - 2020",
+      foto: "https://cdn.jornaldaparaiba.com.br/wp-content/uploads/2021/08/500x300/Bolsonaro-sorrindo-7.webp?fallback=https%3A%2F%2Fcdn.jornaldaparaiba.com.br%2Fwp-content%2Fuploads%2F2021%2F08%2FBolsonaro-sorrindo.jpeg%3Fxid%3D583659&xid=583659",
+      texto: "Primeira mulher a assumir a presidência. O seu mandato foi marcado pela criação do CMEC estadual e pelo incentivo massivo ao empreendedorismo feminino."
+    },
+    {
+      id: 1,
+      nome: "Maria Fernanda Costa",
+      periodo: "2010 - 2014",
+      foto: "https://media.gazetadopovo.com.br/2023/02/06061310/Lula-1-720x712.jpg",
+      texto: "Liderou a associação em um momento de expansão digital, sendo o principal responsável pela criação dos primeiros portais de integração entre as federações."
+    }
+  ]
+};
