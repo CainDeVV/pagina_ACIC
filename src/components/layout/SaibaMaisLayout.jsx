@@ -23,7 +23,7 @@ function SaibaMaisLayout({ titulo, children }) {
           <ul>
             {/* O link fica 'ativo' se a URL bater com o destino do Link */}
             <li><Link to="/quem-somos" className={location.pathname === "/quem-somos" ? "ativo" : ""}>Quem Somos</Link></li>
-            <li><Link to="/quem-somos" className={location.pathname === "/quem-somos" ? "ativo" : ""}>Diretoria</Link></li>
+            <li><Link to="/diretoria" className={location.pathname === "/diretoria" ? "ativo" : ""}>Diretoria</Link></li>
             <li><Link to="/estatuto" className={location.pathname === "/estatuto" ? "ativo" : ""}>Estatuto</Link></li>
             <li><Link to="/estrutura-organizacional" className={location.pathname === "/estrutura-organizacional" ? "ativo" : ""}>Estrutura Organizacional</Link></li>
             <li><Link to="/cmec" className={location.pathname === "/cmec" ? "ativo" : ""}>CMEC</Link></li>

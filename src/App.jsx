@@ -3,6 +3,7 @@ import Header from './components/layout/Header';
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/public/Home';
 import QuemSomos from './pages/public/institucional/QuemSomos';
+import Diretoria  from './pages/public/institucional/Diretoria';
 import Estatuto from './pages/public/institucional/Estatuto';
 import EstruturaOrganizacional from './pages/public/institucional/EstruturaOrganizacional';
 import Cmec from './pages/public/institucional/Cmec';
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quem-somos" element={<QuemSomos />} />
+        <Route path="/diretoria" element={<Diretoria />} />
         <Route path="/estatuto" element={<Estatuto />} />
         <Route path="/estrutura-organizacional" element={<EstruturaOrganizacional />} />
         <Route path="/cmec" element={<Cmec />} />
