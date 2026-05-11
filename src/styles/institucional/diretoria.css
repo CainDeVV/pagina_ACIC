@@ -63,6 +63,7 @@ body {
     .breadcrumb span { margin: 0 6px; }
  
     /* ── MAIN LAYOUT ─────────────────────────────── */
+    .saiba-mais-layout,
     .layout {
       display: flex;
       max-width: 1100px;
@@ -72,8 +73,10 @@ body {
     }
  
     /* ── SIDEBAR ─────────────────────────────────── */
+    .sidebar,
     aside {
-      width: 220px; flex-shrink: 0;
+      width: 220px; 
+      flex-shrink: 0;
       padding-top: 12px;
     }
  
@@ -88,7 +91,13 @@ body {
       display: flex; align-items: center; justify-content: space-between;
     }
  
-    aside ul { list-style: none; }
+    .sidebar ul, 
+    aside ul { 
+      list-style: none; 
+    }
+
+
+    .sidebar ul li a, 
     aside ul li a {
       display: block;
       padding: 9px 0;
@@ -98,20 +107,26 @@ body {
       border-bottom: 1px solid #e8edf3;
       transition: color .2s, padding-left .2s;
     }
-    aside ul li a:hover,
-    aside ul li a.active { color: var(--blue); padding-left: 6px; font-weight: 700; }
+.sidebar ul li a:hover,
+.sidebar ul li a.active,
+aside ul li a:hover,
+aside ul li a.active { 
+  color: var(--blue); 
+  padding-left: 6px;
+   font-weight: 700; 
+}
  
     /* ── CONTENT ─────────────────────────────────── */
-    main { flex: 1; padding-top: 12px; }
+    .content,main { flex: 1; padding-top: 12px; }
  
-    .page-title {
+    .page-titulo {
       font-family: 'Playfair Display', serif;
       font-size: 32px; font-weight: 700;
       color: var(--blue);
       margin-bottom: 4px;
     }
  
-    .page-subtitle {
+    .pag-subtitulo {
       font-size: 13px;
       color: var(--muted);
       margin-bottom: 44px;
@@ -207,7 +222,7 @@ body {
       background: var(--blue);
     }
  
-    .card-name {
+    .card-nome {
       font-size: 14px; font-weight: 700;
       color: var(--text);
       margin-top: 4px;
@@ -315,7 +330,7 @@ body {
     }
  
     /* ── DIVIDER ─────────────────────────────────── */
-    .section-divider {
+    .section-dividir {
       border: none;
       border-top: 1px solid #dde4ef;
       margin: 8px 0 44px;
