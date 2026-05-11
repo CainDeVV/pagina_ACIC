@@ -14,6 +14,7 @@ function Header() {
               Institucional
               <div className="dropdown-content">
                 <Link to="/quem-somos">Quem Somos</Link>
+                <Link to="/quem-somos">Diretoria</Link>
                 <Link to="/estatuto">Estatuto</Link>
                 <Link to="/estrutura-organizacional">Estrutura Organizacional</Link>
                 <Link to="/cmec">CMEC</Link>
