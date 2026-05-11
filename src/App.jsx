@@ -8,6 +8,8 @@ import EstruturaOrganizacional from './pages/public/institucional/EstruturaOrgan
 import Cmec from './pages/public/institucional/Cmec';
 import Contatos from './pages/public/institucional/Contatos';
 import GaleriaPresidentes from './pages/public/institucional/GaleriaPresidentes';
+import Servicos from './pages/public/servicos/Servicos';
+import ServicoDetalhe from './pages/public/servicos/ServicoDetalhe';
 import Footer from './components/layout/Footer';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
         <Route path="/cmec" element={<Cmec />} />
         <Route path="/contatos" element={<Contatos />} />
         <Route path="/galeria-presidentes" element={<GaleriaPresidentes />} />
+        <Route path="/servicos" element={<Servicos />} />
+        <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
       </Routes>
       <Footer />
     </div>

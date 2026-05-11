@@ -1,0 +1,239 @@
+.servicos-page {
+  background-color: var(--color-gray-light);
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+
+/* Slider Principal */
+.servicos-slider {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
+  background-color: #000;
+  cursor: pointer;
+}
+
+.servicos-slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Grid de Cards (Página Principal e Outros Serviços) */
+.servicos-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 24px;
+}
+
+.servico-card {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.servico-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.servico-card img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  background-color: #eee;
+}
+
+.servico-card-content {
+  padding: 24px;
+}
+
+.servico-card-content h3 {
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  margin: 0 0 8px 0;
+}
+
+.servico-card-content p {
+  color: var(--color-gray-medium);
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* --- ESTILOS DA PÁGINA DE DETALHE --- */
+.servico-detalhe-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.servico-banner {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.servico-banner img {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  display: block;
+}
+
+.servico-banner-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.servico-banner-content h1 {
+  color: white;
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+.btn-eu-quero {
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-eu-quero:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.servico-descricao {
+  font-size: 1.1rem;
+  color: var(--color-gray-dark);
+  line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+.servico-descricao h3 {
+  color: var(--color-primary);
+  margin-top: 30px;
+}
+
+/* --- ESTILOS DO DRAWER (MODAL LATERAL) --- */
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end; /* Joga o painel para a direita */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.drawer-content {
+  width: 100%;
+  max-width: 500px; /* Tamanho da gaveta no PC */
+  background-color: white;
+  height: 100%;
+  padding: 40px;
+  box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+  transform: translateX(100%); /* Começa fora da tela */
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-overlay.open .drawer-content {
+  transform: translateX(0); /* Desliza para dentro */
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid var(--color-gray-light);
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+}
+
+.drawer-header h2 {
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--color-gray-dark);
+}
+
+.btn-whatsapp {
+  background-color: #25D366; /* Verde do Whatsapp */
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 16px;
+  display: block;
+}
+
+.btn-telefone {
+  background-color: var(--color-gray-light);
+  color: var(--color-gray-dark);
+  text-align: center;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  margin-top: 30px;
+}
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+  .servico-banner-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  .drawer-content {
+    padding: 24px;
+  }
+}
