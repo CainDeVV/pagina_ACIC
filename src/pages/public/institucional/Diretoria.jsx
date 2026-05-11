@@ -32,9 +32,9 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                     <div className="role-label">I VICE-PRESIDENTE</div>
                     <div className="cards-grid">
                         <div className="card">
-                            <div className="card-img-wrap">
+                             <div className="card-img-wrap"> 
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("vice1")} title="ver mais informações"> <FaEllipsisH /></button>
+                               
                             </div>
                             <div className="card-nome">FRANCISCO ROBERTO LIMA E SILVA – GRÁFICA CRATEÚS</div>
                         </div>
@@ -48,7 +48,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("secretario1")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome">ANTONIO OSVALDO PONTES DE MELO – TINA CONDIMENTOS</div>
                         </div>
@@ -62,7 +62,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("secretario2")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome"> ANTÔNIO WAGNER CLAUDINO SALES – RANCHEIRA W&S</div>
                         </div>
@@ -76,7 +76,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("tesoureiro1")} title="ver mais informações"> <FaEllipsisH /></button>
+                               
                             </div>
                             <div className="card-nome"> EDMILSON ARIMATEIA NORTE – MARCONORTE</div>
                         </div>
@@ -90,7 +90,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("diretorSocial1")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome"> ANTONIA LUCINEIDE LEITÃO MACHADO – DISTRIBUIDORA DE ÁGUA E CIMENTO</div>
                         </div>
@@ -104,7 +104,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("relacoesPublicas1")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome">  AGOSTINHO MORAES RODRIGUES – CASA GOSTINHO</div>
                         </div>
@@ -118,7 +118,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("relacoesPublicas1")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome">  MARCOS ALBERTO SOARES GOIANO - COMERCIAL GOIANO</div>
                             
@@ -128,7 +128,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("relacoesPublicas1")} title="ver mais informações"> <FaEllipsisH /></button>
+                               
                             </div>
                             <div className="card-nome"> ARNALDO RODRIGUES SALES – VISUALLE</div>
                             
@@ -138,7 +138,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("relacoesPublicas1")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome">  MARIA ROZELINA PEREIRA DE SOUSA - MERCADINHO SR. FRANSQUINHO</div>
                             
@@ -153,7 +153,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
                         <div className="card">
                             <div className="card-img-wrap">
                                 <div className="placeholder">👤{/* <img src="foto-presidente.jpg" alt="Alfredo Cotait Neto"/> */}</div>
-                                <button className="dots-btn" onClick={() => openModal("secretario2")} title="ver mais informações"> <FaEllipsisH /></button>
+                                
                             </div>
                             <div className="card-nome"> ANTONIO LUÍZ BENEVIDES SALES -  MERCANSALES</div>
                         </div>
