@@ -10,7 +10,7 @@ function Diretoria(){
 
 const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo}`)};
     return(
-        <SaibaMaisLayout activeItem="diretoria">
+        <SaibaMaisLayout activeItem="diretoria" titulo="Diretoria">
             <div>
                 <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
                 <p className="pag-subtitulo"> Triênio 2023/2025 </p>
