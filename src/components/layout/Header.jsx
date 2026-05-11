@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import '../../styles/header.css';
-import logo from '../../assets/logo.png'; 
+import logo from '../../assets/ACIC.png'; 
 
 function Header() {
   return (
@@ -14,6 +14,7 @@ function Header() {
               Institucional
               <div className="dropdown-content">
                 <Link to="/quem-somos">Quem Somos</Link>
+                <Link to="/diretoria">Diretoria</Link>
                 <Link to="/estatuto">Estatuto</Link>
                 <Link to="/estrutura-organizacional">Estrutura Organizacional</Link>
                 <Link to="/cmec">CMEC</Link>

@@ -32,6 +32,7 @@ function Navbar() {
         {openSection === 'institucional' && (
           <div className="submenu">
             <Link to="/quem-somos" onClick={closeMenu}>Quem Somos</Link>
+            <Link to="/diretoria" onClick={closeMenu}>Diretoria</Link>
             <Link to="/estatuto" onClick={closeMenu}>Estatuto</Link>
             <Link to="/estrutura-organizacional" onClick={closeMenu}>Estrutura Organizacional</Link>
             <Link to="/cmec" onClick={closeMenu}>CMEC</Link>
