@@ -20,11 +20,6 @@
   height: 60px; /* Ajuste o tamanho da sua logo aqui */
 }
 
-.nav-menu li a {
-  text-decoration: none;
-  color: inherit; /* Puxa a cor exata que está definida no <li> pai */
-}
-
 .nav-menu ul {
   list-style: none;
   display: flex;
@@ -115,24 +110,26 @@
   display: block;
 }
 
+
+
+
+
+/* =========================================
+   RESPONSIVIDADE: CELULARES E TABLETS MENORES
+   ========================================= */
 @media (max-width: 768px) {
-  /* Esconde completamente o menu superior do Header */
+  /* Esconde completamente o menu superior no telemóvel */
   .nav-menu {
     display: none;
   }
 
-  /* Centraliza a logo quando o menu superior desaparece */
+  /* Centraliza a logo quando o menu desaparece */
   .header-content {
     justify-content: center;
   }
 
-  /* Ajusta o tamanho da logo no mobile */
+  /* Ajusta o tamanho da logo para poupar espaço */
   .logo {
-    height: 50px;
-  }
-
-  /* Reduz o espaçamento do header no celular */
-  .header-container {
-    padding: 10px 20px;
+    height: 45px;
   }
 }
