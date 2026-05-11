@@ -19,6 +19,7 @@ function Header() {
                 <Link to="/estrutura-organizacional">Estrutura Organizacional</Link>
                 <Link to="/cmec">CMEC</Link>
                 <Link to="/contatos">Contatos</Link>
+                <Link to="/galeria-presidentes">Galeria de Presidentes</Link>
               </div>
             </li>
             <li><Link to="/servicos">Serviços</Link></li>

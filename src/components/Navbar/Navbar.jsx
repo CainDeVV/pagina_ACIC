@@ -36,6 +36,7 @@ function Navbar() {
             <Link to="/estrutura-organizacional" onClick={closeMenu}>Estrutura Organizacional</Link>
             <Link to="/cmec" onClick={closeMenu}>CMEC</Link>
             <Link to="/contatos" onClick={closeMenu}>Contatos</Link>
+            <Link to="/galeria-presidentes" onClick={closeMenu}>Galeria de Presidentes</Link>
           </div>
         )}
 

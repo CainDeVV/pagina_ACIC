@@ -28,6 +28,7 @@ function SaibaMaisLayout({ titulo, children }) {
             <li><Link to="/estrutura-organizacional" className={location.pathname === "/estrutura-organizacional" ? "ativo" : ""}>Estrutura Organizacional</Link></li>
             <li><Link to="/cmec" className={location.pathname === "/cmec" ? "ativo" : ""}>CMEC</Link></li>
             <li><Link to="/contatos" className={location.pathname === "/contatos" ? "ativo" : ""}>Contatos</Link></li>
+            <li><Link to="/galeria-presidentes" className={location.pathname === "/galeria-presidentes" ? "ativo" : ""}>Galeria de Presidentes</Link></li>
           </ul>
         </aside>
 
