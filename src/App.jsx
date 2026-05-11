@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/layout/Header';
+import Navbar from './components/Navbar/Navbar';
 import Home from './pages/public/Home';
 import QuemSomos from './pages/public/institucional/QuemSomos';
 import Estatuto from './pages/public/institucional/Estatuto';
@@ -12,6 +13,7 @@ function App() {
   return (
     <div>
       <Header />
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quem-somos" element={<QuemSomos />} />

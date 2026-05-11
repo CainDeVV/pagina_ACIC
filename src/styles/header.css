@@ -20,11 +20,6 @@
   height: 60px; /* Ajuste o tamanho da sua logo aqui */
 }
 
-.nav-menu li a {
-  text-decoration: none;
-  color: inherit; /* Puxa a cor exata que está definida no <li> pai */
-}
-
 .nav-menu ul {
   list-style: none;
   display: flex;
@@ -113,4 +108,28 @@
 
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+
+
+
+
+/* =========================================
+   RESPONSIVIDADE: CELULARES E TABLETS MENORES
+   ========================================= */
+@media (max-width: 768px) {
+  /* Esconde completamente o menu superior no telemóvel */
+  .nav-menu {
+    display: none;
+  }
+
+  /* Centraliza a logo quando o menu desaparece */
+  .header-content {
+    justify-content: center;
+  }
+
+  /* Ajusta o tamanho da logo para poupar espaço */
+  .logo {
+    height: 45px;
+  }
 }
