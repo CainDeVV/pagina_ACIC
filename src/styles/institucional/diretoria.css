@@ -1,4 +1,4 @@
- *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ /* *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; } */
 
 .logo-circle {
       width: 52px; height: 52px;
@@ -29,7 +29,7 @@
     .content,main { flex: 1; padding-top: 12px; }
  
     .page-titulo {
-      font-family: 'Playfair Display', serif;
+      font-family: 'Montserrat', sans-serif;
       font-size: 32px; font-weight: 700;
       color: var(--blue);
       margin-bottom: 4px;
