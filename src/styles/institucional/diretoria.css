@@ -1,34 +1,5 @@
  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-            --blue:    #1a4a8a;
-            --cyan:    #00a8d6;
-            --gold:    #c8962a;
-            --light:   #f4f7fb;
-            --white:   #ffffff;
-            --text:    #2c3e50;
-            --muted:   #6b7a8d;
-            --shadow:  0 8px 32px rgba(26,74,138,.13);
-}
-
-body {
-      font-family: 'Lato', sans-serif;
-      background: var(--light);
-      color: var(--text);
-      min-height: 100vh;
-}
-
- header {
-      background: var(--white);
-      border-bottom: 3px solid var(--cyan);
-      padding: 18px 48px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      box-shadow: 0 2px 12px rgba(0,0,0,.07);
-}
-
-
 .logo-circle {
       width: 52px; height: 52px;
       border-radius: 50%;
@@ -53,68 +24,6 @@ body {
       letter-spacing: 1.5px;
     }
  
-    /* ── BREADCRUMB ──────────────────────────────── */
-    .breadcrumb {
-      padding: 14px 48px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .breadcrumb a { color: var(--blue); text-decoration: none; }
-    .breadcrumb span { margin: 0 6px; }
- 
-    /* ── MAIN LAYOUT ─────────────────────────────── */
-    .saiba-mais-layout,
-    .layout {
-      display: flex;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 24px 60px;
-      gap: 48px;
-    }
- 
-    /* ── SIDEBAR ─────────────────────────────────── */
-    .sidebar,
-    aside {
-      width: 220px; 
-      flex-shrink: 0;
-      padding-top: 12px;
-    }
- 
-    .sidebar-title {
-      font-size: 14px; font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: var(--text);
-      padding-bottom: 10px;
-      border-bottom: 2px solid var(--cyan);
-      margin-bottom: 16px;
-      display: flex; align-items: center; justify-content: space-between;
-    }
- 
-    .sidebar ul, 
-    aside ul { 
-      list-style: none; 
-    }
-
-
-    .sidebar ul li a, 
-    aside ul li a {
-      display: block;
-      padding: 9px 0;
-      font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      border-bottom: 1px solid #e8edf3;
-      transition: color .2s, padding-left .2s;
-    }
-.sidebar ul li a:hover,
-.sidebar ul li a.active,
-aside ul li a:hover,
-aside ul li a.active { 
-  color: var(--blue); 
-  padding-left: 6px;
-   font-weight: 700; 
-}
  
     /* ── CONTENT ─────────────────────────────────── */
     .content,main { flex: 1; padding-top: 12px; }
