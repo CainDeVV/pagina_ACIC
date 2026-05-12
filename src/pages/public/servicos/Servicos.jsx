@@ -1,75 +1,27 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import HeroSlider from '../../../components/HeroSlider/HeroSlider'; // Importamos o novo componente
 import '../../../styles/servicos.css';
 
 function Servicos() {
-  const [slideAtual, setSlideAtual] = useState(0);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setSlideAtual((prev) => (prev + 1) % servicosMock.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [slideAtual]); // Reseta o tempo a cada mudança manual
-
-  const servicoInfo = servicosMock[slideAtual];
-
-  const proximoSlide = () => {
-    setSlideAtual((prev) => (prev + 1) % servicosMock.length);
-  };
-
-  const slideAnterior = () => {
-    setSlideAtual((prev) => (prev - 1 + servicosMock.length) % servicosMock.length);
-  };
+  // Formatamos os dados do Mock para o formato que o HeroSlider exige
+  const sliderData = servicosMock.map((servico) => ({
+    id: servico.id,
+    image: servico.bannerUrl,
+    pill: "Serviços",
+    title: servico.titulo,
+    description: servico.resumo,
+    link: `/servicos/${servico.slug}` // Faz o texto ser clicável!
+  }));
 
   return (
     <div className="servicos-page">
       
-      {/* Slider Superior */}
-      <div className="servicos-slider">
-        
-        {servicosMock.map((servico, index) => (
-          <img 
-            key={servico.id}
-            src={servico.bannerUrl} 
-            alt={servico.titulo} 
-            className={`slider-bg-image ${index === slideAtual ? 'active' : ''}`}
-          />
-        ))}
+      {/* Agora o Slider inteiro se resume a 1 linha de código! */}
+      <HeroSlider slides={sliderData} autoPlayTime={5000} />
 
-        {/* TEXTO Clicável sobre a imagem */}
-        <Link to={`/servicos/${servicoInfo.slug}`} className="slider-text-overlay">
-          <span className="slider-pill">Serviços</span>
-          <h2>{servicoInfo.titulo}</h2>
-          <p>{servicoInfo.resumo}</p>
-        </Link>
-        
-        {/* Controles do Slider (Setas) */}
-        <div className="slider-controls">
-          <button className="slider-btn" onClick={slideAnterior}>
-            <FaChevronLeft />
-          </button>
-          <button className="slider-btn" onClick={proximoSlide}>
-            <FaChevronRight />
-          </button>
-        </div>
-
-        {/* Barrinhas centrais (Indicadores) */}
-        <div className="slider-indicators">
-          {servicosMock.map((_, index) => (
-            <button 
-              key={index}
-              className={`indicator-bar ${index === slideAtual ? 'active' : ''}`}
-              onClick={() => setSlideAtual(index)}
-              aria-label={`Ir para o slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Grade de Todos os Serviços (Título Removido) */}
+      {/* Grade de Todos os Serviços */}
       <div className="servicos-container">
         <div className="servicos-grid">
           {servicosMock.map((servico) => (
