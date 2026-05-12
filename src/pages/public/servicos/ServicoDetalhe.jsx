@@ -1,20 +1,17 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
+import BlockRenderer from '../../../components/BlockRenderer'; // Importe do BlockRenderer!
 import '../../../styles/servicos.css';
-import '../../../styles/institucional/saibaMaisLayout.css'; // Aproveitando o CSS do breadcrumb
+import '../../../styles/institucional/saibaMaisLayout.css'; 
 
 function ServicoDetalhe() {
-  const { slug } = useParams(); // Pega o nome do serviço lá da URL da barra de endereços
+  const { slug } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Procura no mock qual serviço corresponde ao slug da URL
   const servicoAtual = servicosMock.find(s => s.slug === slug);
-  
-  // Filtra os "Outros Serviços" (todos menos o atual)
   const outrosServicos = servicosMock.filter(s => s.slug !== slug);
 
-  // Se o usuário digitar uma URL errada, avisa que não encontrou
   if (!servicoAtual) {
     return <div className="servico-detalhe-page"><h2>Serviço não encontrado.</h2></div>;
   }
@@ -23,33 +20,30 @@ function ServicoDetalhe() {
     <>
       <div className="servico-detalhe-page">
         
-        {/* Breadcrumb idêntico ao do institucional */}
         <div className="breadcrumb">
           <Link to="/servicos">Serviços</Link> 
           <span className="separador">&gt;</span> 
           <span className="atual">{servicoAtual.titulo}</span>
         </div>
 
-        {/* Banner com botão */}
         <div className="servico-banner">
           <img src={servicoAtual.bannerUrl} alt={servicoAtual.titulo} />
           <div className="servico-banner-content">
             <h1>{servicoAtual.titulo}</h1>
             <button className="btn-eu-quero" onClick={() => setIsModalOpen(true)}>
-              Eu quero
+              {/* Agora o texto do botão vem dinamicamente do mock */}
+              {servicoAtual.textoBotao || "Eu quero"} 
             </button>
           </div>
         </div>
 
-        {/* Descrição Dinâmica em HTML */}
-        <div 
-          className="servico-descricao"
-          dangerouslySetInnerHTML={{ __html: servicoAtual.descricaoHtml }}
-        />
+        {/* Substituímos a div dangerouslySetInnerHTML pelo nosso poderoso BlockRenderer */}
+        <div className="servico-descricao">
+          <BlockRenderer blocks={servicoAtual.blocks} />
+        </div>
 
         <hr style={{ borderColor: '#eaeaea', marginBottom: '40px' }} />
 
-        {/* Outros Serviços */}
         <h2>Outros Serviços</h2>
         <div className="servicos-grid">
           {outrosServicos.map((servico) => (
@@ -66,10 +60,9 @@ function ServicoDetalhe() {
 
       {/* DRAWER / MODAL LATERAL */}
       <div className={`drawer-overlay ${isModalOpen ? 'open' : ''}`} onClick={() => setIsModalOpen(false)}>
-        {/* Usamos e.stopPropagation() para clicar no painel branco não fechar o modal */}
         <div className="drawer-content" onClick={(e) => e.stopPropagation()}>
           <div className="drawer-header">
-            <h2>Eu quero</h2>
+            <h2>{servicoAtual.textoBotao || "Eu quero"}</h2>
             <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
           </div>
           

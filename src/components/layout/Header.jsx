@@ -23,14 +23,13 @@ function Header() {
               </div>
             </li>
             <li className="dropdown">
-              Serviços
+              <Link to="/servicos" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Serviços
+              </Link>
               <div className="dropdown-content">
                 <Link to="/servicos/registro-de-marcas">Registro de Marcas e Patentes</Link>
                 <Link to="/servicos/certificado-de-origem">Certificado de Origem</Link>
                 <Link to="/servicos/certificado-digital">Certificado Digital</Link>
-                <Link to="/servicos" style={{ fontWeight: 'bold', color: 'var(--color-primary)' }}>
-                  Ver todos os serviços &rarr;
-                </Link>
               </div>
             </li>
             <li><Link to="/eventos">Eventos</Link></li>
