@@ -5,11 +5,12 @@ import './HeroSlider.css';
 
 /**
  * Componente Reutilizável de Slider
- * @param {Array} slides - [{ id, image, badge, badgeStyle, title, description, link, buttons: [{label, link, type}] }]
+ * @param {Array} slides - [{ id, image, badge, badgeStyle, title, description, link, buttons }]
  * @param {Number} autoPlayTime - Tempo de transição em ms (padrão: 5000)
  * @param {Boolean} titleAsH1 - Define se o título usa a tag <h1> para SEO (ideal para a Home)
+ * @param {Boolean} showControls - Exibe as setas laterais (padrão: true)
  */
-function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
+function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false, showControls = true }) {
   const [slideAtual, setSlideAtual] = useState(0);
 
   useEffect(() => {
@@ -23,13 +24,15 @@ function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
   if (!slides || slides.length === 0) return null;
 
   const currentSlide = slides[slideAtual];
-  const TitleTag = titleAsH1 ? 'h1' : 'h2'; // Define dinamicamente a tag do título
+  const TitleTag = titleAsH1 ? 'h1' : 'h2'; 
 
-  const proximoSlide = () => {
+  const proximoSlide = (e) => {
+    e.preventDefault(); // Evita clicar no link do banner sem querer
     setSlideAtual((prev) => (prev + 1) % slides.length);
   };
 
-  const slideAnterior = () => {
+  const slideAnterior = (e) => {
+    e.preventDefault();
     setSlideAtual((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
@@ -46,7 +49,6 @@ function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
         
         {currentSlide.description && <p className="hero-slider-desc">{currentSlide.description}</p>}
         
-        {/* Se existirem botões (como na Home), renderiza eles aqui */}
         {currentSlide.buttons && currentSlide.buttons.length > 0 && (
           <div className="hero-slider-btns">
             {currentSlide.buttons.map((btn, idx) => (
@@ -59,7 +61,6 @@ function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
       </>
     );
 
-    // Se o slide inteiro for um link (como em Serviços), envelopamos tudo num <Link>
     if (currentSlide.link) {
       return (
         <Link to={currentSlide.link} className="hero-slider-content is-link">
@@ -68,7 +69,6 @@ function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
       );
     }
 
-    // Se não, é só um bloco de texto normal com botões dentro (como na Home)
     return <div className="hero-slider-content">{innerContent}</div>;
   };
 
@@ -86,12 +86,15 @@ function HeroSlider({ slides, autoPlayTime = 5000, titleAsH1 = false }) {
 
       {renderContent()}
 
-      {/* Controles e Indicadores */}
-      <div className="hero-slider-controls">
-        <button className="hero-slider-btn" onClick={slideAnterior}><FaChevronLeft /></button>
-        <button className="hero-slider-btn" onClick={proximoSlide}><FaChevronRight /></button>
-      </div>
+      {/* NOVO: Condicional para exibir ou esconder as setinhas */}
+      {showControls && (
+        <div className="hero-slider-controls">
+          <button className="hero-slider-btn" onClick={slideAnterior}><FaChevronLeft /></button>
+          <button className="hero-slider-btn" onClick={proximoSlide}><FaChevronRight /></button>
+        </div>
+      )}
 
+      {/* Indicadores (Barrinhas) sempre aparecem */}
       <div className="hero-slider-indicators">
         {slides.map((_, index) => (
           <button 

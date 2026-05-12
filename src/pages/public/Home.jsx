@@ -219,6 +219,7 @@ export default function Home() {
           slides={homeSliderData} 
           autoPlayTime={5500} 
           titleAsH1={true} 
+          showControls={false}  /* <--- MAGIA ACONTECE AQUI! Desliga as setinhas */
         />
 
         {/* ── NÚMEROS ── */}
