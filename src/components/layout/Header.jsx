@@ -32,7 +32,11 @@ function Header() {
                 <Link to="/servicos/certificado-digital">Certificado Digital</Link>
               </div>
             </li>
-            <li><Link to="/eventos">Eventos</Link></li>
+            <li>
+              <Link to="/eventos" style={{ color: 'inherit', textDecoration: 'none' }}>
+                Eventos
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
