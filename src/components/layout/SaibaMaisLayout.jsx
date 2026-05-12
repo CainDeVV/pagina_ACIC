@@ -10,7 +10,12 @@ function SaibaMaisLayout({ titulo, children }) {
     <div className="institucional-page">
       
       {/* Breadcrumb */}
-      <Breadcrumb items={[{ label: titulo }]} />
+      <Breadcrumb 
+        items={[
+          { label: 'Institucional' }, 
+          { label: titulo }
+        ]} 
+      />
 
       <div className="institucional-container">
         

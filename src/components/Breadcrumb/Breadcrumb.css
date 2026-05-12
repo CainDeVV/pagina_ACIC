@@ -51,3 +51,9 @@
 .breadcrumb-item.active {
   pointer-events: none;
 }
+
+.breadcrumb-unclickable {
+  color: var(--color-gray-medium);
+  font-weight: 500;
+  cursor: default; /* Mostra que não é clicável */
+}

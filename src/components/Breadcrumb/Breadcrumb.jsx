@@ -2,15 +2,12 @@ import { Link } from 'react-router-dom';
 import { FaChevronRight, FaHome } from 'react-icons/fa';
 import './Breadcrumb.css';
 
-/**
- * @param {Array} items - [{ label: 'Home', path: '/' }, { label: 'Serviços' }]
- */
 const Breadcrumb = ({ items }) => {
   return (
     <nav className="breadcrumb-nav" aria-label="Breadcrumb">
       <ol className="breadcrumb-list" itemScope itemType="https://schema.org/BreadcrumbList">
         
-        {/* Link da Home sempre presente como ícone para modernidade */}
+        {/* Link da Home */}
         <li className="breadcrumb-item" itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
           <Link to="/" itemProp="item" className="breadcrumb-link home-icon">
             <FaHome itemProp="name" />
@@ -33,9 +30,14 @@ const Breadcrumb = ({ items }) => {
             >
               {!isLast ? (
                 <>
-                  <Link to={item.path} itemProp="item" className="breadcrumb-link">
-                    <span itemProp="name">{item.label}</span>
-                  </Link>
+                  {/* Se tiver path, é clicável. Se não, é só um texto de categoria */}
+                  {item.path ? (
+                    <Link to={item.path} itemProp="item" className="breadcrumb-link">
+                      <span itemProp="name">{item.label}</span>
+                    </Link>
+                  ) : (
+                    <span itemProp="name" className="breadcrumb-unclickable">{item.label}</span>
+                  )}
                   <FaChevronRight className="breadcrumb-separator" />
                 </>
               ) : (
