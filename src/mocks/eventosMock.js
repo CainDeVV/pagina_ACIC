@@ -15,7 +15,7 @@ export const eventosMock = [
       {
         type: "paragraph",
         content:
-          "Em 2025, a Associação Comercial e Industrial de Crateús (ACIC) celebra 150 anos de história, consolidando-se como uma das mais importantes entidades de representação empresarial do interior do Ceará.",
+          "Em 2026, a Associação Comercial e Industrial de Crateús (ACIC) celebra 150 anos de história, consolidando-se como uma das mais importantes entidades de representação empresarial do interior do Ceará.",
       },
       {
         type: "paragraph",
