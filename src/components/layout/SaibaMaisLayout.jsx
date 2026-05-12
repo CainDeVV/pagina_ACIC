@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import '../../styles/institucional/saibaMaisLayout.css';
 
 // O 'children' é o conteúdo específico de cada página que vai ser renderizado aqui dentro
@@ -9,11 +10,7 @@ function SaibaMaisLayout({ titulo, children }) {
     <div className="institucional-page">
       
       {/* Breadcrumb */}
-      <div className="breadcrumb">
-        <Link to="/">Home</Link> 
-        <span className="separador">&gt;</span> 
-        <span className="atual">{titulo}</span>
-      </div>
+      <Breadcrumb items={[{ label: titulo }]} />
 
       <div className="institucional-container">
         

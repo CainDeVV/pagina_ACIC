@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
-import BlockRenderer from '../../../components/BlockRenderer'; // Importe do BlockRenderer!
+import BlockRenderer from '../../../components/BlockRenderer';
+import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
+import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import '../../../styles/servicos.css';
 import '../../../styles/institucional/saibaMaisLayout.css'; 
 
@@ -20,11 +22,7 @@ function ServicoDetalhe() {
     <>
       <div className="servico-detalhe-page">
         
-        <div className="breadcrumb">
-          <Link to="/servicos">Serviços</Link> 
-          <span className="separador">&gt;</span> 
-          <span className="atual">{servicoAtual.titulo}</span>
-        </div>
+        <Breadcrumb items={[{ label: 'Serviços', path: '/servicos' }, { label: servicoAtual.titulo }]} />
 
         <div className="servico-banner">
           <img src={servicoAtual.bannerUrl} alt={servicoAtual.titulo} />
@@ -46,14 +44,8 @@ function ServicoDetalhe() {
 
         <h2>Outros Serviços</h2>
         <div className="servicos-grid">
-          {outrosServicos.map((servico) => (
-            <Link to={`/servicos/${servico.slug}`} className="servico-card" key={servico.id}>
-              <img src={servico.cardUrl} alt={servico.titulo} />
-              <div className="servico-card-content">
-                <h3>{servico.titulo}</h3>
-                <p>{servico.resumo}</p>
-              </div>
-            </Link>
+          {outrosServicos.map(servico => (
+            <ServiceCard key={servico.id} service={servico} />
           ))}
         </div>
       </div>

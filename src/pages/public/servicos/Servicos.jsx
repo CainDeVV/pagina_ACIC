@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider'; // Importamos o novo componente
+import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import '../../../styles/servicos.css';
 
 function Servicos() {
@@ -24,14 +25,8 @@ function Servicos() {
       {/* Grade de Todos os Serviços */}
       <div className="servicos-container">
         <div className="servicos-grid">
-          {servicosMock.map((servico) => (
-            <Link to={`/servicos/${servico.slug}`} className="servico-card" key={servico.id}>
-              <img src={servico.cardUrl} alt={servico.titulo} />
-              <div className="servico-card-content">
-                <h3>{servico.titulo}</h3>
-                <p>{servico.resumo}</p>
-              </div>
-            </Link>
+          {servicosMock.map(servico => (
+            <ServiceCard key={servico.id} service={servico} />
           ))}
         </div>
       </div>
