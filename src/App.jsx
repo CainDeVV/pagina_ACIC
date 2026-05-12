@@ -12,6 +12,8 @@ import Contatos from './pages/public/institucional/Contatos';
 import GaleriaPresidentes from './pages/public/institucional/GaleriaPresidentes';
 import Servicos from './pages/public/servicos/Servicos';
 import ServicoDetalhe from './pages/public/servicos/ServicoDetalhe';
+import Eventos from './pages/public/Eventos/Eventos';
+import EventoDetalhe from './pages/public/Eventos/EventoDetalhe';
 import Footer from './components/layout/Footer';
 
 function App() {
@@ -31,6 +33,8 @@ function App() {
         <Route path="/galeria-presidentes" element={<GaleriaPresidentes />} />
         <Route path="/servicos" element={<Servicos />} />
         <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
+        <Route path="/eventos" element={<Eventos />} />
+        <Route path="/eventos/:slug" element={<EventoDetalhe />} />
       </Routes>
       <Footer />
     </div>

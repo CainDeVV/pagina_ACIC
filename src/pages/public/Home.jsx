@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import HeroSlider from '../../components/HeroSlider/HeroSlider'; // <-- Importamos aqui
+import HeroSlider from '../../components/HeroSlider/HeroSlider'; 
 
 /* ─── MOCK DATA ─── */
 const slidesMock = [
