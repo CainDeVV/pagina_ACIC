@@ -23,6 +23,7 @@ function Navbar() {
       {/* PAINEL DO MENU MOBILE (Desliza para cima) */}
       <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
         
+        {/* SUBMENU: INSTITUCIONAL */}
         <div className="menu-item" onClick={() => toggleSection('institucional')}>
           <span>Institucional</span>
           <FaChevronDown />
@@ -40,10 +41,22 @@ function Navbar() {
           </div>
         )}
 
-        <Link to="/servicos" className="menu-item" onClick={closeMenu}>
+        {/* SUBMENU: SERVIÇOS */}
+        <div className="menu-item" onClick={() => toggleSection('servicos')}>
           <span>Serviços</span>
-        </Link>
+          <FaChevronDown />
+        </div>
 
+        {openSection === 'servicos' && (
+          <div className="submenu">
+            <Link to="/servicos/registro-de-marcas" onClick={closeMenu}>Registro de Marcas</Link>
+            <Link to="/servicos/certificado-de-origem" onClick={closeMenu}>Certificado de Origem</Link>
+            <Link to="/servicos/certificado-digital" onClick={closeMenu}>Certificado Digital</Link>
+            <Link to="/servicos" onClick={closeMenu} style={{ fontWeight: 'bold' }}>Ver todos</Link>
+          </div>
+        )}
+
+        {/* LINK DIRETO: EVENTOS */}
         <Link to="/eventos" className="menu-item" onClick={closeMenu}>
           <span>Eventos</span>
           <FaCalendarAlt />

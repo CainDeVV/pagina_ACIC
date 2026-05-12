@@ -113,6 +113,19 @@ function BlockRenderer({ blocks }) {
                 title="Visualizador de PDF do Estatuto"
               />
             );
+          
+          case 'imageTextHighlight':
+            return (
+              <div key={index} className="image-text-highlight">
+                <div className="ith-image-container">
+                  <img src={block.imageUrl} alt={block.title} />
+                </div>
+                <div className="ith-text-container">
+                  <h3>{block.title}</h3>
+                  <p>{block.text}</p>
+                </div>
+              </div>
+            );
 
           default:
             // Se alguém tentar enviar um tipo de bloco que não existe (ex: type: 'video'),
