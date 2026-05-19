@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { eventosMock } from "../../../mocks/eventosMock.js";
-import '../../../styles/eventos.css';
+import './Eventos.css';
 
 function Eventos() {
   const eventosDestaque = eventosMock.filter((e) => e.destaque);

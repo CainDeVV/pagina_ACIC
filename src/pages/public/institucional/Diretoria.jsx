@@ -1,8 +1,8 @@
-import SaibaMaisLayout from "../../../components/layout/SaibaMaisLayout";
-import BlockRenderer from "../../../components/BlockRenderer";
-import '../../../styles/institucional/institucional.css';
+import SaibaMaisLayout from "../../../components/Layout/SaibaMaisLayout";
+import BlockRenderer from "../../../components/BlockRenderer/BlockRenderer";
+import './Institucional.css';
 
-import '../../../styles/institucional/diretoria.css';
+import './Diretoria.css';
 
 import { FaEllipsisH } from "react-icons/fa";
 

@@ -1,6 +1,6 @@
-import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
-import BlockRenderer from '../../../components/BlockRenderer';
-import '../../../styles/institucional/institucional.css';
+import SaibaMaisLayout from '../../../components/Layout/SaibaMaisLayout';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import './Institucional.css';
 
 function EstruturaOrganizacional() {
   return (

@@ -1,4 +1,4 @@
-import '../../styles/footer.css';
+import './Footer.css';
 import logo from "../../assets/ACIC.png";
 
 function Footer() {

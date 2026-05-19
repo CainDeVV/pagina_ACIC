@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
-import BlockRenderer from '../../../components/BlockRenderer';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import { eventosMock } from "../../../mocks/eventosMock.js";
-import '../../../styles/eventos.css';
+import './Eventos.css';
 
 function EventoDetalhe() {
   const { slug } = useParams();

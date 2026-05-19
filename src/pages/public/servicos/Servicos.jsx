@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import '../../../styles/servicos.css';
+import './Servicos.css';
 
 function Servicos() {
 

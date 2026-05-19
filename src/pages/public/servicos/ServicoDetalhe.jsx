@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
-import BlockRenderer from '../../../components/BlockRenderer';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import '../../../styles/servicos.css';
-import '../../../styles/institucional/saibaMaisLayout.css'; 
+import './Servicos.css';
+import '../../../components/Layout/SaibaMaisLayout.css'; 
 
 function ServicoDetalhe() {
   const { slug } = useParams();

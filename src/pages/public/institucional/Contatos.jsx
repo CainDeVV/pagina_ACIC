@@ -1,7 +1,7 @@
-import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
-import BlockRenderer from '../../../components/BlockRenderer';
+import SaibaMaisLayout from '../../../components/Layout/SaibaMaisLayout';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import { contatosPageMock } from '../../../mocks/institucionalMock';
-import '../../../styles/institucional/institucional.css';
+import './Institucional.css';
 
 function Contatos() {
   return (

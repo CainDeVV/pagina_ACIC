@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
-import '../../styles/institucional/saibaMaisLayout.css';
+import './SaibaMaisLayout.css';
 
 // O 'children' é o conteúdo específico de cada página que vai ser renderizado aqui dentro
 function SaibaMaisLayout({ titulo, children }) {

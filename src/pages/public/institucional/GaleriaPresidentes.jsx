@@ -1,7 +1,7 @@
-import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
+import SaibaMaisLayout from '../../../components/Layout/SaibaMaisLayout';
 import { galeriaPresidentesMock } from '../../../mocks/institucionalMock';
-import '../../../styles/institucional/institucional.css'; // Estilos globais
-import '../../../styles/institucional/galeriaPresidentes.css'; // Estilos desta página
+import './Institucional.css'; // Estilos globais
+import './GaleriaPresidentes.css'; // Estilos desta página
 
 function GaleriaPresidentes() {
   return (
