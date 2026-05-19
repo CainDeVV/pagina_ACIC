@@ -1,3 +1,6 @@
+
+
+
 export const quemSomosPageMock = {
   pageTitle: "Quem Somos",
   blocks: [
@@ -102,30 +105,192 @@ export const contatosPageMock = {
   ]
 };
 
+import { galeria } from "../assets/galeriaPresidentes";
+
 export const galeriaPresidentesMock = {
   pageTitle: "Galeria de Presidentes",
-  intro: "Conheça os líderes que conduziram a nossa instituição ao longo dos anos, deixando seu legado e contribuindo ativamente para o fortalecimento do associativismo brasileiro.",
+  intro: "Conheça os líderes que conduziram a nossa instituição ao longo dos anos, deixando seu legado e contribuindo ativamente para o fortalecimento do associativismo crateuense.",
   presidentes: [
+
     {
-      id: 3,
-      nome: "Alfredo Cotait Neto",
-      periodo: "2021 - Atual",
-      foto: "https://desvendandoumverso.wordpress.com/wp-content/uploads/2015/12/michel-temer-vampiro.jpg",
-      texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+      id: 25,
+      nome: "Francisco Roberto Lima e Silva",
+      periodo: "2017 - 2023",
+      foto: galeria.FcoRoberto,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
     },
     {
+      id: 24,
+      nome: "Antônio Luiz Benevides Sales",
+      periodo: "2015 - 2017",
+      foto: galeria.AntLuiz,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 23,
+      nome: "José de Melo Cavalcante",
+      periodo: "1999 - 2001 e 2001 - 2003",
+      foto: galeria.JosedeMelo,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 22,
+      nome: "Fernando Antônio Aguiar Albuquerque",
+      periodo: "1995 - 1997",
+      foto: galeria.FernandoAguiar,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 21,
+      nome: "José Airton Melo Aguiar",
+      periodo: "1991 - 1993",
+      foto: galeria.JoseAirton,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 20,
+      nome: "Antônio Soares Martins",
+      periodo: "1984 - 1986 e 1986 - 1991",
+      foto: galeria.AntSoares,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 19,
+      nome: "Edmundo Pinto FIlho",
+      periodo: "1982 - 1984",
+      foto: galeria.Edmundo,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 18,
+      nome: "José Américo Moreira",
+      periodo: "1978 - 1980",
+      foto: galeria.JoseAmerico,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 17,
+      nome: "Raimundo Bezerra de Melo",
+      periodo: "1976 - 1978",
+      foto: galeria.RaimundoBezerra,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 16,
+      nome: "Raimundo Soares Resende",
+      periodo: "1974 - 1976",
+      foto: galeria.RaimundoSoares,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 15,
+      nome: "Boanerges Cisne Sales",
+      periodo: "1971 - 1974",
+      foto: galeria.Boanerges,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 14,
+      nome: "João José de Castro",
+      periodo: "1968 - 1971",
+      foto: galeria.JoaoJose,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 13,
+      nome: "Francisco de Assis Machado",
+      periodo: "1964 - 1968",
+      foto: galeria.FcoDeAssis,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 12,
+      nome: "Antônio de Melo Rosa",
+      periodo: "1961 - 1964",
+      foto: galeria.AntMelo,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 11,
+      nome: "Armando Marques Mourão",
+      periodo: "1958 - 1961",
+      foto: galeria.Armando,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 10,
+      nome: "Pedro de Miranda Melo",
+      periodo: "1954 - 1958",
+      foto: galeria.PedroDeMiranda,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 9,
+      nome: "Bento Coutinho de Macedo",
+      periodo: "1951 - 1954",
+      foto: galeria.Bento,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+
+      id: 8,
+      nome: "Julio Evaristo de Paiva",
+      periodo: "1947 - 1951",
+      foto: galeria.Julio,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 7,
+      nome: "Francisco Melo Lima",
+      periodo: "1943 - 1947",
+      foto: galeria.FcoMelo,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+    {
+      id: 6,
+      nome: "Manoel Evaristo de Paiva",
+      periodo: "1939 - 1943",
+      foto: galeria.Manoel,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+
+    {
+      id: 5,
+      nome: "Pedro Machado da Ponte",
+      periodo: "1935 - 1939",
+      foto: galeria.Pedro,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+
+    {
+      id: 4,
+      nome: "Abel Alcanfor soares",
+      periodo: "1931 - 1935",
+      foto: galeria.Abel,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+
+    {
+      id: 3,
+      nome: "Firmino Rocha Aguiar ",
+      periodo: "1929 - 1931",
+      foto: galeria.Firmino,
+      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+    },
+
+    {
       id: 2,
-      nome: "Dr. João Silva Albuquerque",
-      periodo: "2014 - 2020",
-      foto: "https://cdn.jornaldaparaiba.com.br/wp-content/uploads/2021/08/500x300/Bolsonaro-sorrindo-7.webp?fallback=https%3A%2F%2Fcdn.jornaldaparaiba.com.br%2Fwp-content%2Fuploads%2F2021%2F08%2FBolsonaro-sorrindo.jpeg%3Fxid%3D583659&xid=583659",
-      texto: "Primeira mulher a assumir a presidência. O seu mandato foi marcado pela criação do CMEC estadual e pelo incentivo massivo ao empreendedorismo feminino."
+      nome: "Francisco Mariano Cavalcante",
+      periodo: "1925 - 1929",
+      foto: galeria.FcoMariano,
+      //texto: "Primeira mulher a assumir a presidência. O seu mandato foi marcado pela criação do CMEC estadual e pelo incentivo massivo ao empreendedorismo feminino."
     },
     {
       id: 1,
-      nome: "Maria Fernanda Costa",
-      periodo: "2010 - 2014",
-      foto: "https://media.gazetadopovo.com.br/2023/02/06061310/Lula-1-720x712.jpg",
-      texto: "Liderou a associação em um momento de expansão digital, sendo o principal responsável pela criação dos primeiros portais de integração entre as federações."
+      nome: "Auton Aragão",
+      periodo: "1921 - 1925 ",
+      foto: galeria.AutonAragao,
+      //texto: "Liderou a associação em um momento de expansão digital, sendo o principal responsável pela criação dos primeiros portais de integração entre as federações."
     }
   ]
 };
