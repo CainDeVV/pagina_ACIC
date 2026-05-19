@@ -15,6 +15,7 @@ import ServicoDetalhe from './pages/Public/Servicos/ServicoDetalhe';
 import Eventos from './pages/Public/Eventos/Eventos';
 import EventoDetalhe from './pages/Public/Eventos/EventoDetalhe';
 import Footer from './components/Layout/Footer';
+import NotFound from './pages/Public/NotFound/NotFound';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/eventos/:slug" element={<EventoDetalhe />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>

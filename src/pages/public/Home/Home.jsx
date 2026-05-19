@@ -11,33 +11,15 @@ import DirectorCard from '../../../components/DirectorCard/DirectorCard';
 import { servicosMock } from '../../../mocks/servicosMock';
 import { eventosMock } from '../../../mocks/eventosMock';
 import { diretoriaHomeMock } from '../../../mocks/institucionalMock';
+import { slidesMock, numerosMock, noticiasMock } from '../../../mocks/homeMock';
+
 import './Home.css';
-
-/* ─── DADOS LOCAIS ESPECÍFICOS DA HOME ─── */
-const slidesMockLocal = [
-  { id: 1, titulo: 'Fortalecendo o comércio de Crateús', subtitulo: 'Há décadas unindo empresários e impulsionando a economia regional', imagem_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=80' },
-  { id: 2, titulo: 'Conectando empresários de todos os setores', subtitulo: 'Comércio, indústria, agropecuária e serviços em um só lugar', imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&q=80' },
-  { id: 3, titulo: 'Sua voz no desenvolvimento regional', subtitulo: 'Representação política e institucional para o empresário cearense', imagem_url: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1400&q=80' },
-];
-
-const numerosMock = [
-  { valor: '+500', label: 'Empresas associadas' },
-  { valor: '40+', label: 'Anos de atuação' },
-  { valor: '12', label: 'Municípios atendidos' },
-  { valor: '200+', label: 'Eventos realizados' },
-];
-
-const noticiasMock = [
-  { id: 1, slug: "reuniao-sec", categoria: 'Economia', titulo: 'ACIC participa de reunião com secretaria estadual sobre desenvolvimento regional', data: '07 Mai 2025', imagem_url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=70' },
-  { id: 2, slug: "cafe-emp", categoria: 'Eventos', titulo: 'Café empresarial reúne mais de 80 associados em encontro de networking', data: '02 Mai 2025', imagem_url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=70' },
-  { id: 3, slug: "novo-prog", categoria: 'Associados', titulo: 'Novo programa de benefícios é lançado para empresas do setor de serviços', data: '28 Abr 2025', imagem_url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=70' },
-];
-/* ─────────────────────────────────────────────────────── */
-
 
 export default function Home() {
 
-  const homeSliderData = slidesMockLocal.map((slide) => ({
+  // LÓGICA COMPLEXA: Mapeamento de Dados Externos
+  // Convertemos o array limpo do mock para a estrutura rica de botões e selos exigida pelo HeroSlider
+  const homeSliderData = slidesMock.map((slide) => ({
     id: slide.id,
     image: slide.imagem_url,
     badge: "● ACIC — Crateús, CE",
@@ -115,7 +97,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── DIRETORIA (Componentizada e consumindo Mock Global) ── */}
+      {/* ── DIRETORIA ── */}
       <section className="secao-diretoria">
         <div className="secao-label">Gestão 2023–2025</div>
         <h2>Nossa Diretoria</h2>
