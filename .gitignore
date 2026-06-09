@@ -12,9 +12,6 @@ dist/
 **/dist/
 build/
 
-# Prisma
-backend/prisma/migrations/*.sql
-
 # NestJS
 backend/dist/
 
