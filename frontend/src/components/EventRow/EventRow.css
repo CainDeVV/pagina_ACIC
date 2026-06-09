@@ -1,0 +1,77 @@
+.event-row {
+  display: flex;
+  gap: 16px;
+  padding: 16px 8px; /* Padding ajustado para o efeito de hover funcionar bem */
+  border-bottom: 1px solid #EAECF0;
+  align-items: flex-start;
+  text-decoration: none; /* Garante que o texto não fique sublinhado por ser um Link */
+  transition: background-color 0.2s ease, padding-left 0.2s ease;
+  border-radius: 8px;
+}
+
+/* Efeito sutil: a linha muda de cor e se move levemente, indicando que é clicável */
+.event-row:hover {
+  background-color: #F8FAFC;
+  padding-left: 12px;
+}
+
+.event-row:last-child {
+  border-bottom: none;
+}
+
+.event-date-box {
+  flex-shrink: 0;
+  width: 52px;
+  height: 58px;
+  background: #EBF3FB; /* Azul clarinho baseado na paleta da Home */
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-top: 3px solid #1A5FA8; /* Azul corporativo da marca */
+}
+
+.event-day {
+  font-family: 'Sora', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  color: #1A5FA8;
+  line-height: 1;
+}
+
+.event-month {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #1A5FA8;
+  letter-spacing: 0.5px;
+}
+
+.event-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 4px; /* Alinha o título visualmente com o topo da caixa de data */
+}
+
+.event-info h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A2E; /* Cor de texto escuro baseada na Home */
+  margin: 0 0 6px 0;
+  line-height: 1.4;
+}
+
+.event-meta {
+  font-size: 12px;
+  color: #5A6172; /* Cor de texto mutado */
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap; /* Garante que ícones desçam de linha se a tela do celular for muito estreita */
+}
+
+.event-meta span {
+  display: flex;
+  align-items: center;
+}

@@ -1,58 +1,18 @@
 export const slidesMock = [
-  {
-    id: 1,
-    titulo: "Encontro Empresarial 2026",
-    imagem_url: "https://placehold.co/400x250/EEEEEE/333333?text=Imagem",
-  },
-  {
-    id: 2,
-    titulo: "Inauguração da Nova Sede",
-    imagem_url: "https://placehold.co/400x250/EEEEEE/333333?text=Imagem",
-  }
+  { id: 1, titulo: 'Fortalecendo o comércio de Crateús', subtitulo: 'Há décadas unindo empresários e impulsionando a economia regional', imagem_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=80' },
+  { id: 2, titulo: 'Conectando empresários de todos os setores', subtitulo: 'Comércio, indústria, agropecuária e serviços em um só lugar', imagem_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&q=80' },
+  { id: 3, titulo: 'Sua voz no desenvolvimento regional', subtitulo: 'Representação política e institucional para o empresário cearense', imagem_url: 'https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1400&q=80' },
 ];
 
-export const quemSomosMock = {
-  titulo: "O que somos",
-  resumo: "A ASIC é a Associação Comercial focada em fortalecer o empreendedorismo local. Nossa missão é conectar, capacitar e representar os interesses da classe empresarial, promovendo o desenvolvimento econômico da nossa região."
-};
-
-export const presidentesMock = [
-  {
-    id: 1,
-    nome: "João Silva",
-    cargo: "Presidente",
-    biografia: "Empresário com mais de 20 anos de atuação no setor varejista...",
-    imagem_url: "https://placehold.co/300x300/CCCCCC/000000?text=Foto+Presidente",
-  },
-  {
-    id: 2,
-    nome: "Maria Fernanda",
-    cargo: "Vice-Presidente",
-    biografia: "Especialista em gestão de pessoas e inovação tecnológica...",
-    imagem_url: "https://placehold.co/300x300/CCCCCC/000000?text=Foto+Vice-Presidente",
-  }
+export const numerosMock = [
+  { valor: '+500', label: 'Empresas associadas' },
+  { valor: '40+', label: 'Anos de atuação' },
+  { valor: '12', label: 'Municípios atendidos' },
+  { valor: '200+', label: 'Eventos realizados' },
 ];
 
-export const eventosHomeMock = [
-  {
-    id: 1,
-    titulo: "Comemoração 150 Anos",
-    data_hora: "15 de Junho, 2026 - 19:00",
-    local: "Centro de Convenções",
-    imagem_url: "https://placehold.co/400x250/EEEEEE/333333?text=150+Anos",
-  },
-  {
-    id: 2,
-    titulo: "Palestra: Futuro do Varejo",
-    data_hora: "20 de Maio, 2026 - 14:30",
-    local: "Auditório Principal",
-    imagem_url: "https://placehold.co/400x250/EEEEEE/333333?text=Palestra",
-  },
-  {
-    id: 3,
-    titulo: "Rodada de Negócios",
-    data_hora: "25 de Maio, 2026 - 09:00",
-    local: "Sede da ASIC",
-    imagem_url: "https://placehold.co/400x250/EEEEEE/333333?text=Rodada+de+Negocios",
-  }
+export const noticiasMock = [
+  { id: 1, slug: "reuniao-sec", categoria: 'Economia', titulo: 'ACIC participa de reunião com secretaria estadual sobre desenvolvimento regional', data: '07 Mai 2025', imagem_url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&q=70' },
+  { id: 2, slug: "cafe-emp", categoria: 'Eventos', titulo: 'Café empresarial reúne mais de 80 associados em encontro de networking', data: '02 Mai 2025', imagem_url: 'https://images.unsplash.com/photo-1515187029135-18ee286d815b?w=600&q=70' },
+  { id: 3, slug: "novo-prog", categoria: 'Associados', titulo: 'Novo programa de benefícios é lançado para empresas do setor de serviços', data: '28 Abr 2025', imagem_url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600&q=70' },
 ];

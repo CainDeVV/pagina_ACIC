@@ -1,5 +1,10 @@
-
-
+// Dados simplificados da diretoria especificamente para a Home
+export const diretoriaHomeMock = [
+  { id: 1, nome: 'João Silva', cargo: 'Presidente', imagem_url: 'https://i.pravatar.cc/300?img=11' },
+  { id: 2, nome: 'Maria Souza', cargo: '1ª Vice-Presidente', imagem_url: 'https://i.pravatar.cc/300?img=5' },
+  { id: 3, nome: 'Carlos Melo', cargo: '2º Vice-Presidente', imagem_url: 'https://i.pravatar.cc/300?img=12' },
+  { id: 4, nome: 'Ana Ferreira', cargo: 'Diretora Financeira', imagem_url: 'https://i.pravatar.cc/300?img=9' },
+];
 
 export const quemSomosPageMock = {
   pageTitle: "Quem Somos",
@@ -27,6 +32,66 @@ export const quemSomosPageMock = {
     { type: "pdfLink", url: "https://cacb.org.br/downloads/Estatuto_Atual_CACB.pdf", text: "📄 Acesse aqui o estatuto da CACB", className: "institutional-pdf-link" }
   ]
 };
+
+// Dados completos e categorizados para a página oficial de Diretoria
+export const diretoriaPageMock = [
+  {
+    roleLabel: "PRESIDENTE",
+    members: [
+      { id: 101, nome: "MARIA DO CARMO XIMENES DE PINHO", cargo: "HIPERNACIONAL", imagem_url: null, biografia: "Empresária com vasta experiência no varejo e gestão corporativa, focada na inovação do comércio de Crateús." }
+    ]
+  },
+  {
+    roleLabel: "I VICE-PRESIDENTE",
+    members: [
+      { id: 102, nome: "FRANCISCO ROBERTO LIMA E SILVA", cargo: "GRÁFICA CRATEÚS", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "I SECRETÁRIO",
+    members: [
+      { id: 103, nome: "ANTONIO OSVALDO PONTES DE MELO", cargo: "TINA CONDIMENTOS", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "II SECRETÁRIO",
+    members: [
+      { id: 104, nome: "ANTÔNIO WAGNER CLAUDINO SALES", cargo: "RANCHEIRA W&S", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "I TESOUREIRO",
+    members: [
+      { id: 105, nome: "EDMILSON ARIMATEIA NORTE", cargo: "MARCONORTE", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "I DIRETOR SOCIAL",
+    members: [
+      { id: 106, nome: "ANTONIA LUCINEIDE LEITÃO MACHADO", cargo: "DISTRIBUIDORA DE ÁGUA E CIMENTO", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "II RELAÇÕES PÚBLICAS",
+    members: [
+      { id: 107, nome: "AGOSTINHO MORAES RODRIGUES", cargo: "CASA GOSTINHO", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "CONSELHO FISCAL",
+    members: [
+      { id: 108, nome: "MARCOS ALBERTO SOARES GOIANO", cargo: "COMERCIAL GOIANO", imagem_url: null, biografia: "" },
+      { id: 109, nome: "ARNALDO RODRIGUES SALES", cargo: "VISUALLE", imagem_url: null, biografia: "" },
+      { id: 110, nome: "MARIA ROZELINA PEREIRA DE SOUSA", cargo: "MERCADINHO SR. FRANSQUINHO", imagem_url: null, biografia: "" }
+    ]
+  },
+  {
+    roleLabel: "CONSELHO CONSULTIVO",
+    members: [
+      { id: 111, nome: "ANTONIO LUÍZ BENEVIDES SALES", cargo: "MERCANSALES", imagem_url: null, biografia: "" }
+    ]
+  }
+];
 
 export const cmecPageMock = {
   pageTitle: "CMEC",
@@ -117,7 +182,7 @@ export const galeriaPresidentesMock = {
       nome: "Francisco Roberto Lima e Silva",
       periodo: "2017 - 2023",
       foto: galeria.FcoRoberto,
-      //texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
+      texto: "Atual presidente, focado na reestruturação e modernização da entidade, além da defesa incansável dos direitos dos micro e pequenos empresários junto ao Governo Federal."
     },
     {
       id: 24,

@@ -1,0 +1,154 @@
+/* ESTRUTURA BASE (Comum a ambas as variantes) */
+.director-card {
+  position: relative;
+  width: 100%;
+  /* Removemos o max-width para que o Grid da Home defina a largura livremente, 
+     criando o aspecto de "paisagem" horizontal que estava no original. */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.2s ease;
+}
+
+.director-card:hover {
+  transform: translateY(-4px);
+}
+
+.director-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px; /* Restauramos a altura fixa original de 220px */
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.director-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.director-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  background: linear-gradient(160deg, #c8d6ea 0%, #a8bed9 100%);
+  color: #ffffff;
+}
+
+/* LÓGICA COMPLEXA: Z-Index e Posição do botão de modal */
+.director-dots-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1A5FA8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  transition: background 0.2s ease, transform 0.2s ease;
+  z-index: 2;
+}
+
+.director-dots-btn:hover {
+  background: #ffffff;
+  transform: scale(1.1);
+}
+
+.director-info {
+  padding: 18px 20px;
+}
+
+.director-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.director-role {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+/* ========================================================
+   VARIANTE: DARK (Página Home - Fundo Azul)
+   ======================================================== */
+.variant-dark {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.variant-dark:hover {
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.variant-dark .director-img-wrapper {
+  border-radius: 0; /* Na Home a imagem cola nas bordas superiores */
+}
+
+.variant-dark .director-info {
+  border-top: 3px solid #F5A500;
+}
+
+.variant-dark .director-name {
+  color: #ffffff;
+}
+
+.variant-dark .director-role {
+  color: #F5A500;
+}
+
+/* ========================================================
+   VARIANTE: LIGHT (Página Diretoria - Fundo Branco)
+   ======================================================== */
+.variant-light {
+  background: transparent;
+  border: none;
+  align-items: center;
+  text-align: center;
+}
+
+/* Na página Institucional, forçamos a imagem a ser um quadrado 
+   centralizado, já que lá o layout pede uma foto de perfil mais tradicional */
+.variant-light .director-img-wrapper {
+  width: 220px;
+  height: 220px;
+  margin: 0 auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.variant-light:hover .director-img-wrapper {
+  box-shadow: 0 16px 40px rgba(26, 74, 138, 0.18);
+}
+
+.variant-light .director-info {
+  padding: 16px 0 0 0;
+  border-top: none;
+}
+
+.variant-light .director-name {
+  color: #1A1A2E;
+  font-size: 14px;
+}
+
+.variant-light .director-role {
+  color: #5A6172;
+}

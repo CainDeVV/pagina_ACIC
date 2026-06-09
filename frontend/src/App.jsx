@@ -1,20 +1,21 @@
 import { Routes, Route } from 'react-router-dom';
-import ScrollToTop from './components/ScrollToTop';
-import Header from './components/layout/Header';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import Header from './components/Layout/Header';
 import Navbar from './components/Navbar/Navbar';
-import Home from './pages/public/Home';
-import QuemSomos from './pages/public/institucional/QuemSomos';
-import Diretoria  from './pages/public/institucional/Diretoria';
-import Estatuto from './pages/public/institucional/Estatuto';
-import EstruturaOrganizacional from './pages/public/institucional/EstruturaOrganizacional';
-import Cmec from './pages/public/institucional/Cmec';
-import Contatos from './pages/public/institucional/Contatos';
-import GaleriaPresidentes from './pages/public/institucional/GaleriaPresidentes';
-import Servicos from './pages/public/servicos/Servicos';
-import ServicoDetalhe from './pages/public/servicos/ServicoDetalhe';
-import Eventos from './pages/public/Eventos/Eventos';
-import EventoDetalhe from './pages/public/Eventos/EventoDetalhe';
-import Footer from './components/layout/Footer';
+import Home from './pages/Public/Home/Home';
+import QuemSomos from './pages/Public/Institucional/QuemSomos';
+import Diretoria  from './pages/Public/Institucional/Diretoria';
+import Estatuto from './pages/Public/Institucional/Estatuto';
+import EstruturaOrganizacional from './pages/Public/Institucional/EstruturaOrganizacional';
+import Cmec from './pages/Public/Institucional/Cmec';
+import Contatos from './pages/Public/Institucional/Contatos';
+import GaleriaPresidentes from './pages/Public/Institucional/GaleriaPresidentes';
+import Servicos from './pages/Public/Servicos/Servicos';
+import ServicoDetalhe from './pages/Public/Servicos/ServicoDetalhe';
+import Eventos from './pages/Public/Eventos/Eventos';
+import EventoDetalhe from './pages/Public/Eventos/EventoDetalhe';
+import Footer from './components/Layout/Footer';
+import NotFound from './pages/Public/NotFound/NotFound';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
         <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/eventos/:slug" element={<EventoDetalhe />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
     </div>
