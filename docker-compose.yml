@@ -5,31 +5,39 @@ services:
     container_name: acic_db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: acic_db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-acic_db}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-acic_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
+      target: development
     container_name: acic_backend
     restart: always
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/acic_db
-      JWT_SECRET: sua_chave_secreta_aqui
-      NODE_ENV: development
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-acic_db}
+      JWT_SECRET: ${JWT_SECRET:-sua_chave_secreta_aqui}
+      NODE_ENV: ${NODE_ENV:-development}
     ports:
       - "3000:3000"
     volumes:
       - ./backend:/app
       - /app/node_modules
+    command: sh -c "npx prisma migrate deploy && npm run start:dev"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
   frontend:
     build:
