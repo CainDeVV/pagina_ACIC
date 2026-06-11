@@ -28,7 +28,3 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
-
-# Agentes de IA
-.agent/
-geminiignore
