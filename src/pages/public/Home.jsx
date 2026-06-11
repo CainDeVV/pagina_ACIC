@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import HeroSlider from '../../components/HeroSlider/HeroSlider'; 
-
+import { Helmet } from 'react-helmet-async';
+import HeroSlider from '../../components/HeroSlider/HeroSlider';
 /* ─── MOCK DATA ─── */
 const slidesMock = [
   { id: 1, titulo: 'Fortalecendo o comércio de Crateús', subtitulo: 'Há décadas unindo empresários e impulsionando a economia regional', imagem_url: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=80' },
@@ -209,6 +209,9 @@ export default function Home() {
 
   return (
     <>
+    <Helmet>
+      <title>ACIC - Associação Comercial e Industrial de Crateús</title>
+    </Helmet>
       <style>{css}</style>
       <main className="acic-home">
 
