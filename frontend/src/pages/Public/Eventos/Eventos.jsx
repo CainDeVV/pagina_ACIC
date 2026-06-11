@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { eventosMock } from "../../../mocks/eventosMock.js";
 import './Eventos.css';
 
@@ -7,6 +8,10 @@ function Eventos() {
   const outrosEventos = eventosMock.filter((e) => !e.destaque);
 
   return (
+    <>
+    <Helmet>
+      <title>Eventos | ACIC</title>
+    </Helmet> 
     <div className="eventos-page">
       <div className="eventos-header">
         <h1>Eventos</h1>
@@ -68,6 +73,7 @@ function Eventos() {
         </div>
       )}
     </div>
+    </>
   );
 }
 

@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './NotFound.css';
 
 function NotFound() {
   return (
+      <>
+      <Helmet>
+        <title>404 - Página Não Encontrada | ACIC</title>
+      </Helmet>
     <div className="not-found-page">
       <div className="not-found-content">
         <h1 className="not-found-title">404</h1>
@@ -16,6 +21,7 @@ function NotFound() {
         </Link>
       </div>
     </div>
+    </>
   );
 }
 
