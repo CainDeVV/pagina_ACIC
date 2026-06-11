@@ -6,6 +6,11 @@ import './Servicos.css';
 
 function Servicos() {
 
+  // 1. Filtra apenas os serviços marcados como destaque
+  // (Caso nenhum esteja como destaque no Mock, exibimos todos temporariamente para não quebrar a tela)
+  const servicosDestaque = servicosMock.filter(s => s.destaque);
+  const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicosMock;
+
   const sliderData = servicosMock.map((servico) => ({
     id: servico.id,
     image: servico.bannerUrl,

@@ -1,5 +1,5 @@
 import { PublishStatus } from '@prisma/client';
-import { IsEnum, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateServicoDto {
@@ -27,6 +27,11 @@ export class CreateServicoDto {
   @IsUrl({}, { message: 'A imagem deve ser uma URL válida.' })
   @IsOptional()
   imageUrl?: string;
+
+  @ApiProperty({ example: true, description: 'Define se o serviço aparecerá no banner principal (Slider)', required: false })
+  @IsBoolean()
+  @IsOptional()
+  destaque?: boolean;
 
   @ApiProperty({ enum: PublishStatus, default: PublishStatus.DRAFT })
   @IsEnum(PublishStatus)

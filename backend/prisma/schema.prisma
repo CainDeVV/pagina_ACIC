@@ -96,6 +96,7 @@ model Evento {
   endsAt       DateTime?
   capacity     Int?
   coverImage   String?
+  destaque     Boolean                  @default(false)
   status       EventStatus        @default(DRAFT)
   authorId     String?
   author       User?              @relation("EventoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
@@ -140,6 +141,7 @@ model Servico {
   description Json
   icon        String?
   imageUrl    String?
+  destaque    Boolean       @default(false)
   status      PublishStatus @default(DRAFT)
   authorId    String?
   author      User?         @relation("ServicoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
