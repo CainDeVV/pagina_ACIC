@@ -12,7 +12,7 @@ function Servicos() {
   const servicosDestaque = servicosMock.filter(s => s.destaque);
   const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicosMock;
 
-  const sliderData = servicosMock.map((servico) => ({
+  const sliderData = servicosParaSlider.map((servico) => ({
     id: servico.id,
     image: servico.bannerUrl,
     badge: "Serviços",
