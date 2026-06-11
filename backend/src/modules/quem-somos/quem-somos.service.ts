@@ -5,14 +5,14 @@ import { UpdateQuemSomosDto } from './dto/update-quem-somos.dto';
 
 @Injectable()
 export class QuemSomosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createQuemSomosDto: CreateQuemSomosDto) {
     try {
       return await this.prisma.quemSomosSection.create({
         data: createQuemSomosDto,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2002') {
         throw new ConflictException('Uma seção com essa chave (key) já existe.');
       }
@@ -28,10 +28,16 @@ export class QuemSomosService {
     });
   }
 
-  async findOne(id: string) {
-    const section = await this.prisma.quemSomosSection.findUnique({
-      where: { id },
+  async findOne(idOrKey: string) {
+    const section = await this.prisma.quemSomosSection.findFirst({
+      where: {
+        OR: [
+          { id: idOrKey },
+          { key: idOrKey }
+        ],
+      },
     });
+    
     if (!section) {
       throw new NotFoundException('Seção não encontrada.');
     }
@@ -44,9 +50,9 @@ export class QuemSomosService {
         where: { id },
         data: updateQuemSomosDto,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
-        throw new NotFoundException('Seção não encontrada.');
+        throw new NotFoundException('Seção não encontrada para atualização.');
       }
       throw error;
     }
@@ -57,9 +63,9 @@ export class QuemSomosService {
       return await this.prisma.quemSomosSection.delete({
         where: { id },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
-        throw new NotFoundException('Seção não encontrada.');
+        throw new NotFoundException('Seção não encontrada para exclusão.');
       }
       throw error;
     }

@@ -1,20 +1,4 @@
-import { PublishStatus } from '@prisma/client';
-import { IsEnum, IsInt, IsObject, IsOptional, IsString } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateQuemSomosDto } from './create-quem-somos.dto';
 
-export class UpdateQuemSomosDto {
-  @IsString()
-  @IsOptional()
-  title?: string;
-
-  @IsObject()
-  @IsOptional()
-  content?: any;
-
-  @IsEnum(PublishStatus)
-  @IsOptional()
-  status?: PublishStatus;
-
-  @IsInt()
-  @IsOptional()
-  sortOrder?: number;
-}
+export class UpdateQuemSomosDto extends PartialType(CreateQuemSomosDto) {}

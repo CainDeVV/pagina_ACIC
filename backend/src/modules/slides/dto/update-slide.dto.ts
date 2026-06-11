@@ -1,28 +1,4 @@
-import { PublishStatus } from '@prisma/client';
-import { IsEnum, IsInt, IsOptional, IsString, IsUrl } from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateSlideDto } from './create-slide.dto';
 
-export class UpdateSlideDto {
-  @IsString()
-  @IsOptional()
-  title?: string;
-
-  @IsString()
-  @IsOptional()
-  subtitle?: string;
-
-  @IsUrl()
-  @IsOptional()
-  imageUrl?: string;
-
-  @IsUrl()
-  @IsOptional()
-  linkUrl?: string;
-
-  @IsEnum(PublishStatus)
-  @IsOptional()
-  status?: PublishStatus;
-
-  @IsInt()
-  @IsOptional()
-  sortOrder?: number;
-}
+export class UpdateSlideDto extends PartialType(CreateSlideDto) {}

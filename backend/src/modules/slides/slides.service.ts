@@ -50,7 +50,7 @@ export class SlidesService {
         where: { id },
         data: updateSlideDto,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
         throw new NotFoundException('Slide não encontrado.');
       }
@@ -63,7 +63,7 @@ export class SlidesService {
       return await this.prisma.homeSlide.delete({
         where: { id },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
         throw new NotFoundException('Slide não encontrado.');
       }

@@ -37,7 +37,7 @@ export class PresidentesService {
         where: { id },
         data: updatePresidenteDto,
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
         throw new NotFoundException('Presidente não encontrado.');
       }
@@ -50,7 +50,7 @@ export class PresidentesService {
       return await this.prisma.presidente.delete({
         where: { id },
       });
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
         throw new NotFoundException('Presidente não encontrado.');
       }

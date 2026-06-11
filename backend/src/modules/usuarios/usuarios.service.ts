@@ -22,7 +22,7 @@ export class UsuariosService {
       });
       const { passwordHash: _, ...result } = user;
       return result;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2002') {
         throw new ConflictException('E-mail já cadastrado.');
       }
@@ -79,7 +79,7 @@ export class UsuariosService {
       });
       const { passwordHash: _, ...result } = user;
       return result;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2002') {
         throw new ConflictException('E-mail já cadastrado.');
       }
@@ -97,7 +97,7 @@ export class UsuariosService {
       });
       const { passwordHash: _, ...result } = user;
       return result;
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'P2025') {
         throw new NotFoundException('Usuário não encontrado.');
       }

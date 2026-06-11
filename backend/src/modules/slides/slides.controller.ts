@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { SlidesService } from './slides.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
@@ -8,10 +9,12 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { UserRole } from '@prisma/client';
 
+@ApiTags('Slides')
 @Controller()
 export class SlidesController {
   constructor(private readonly slidesService: SlidesService) {}
 
+  // ROTAS PÚBLICAS (Sem cadeado no Swagger)
   @Get('slides')
   findAll() {
     return this.slidesService.findAll();
@@ -22,6 +25,8 @@ export class SlidesController {
     return this.slidesService.findOne(id);
   }
 
+  // ROTAS ADMINISTRATIVAS PROTEGIDAS
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Post('admin/slides')
@@ -29,6 +34,7 @@ export class SlidesController {
     return this.slidesService.create(createSlideDto, user.id);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/slides/:id')
@@ -36,6 +42,7 @@ export class SlidesController {
     return this.slidesService.update(id, updateSlideDto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/slides/:id')

@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PresidentesService } from './presidentes.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
 import { UpdatePresidenteDto } from './dto/update-presidente.dto';
@@ -7,6 +8,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 
+@ApiTags('Presidentes')
 @Controller()
 export class PresidentesController {
   constructor(private readonly presidentesService: PresidentesService) {}
@@ -21,6 +23,7 @@ export class PresidentesController {
     return this.presidentesService.findOne(id);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Post('admin/presidentes')
@@ -28,6 +31,7 @@ export class PresidentesController {
     return this.presidentesService.create(createPresidenteDto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/presidentes/:id')
@@ -35,6 +39,7 @@ export class PresidentesController {
     return this.presidentesService.update(id, updatePresidenteDto);
   }
 
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/presidentes/:id')
