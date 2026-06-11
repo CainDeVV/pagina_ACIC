@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import SaibaMaisLayout from "../../../components/Layout/SaibaMaisLayout";
 import DirectorCard from "../../../components/DirectorCard/DirectorCard";
 import { diretoriaPageMock } from "../../../mocks/institucionalMock";
@@ -20,6 +21,10 @@ function Diretoria() {
   };
 
   return (
+    <>
+    <Helmet>
+      <title>Diretoria | ACIC</title>
+    </Helmet>
     <SaibaMaisLayout activeItem="diretoria" titulo="Diretoria">
       <div className="diretoria-page">
         <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
@@ -81,6 +86,7 @@ function Diretoria() {
       </div>
 
     </SaibaMaisLayout>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
@@ -15,11 +16,25 @@ function ServicoDetalhe() {
   const outrosServicos = servicosMock.filter(s => s.slug !== slug);
 
   if (!servicoAtual) {
-    return <div className="servico-detalhe-page"><h2>Serviço não encontrado.</h2></div>;
+    return (
+    <>
+      <Helmet>
+        <title>Serviço não encontrado | ACIC</title>
+      </Helmet>
+
+      <div className="servico-detalhe-page">
+        <h2>Serviço não encontrado.</h2>
+      </div>
+    </>
+    );
   }
 
   return (
     <>
+    <Helmet>
+  <title>{servicoAtual.titulo + " | ACIC"}</title>
+</Helmet>
+
       <div className="servico-detalhe-page">
         
         <Breadcrumb items={[{ label: 'Serviços', path: '/servicos' }, { label: servicoAtual.titulo }]} />

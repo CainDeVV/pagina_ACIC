@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { servicosMock } from '../../../mocks/servicosMock';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
@@ -17,6 +18,10 @@ function Servicos() {
   }));
 
   return (
+    <>
+    <Helmet>
+      <title>Serviços | ACIC</title>
+    </Helmet>
     <div className="servicos-page">
       <HeroSlider slides={sliderData} autoPlayTime={5000} />
 
@@ -28,6 +33,7 @@ function Servicos() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

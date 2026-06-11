@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { Helmet } from 'react-helmet-async';
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
@@ -43,6 +43,10 @@ export default function Home() {
   const homeEventos = eventosMock.slice(0, 3);
 
   return (
+    <>
+    <Helmet>
+      <title>ACIC - Associação Comercial e Industrial de Crateús</title>
+    </Helmet>
     <main className="acic-home">
 
       {/* ── HERO SLIDER ── */}
@@ -151,5 +155,6 @@ export default function Home() {
       </section>
 
     </main>
+    </>
   );
 }

@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import { eventosMock } from "../../../mocks/eventosMock.js";
 import './Eventos.css';
@@ -9,16 +10,25 @@ function EventoDetalhe() {
 
   if (!evento) {
     return (
+      <>
+      <Helmet>
+        <title>Evento Não Encontrado | ACIC</title>
+      </Helmet>
       <div className="eventos-page">
         <div className="eventos-vazio">
           <p>Evento não encontrado.</p>
           <Link to="/eventos" className="btn-voltar">← Voltar para Eventos</Link>
         </div>
       </div>
+      </>
     );
   }
 
   return (
+    <>
+    <Helmet>
+      <title>{evento.titulo} | ACIC</title>
+    </Helmet>
     <div className="eventos-page">
       {/* Banner */}
       <div className="evento-detalhe-banner">
@@ -37,6 +47,7 @@ function EventoDetalhe() {
         <BlockRenderer blocks={evento.blocks} />
       </div>
     </div>
+    </>
   );
 }
 
