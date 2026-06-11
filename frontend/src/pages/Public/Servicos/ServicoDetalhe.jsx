@@ -1,0 +1,93 @@
+import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useParams, Link } from 'react-router-dom';
+import { servicosMock } from '../../../mocks/servicosMock';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
+import ServiceCard from '../../../components/ServiceCard/ServiceCard';
+import './Servicos.css';
+import '../../../components/Layout/SaibaMaisLayout.css'; 
+
+function ServicoDetalhe() {
+  const { slug } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const servicoAtual = servicosMock.find(s => s.slug === slug);
+  const outrosServicos = servicosMock.filter(s => s.slug !== slug);
+
+  if (!servicoAtual) {
+    return (
+    <>
+      <Helmet>
+        <title>Serviço não encontrado | ACIC</title>
+      </Helmet>
+
+      <div className="servico-detalhe-page">
+        <h2>Serviço não encontrado.</h2>
+      </div>
+    </>
+    );
+  }
+
+  return (
+    <>
+    <Helmet>
+  <title>{servicoAtual.titulo + " | ACIC"}</title>
+</Helmet>
+
+      <div className="servico-detalhe-page">
+        
+        <Breadcrumb items={[{ label: 'Serviços', path: '/servicos' }, { label: servicoAtual.titulo }]} />
+
+        <div className="servico-banner">
+          <img src={servicoAtual.bannerUrl} alt={servicoAtual.titulo} />
+          <div className="servico-banner-content">
+            <h1>{servicoAtual.titulo}</h1>
+            <button className="btn-eu-quero" onClick={() => setIsModalOpen(true)}>
+              {/* Agora o texto do botão vem dinamicamente do mock */}
+              {servicoAtual.textoBotao || "Eu quero"} 
+            </button>
+          </div>
+        </div>
+
+        {/* Substituímos a div dangerouslySetInnerHTML pelo nosso poderoso BlockRenderer */}
+        <div className="servico-descricao">
+          <BlockRenderer blocks={servicoAtual.blocks} />
+        </div>
+
+        <hr style={{ borderColor: '#eaeaea', marginBottom: '40px' }} />
+
+        <h2>Outros Serviços</h2>
+        <div className="servicos-grid">
+          {outrosServicos.map(servico => (
+            <ServiceCard key={servico.id} service={servico} />
+          ))}
+        </div>
+      </div>
+
+      {/* DRAWER / MODAL LATERAL */}
+      <div className={`drawer-overlay ${isModalOpen ? 'open' : ''}`} onClick={() => setIsModalOpen(false)}>
+        <div className="drawer-content" onClick={(e) => e.stopPropagation()}>
+          <div className="drawer-header">
+            <h2>{servicoAtual.textoBotao || "Eu quero"}</h2>
+            <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
+          </div>
+          
+          <p style={{ lineHeight: '1.6', color: '#555', fontSize: '1.1rem' }}>
+            {servicoAtual.modalInfo.texto}
+          </p>
+
+          <div className="btn-telefone">
+            📞 {servicoAtual.modalInfo.telefone}
+          </div>
+
+          <a href={servicoAtual.modalInfo.linkWhatsapp} target="_blank" rel="noreferrer" className="btn-whatsapp">
+            Enviar mensagem no WhatsApp
+          </a>
+        </div>
+      </div>
+    </>
+  );
+}
+
+export default ServicoDetalhe;

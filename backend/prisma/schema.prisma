@@ -1,0 +1,187 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  ASSOCIADO
+}
+
+enum PublishStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+  CANCELLED
+  FINISHED
+}
+
+enum RegistrationStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum CertificateStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ISSUED
+}
+
+model User {
+  id           String      @id @default(uuid())
+  name         String
+  email        String      @unique
+  passwordHash String
+  role         UserRole    @default(EDITOR)
+  active       Boolean     @default(true)
+  associado    Associado?
+  noticias     Noticia[]   @relation("NoticiaAuthor")
+  eventos      Evento[]    @relation("EventoAuthor")
+  servicos     Servico[]   @relation("ServicoAuthor")
+  slides       HomeSlide[] @relation("SlideAuthor")
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Associado {
+  id            String                  @id @default(uuid())
+  userId        String                  @unique
+  user          User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  companyName   String
+  tradeName     String?
+  cnpj          String                  @unique
+  phone         String?
+  address       String?
+  active        Boolean                 @default(true)
+  inscricoes    InscricaoEvento[]
+  certificados  CertificadoSolicitacao[]
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+}
+
+model Noticia {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique
+  summary     String?
+  content     Json
+  coverImage  String?
+  status      PublishStatus @default(DRAFT)
+  publishedAt DateTime?
+  authorId    String?
+  author      User?         @relation("NoticiaAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Evento {
+  id           String             @id @default(uuid())
+  title        String
+  slug         String             @unique
+  description  Json
+  location     String?
+  startsAt     DateTime
+  endsAt       DateTime?
+  capacity     Int?
+  coverImage   String?
+  destaque     Boolean                  @default(false)
+  status       EventStatus        @default(DRAFT)
+  authorId     String?
+  author       User?              @relation("EventoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  inscricoes   InscricaoEvento[]
+  certificados CertificadoSolicitacao[]
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+}
+
+model InscricaoEvento {
+  id          String             @id @default(uuid())
+  eventoId    String
+  associadoId String
+  evento      Evento             @relation(fields: [eventoId], references: [id], onDelete: Cascade)
+  associado   Associado          @relation(fields: [associadoId], references: [id], onDelete: Cascade)
+  status      RegistrationStatus @default(PENDING)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@unique([eventoId, associadoId])
+}
+
+model CertificadoSolicitacao {
+  id          String            @id @default(uuid())
+  associadoId String
+  eventoId    String?
+  associado   Associado         @relation(fields: [associadoId], references: [id], onDelete: Cascade)
+  evento      Evento?           @relation(fields: [eventoId], references: [id], onDelete: SetNull)
+  reason      String?
+  status      CertificateStatus @default(PENDING)
+  fileUrl     String?
+  reviewedAt  DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model Servico {
+  id          String        @id @default(uuid())
+  title       String
+  slug        String        @unique
+  summary     String?
+  description Json
+  icon        String?
+  imageUrl    String?
+  destaque    Boolean       @default(false)
+  status      PublishStatus @default(DRAFT)
+  authorId    String?
+  author      User?         @relation("ServicoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Presidente {
+  id        String   @id @default(uuid())
+  name      String
+  termStart Int
+  termEnd   Int?
+  photoUrl  String?
+  bio       String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QuemSomosSection {
+  id        String        @id @default(uuid())
+  key       String        @unique
+  title     String
+  content   Json
+  status    PublishStatus @default(PUBLISHED)
+  sortOrder Int           @default(0)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model HomeSlide {
+  id          String        @id @default(uuid())
+  title       String
+  subtitle    String?
+  imageUrl    String
+  linkUrl     String?
+  status      PublishStatus @default(DRAFT)
+  sortOrder   Int           @default(0)
+  authorId    String?
+  author      User?         @relation("SlideAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
