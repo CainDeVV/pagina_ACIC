@@ -10,6 +10,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-acic_db}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
+    networks:
+      - acic_network
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -31,6 +33,8 @@ services:
       NODE_ENV: ${NODE_ENV:-development}
     ports:
       - "3000:3000"
+    networks:
+      - acic_network
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -38,6 +42,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/api || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
 
   frontend:
     build:
@@ -50,11 +60,18 @@ services:
       VITE_API_URL: http://localhost:3000
     ports:
       - "5173:5173"
+    networks:
+      - acic_network
     volumes:
       - ./frontend:/app
       - /app/node_modules
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+
+networks:
+  acic_network:
+    driver: bridge
 
 volumes:
   pgdata:
