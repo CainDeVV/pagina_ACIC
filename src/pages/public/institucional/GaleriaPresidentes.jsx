@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import SaibaMaisLayout from '../../../components/layout/SaibaMaisLayout';
 import { galeriaPresidentesMock } from '../../../mocks/institucionalMock';
 import '../../../styles/institucional/institucional.css'; // Estilos globais
@@ -5,6 +6,10 @@ import '../../../styles/institucional/galeriaPresidentes.css'; // Estilos desta 
 
 function GaleriaPresidentes() {
   return (
+     <>
+      <Helmet>
+        <title>Galeria de Presidentes | ACIC</title>
+      </Helmet>
     <SaibaMaisLayout titulo={galeriaPresidentesMock.pageTitle}>
       
       {/* Cabeçalho da Página */}
@@ -37,7 +42,8 @@ function GaleriaPresidentes() {
       </div>
 
     </SaibaMaisLayout>
-  );
+    </>
+  ); 
 }
 
 export default GaleriaPresidentes;

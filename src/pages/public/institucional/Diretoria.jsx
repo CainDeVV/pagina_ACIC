@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import SaibaMaisLayout from "../../../components/layout/SaibaMaisLayout";
 import BlockRenderer from "../../../components/BlockRenderer";
 import '../../../styles/institucional/institucional.css';
@@ -10,6 +11,10 @@ function Diretoria(){
 
 const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo}`)};
     return(
+        <>
+        <Helmet>
+        <title>Diretoria | ACIC</title>
+      </Helmet>
         <SaibaMaisLayout activeItem="diretoria" titulo="Diretoria">
             <div>
                 <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
@@ -164,7 +169,7 @@ const openModal = (cargo) =>{alert(`Abrir modal com informações sobre: ${cargo
 
             </div>
         </SaibaMaisLayout>
-
+        </>
     );
 }
 

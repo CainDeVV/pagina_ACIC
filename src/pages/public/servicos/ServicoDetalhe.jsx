@@ -1,3 +1,4 @@
+import { Helmet } from 'react-helmet-async';
 import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { servicosMock } from '../../../mocks/servicosMock';
@@ -20,6 +21,9 @@ function ServicoDetalhe() {
 
   return (
     <>
+    <Helmet>
+  <title>{servicoAtual.titulo} | ACIC</title>
+</Helmet>
       <div className="servico-detalhe-page">
         
         <Breadcrumb items={[{ label: 'Serviços', path: '/servicos' }, { label: servicoAtual.titulo }]} />
