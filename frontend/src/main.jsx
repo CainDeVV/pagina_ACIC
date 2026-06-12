@@ -1,4 +1,3 @@
-// src/main.jsx
 import { HelmetProvider } from 'react-helmet-async';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';

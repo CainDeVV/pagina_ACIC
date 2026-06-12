@@ -6,17 +6,17 @@ export class CreateUsuarioDto {
   @ApiProperty({ example: 'Administrador ACIC' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 'admin@acic.local' })
   @IsEmail()
   @IsNotEmpty()
-  email: string;
+  email!: string;
 
   @ApiProperty({ example: 'senha123', description: 'A senha deve conter pelo menos 6 caracteres', minLength: 6 })
   @IsString()
   @MinLength(6)
-  password: string;
+  password!: string;
 
   @ApiProperty({ enum: UserRole, default: UserRole.EDITOR, required: false })
   @IsEnum(UserRole)

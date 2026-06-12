@@ -6,12 +6,12 @@ export class CreateQuemSomosDto {
   @ApiProperty({ example: 'estatuto', description: 'Chave única de identificação da página (ex: estatuto, cmec, quem-somos)' })
   @IsString()
   @IsNotEmpty()
-  key: string;
+  key!: string;
 
   @ApiProperty({ example: 'Estatuto da ACIC' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiProperty({ example: { blocks: [] }, description: 'JSON estruturado do Editor.js' })
   @IsObject()

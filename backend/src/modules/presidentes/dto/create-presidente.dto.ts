@@ -5,12 +5,12 @@ export class CreatePresidenteDto {
   @ApiProperty({ example: 'Francisco Roberto Lima e Silva' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @ApiProperty({ example: 2017 })
   @IsInt()
   @IsNotEmpty()
-  termStart: number;
+  termStart!: number;
 
   @ApiProperty({ example: 2023, required: false })
   @IsInt()

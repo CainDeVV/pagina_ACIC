@@ -6,7 +6,7 @@ export class CreateSlideDto {
   @ApiProperty({ example: 'Fortalecendo o comércio de Crateús' })
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @ApiProperty({ example: 'Há décadas unindo empresários e impulsionando a economia regional', required: false })
   @IsString()
@@ -16,7 +16,7 @@ export class CreateSlideDto {
   @ApiProperty({ example: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab' })
   @IsUrl()
   @IsNotEmpty()
-  imageUrl: string;
+  imageUrl!: string;
 
   @ApiProperty({ example: 'https://acic.com.br/contatos', required: false })
   @IsUrl()

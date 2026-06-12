@@ -6,7 +6,7 @@ export class CreateServicoDto {
   @ApiProperty({ example: 'Certificado Digital' })
   @IsString()
   @IsNotEmpty({ message: 'O título é obrigatório.' })
-  title: string;
+  title!: string;
 
   @ApiProperty({ example: 'Emita o seu certificado sem sair de casa.', required: false })
   @IsString()
