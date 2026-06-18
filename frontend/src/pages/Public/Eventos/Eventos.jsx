@@ -1,11 +1,44 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { eventosMock } from "../../../mocks/eventosMock.js";
+import { eventosService } from '../../../services/eventosService';
 import './Eventos.css';
 
 function Eventos() {
-  const eventosDestaque = eventosMock.filter((e) => e.destaque);
-  const outrosEventos = eventosMock.filter((e) => !e.destaque);
+  const [eventos, setEventos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    async function carregarEventos() {
+      try {
+        const dados = await eventosService.buscarTodos();
+        setEventos(dados);
+      } catch (error) {
+        console.error("Erro ao carregar os eventos:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+    carregarEventos();
+  }, []);
+
+  // Assumimos o primeiro evento retornado da API como o destaque principal
+  const eventosDestaque = eventos.length > 0 ? [eventos[0]] : [];
+  const outrosEventos = eventos.length > 1 ? eventos.slice(1) : [];
+
+  if (carregando) {
+    return (
+      <div className="eventos-page">
+        <div className="eventos-header">
+          <h1>Eventos</h1>
+          <p>Carregando eventos...</p>
+        </div>
+        <div className="eventos-vazio">
+          <p>Buscando dados no servidor...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -18,7 +51,6 @@ function Eventos() {
         <p>Fique por dentro das novidades e acontecimentos da ACIC Crateús</p>
       </div>
 
-      {/* Eventos em Destaque */}
       {eventosDestaque.length > 0 && (
         <section className="eventos-destaque-section">
           <h2 className="eventos-section-titulo">Em Destaque</h2>
@@ -29,13 +61,17 @@ function Eventos() {
               className="evento-destaque-card"
             >
               <div className="evento-destaque-img-wrapper">
-                <img src={evento.cardUrl} alt={evento.titulo} />
-                <span className="evento-badge">{evento.categoria}</span>
+                <img src={evento.coverImage || 'https://placehold.co/800x400?text=Evento+ACIC'} alt={evento.title} />
+                <span className="evento-badge">
+                  {evento.status === 'PUBLISHED' ? 'Evento' : 'Em Breve'}
+                </span>
               </div>
               <div className="evento-destaque-info">
-                <span className="evento-data">{evento.data}</span>
-                <h3>{evento.titulo}</h3>
-                <p>{evento.resumo}</p>
+                <span className="evento-data">
+                  {new Date(evento.startsAt).toLocaleDateString('pt-BR')}
+                </span>
+                <h3>{evento.title}</h3>
+                {evento.location && <p>📍 {evento.location}</p>}
                 <span className="btn-saiba-mais-evento">Saiba mais →</span>
               </div>
             </Link>
@@ -43,7 +79,6 @@ function Eventos() {
         </section>
       )}
 
-      {/* Outros Eventos */}
       {outrosEventos.length > 0 && (
         <section className="eventos-lista-section">
           <h2 className="eventos-section-titulo">Outros Eventos</h2>
@@ -54,12 +89,16 @@ function Eventos() {
                 key={evento.id}
                 className="evento-card"
               >
-                <img src={evento.cardUrl} alt={evento.titulo} />
+                <img src={evento.coverImage || 'https://placehold.co/150x150?text=Evento'} alt={evento.title} />
                 <div className="evento-card-info">
-                  <span className="evento-badge">{evento.categoria}</span>
-                  <h3>{evento.titulo}</h3>
-                  <p>{evento.resumo}</p>
-                  <span className="evento-data">{evento.data}</span>
+                  <span className="evento-badge">
+                    {evento.status === 'PUBLISHED' ? 'Evento' : 'Em Breve'}
+                  </span>
+                  <h3>{evento.title}</h3>
+                  {evento.location && <p>📍 {evento.location}</p>}
+                  <span className="evento-data">
+                    {new Date(evento.startsAt).toLocaleDateString('pt-BR')}
+                  </span>
                 </div>
               </Link>
             ))}
@@ -67,7 +106,7 @@ function Eventos() {
         </section>
       )}
 
-      {eventosMock.length === 0 && (
+      {eventos.length === 0 && (
         <div className="eventos-vazio">
           <p>Nenhum evento disponível no momento.</p>
         </div>

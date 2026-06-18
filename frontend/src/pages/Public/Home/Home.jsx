@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
@@ -7,40 +9,101 @@ import NewsCard from '../../../components/NewsCard/NewsCard';
 import EventRow from '../../../components/EventRow/EventRow';
 import DirectorCard from '../../../components/DirectorCard/DirectorCard';
 
-/* --- IMPORTAÇÃO DOS MOCKS GLOBAIS --- */
-import { servicosMock } from '../../../mocks/servicosMock';
-import { eventosMock } from '../../../mocks/eventosMock';
-import { diretoriaHomeMock } from '../../../mocks/institucionalMock';
-import { slidesMock, numerosMock, noticiasMock } from '../../../mocks/homeMock';
+/* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
+import { servicosService } from '../../../services/servicosService';
+import { eventosService } from '../../../services/eventosService';
+import { institucionalService } from '../../../services/institucionalService';
+import { slidesService } from '../../../services/slidesService';
+import { noticiasService } from '../../../services/noticiasService';
 
 import './Home.css';
 
-export default function Home() {
+// Constante local para os números, já que o backend ainda não possui uma tabela para isso.
+const NUMEROS_ESTATICOS = [
+  { valor: '+500', label: 'Empresas associadas' },
+  { valor: '40+', label: 'Anos de atuação' },
+  { valor: '12', label: 'Municípios atendidos' },
+  { valor: '200+', label: 'Eventos realizados' },
+];
 
-  // LÓGICA COMPLEXA: Mapeamento de Dados Externos
-  // Convertemos o array limpo do mock para a estrutura rica de botões e selos exigida pelo HeroSlider
-  const homeSliderData = slidesMock.map((slide) => ({
+export default function Home() {
+  const [slides, setSlides] = useState([]);
+  const [servicos, setServicos] = useState([]);
+  const [diretoria, setDiretoria] = useState([]);
+  const [eventos, setEventos] = useState([]);
+  const [noticias, setNoticias] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    async function carregarDadosDaHome() {
+      try {
+        // Dispara todas as requisições ao backend simultaneamente.
+        // O .catch(() => []) garante que se um módulo (ex: Noticias) ainda não 
+        // estiver pronto no backend, a Home não vai quebrar por inteiro.
+        const [dadosSlides, dadosServicos, dadosDiretoria, dadosEventos, dadosNoticias] = await Promise.all([
+          slidesService.buscarTodos().catch(() => []),
+          servicosService.buscarTodos().catch(() => []),
+          institucionalService.buscarDiretoria().catch(() => []),
+          eventosService.buscarTodos().catch(() => []),
+          noticiasService.buscarTodos().catch(() => [])
+        ]);
+
+        setSlides(dadosSlides || []);
+        setServicos(dadosServicos || []);
+        setEventos(dadosEventos || []);
+        setNoticias(dadosNoticias || []);
+
+        // O backend agrupa a diretoria por categoria. Para a Home, nós "desempacotamos"
+        // essa lista para pegar apenas os 4 primeiros diretores no geral.
+        const todosDiretores = (dadosDiretoria || []).flatMap(categoria => categoria.members);
+        setDiretoria(todosDiretores.slice(0, 4));
+
+      } catch (error) {
+        console.error("Erro ao carregar os dados da Home:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+    
+    carregarDadosDaHome();
+  }, []);
+
+  if (carregando) {
+    return (
+      <main className="acic-home" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <p>Carregando o portal ACIC...</p>
+      </main>
+    );
+  }
+
+  // ── PREPARAÇÃO DE DADOS PARA OS COMPONENTES ── 
+  const homeSliderData = slides.map((slide) => ({
     id: slide.id,
-    image: slide.imagem_url,
+    image: slide.imageUrl,
     badge: "● ACIC — Crateús, CE",
     badgeStyle: "gold", 
-    title: slide.titulo,
-    description: slide.subtitulo,
-    buttons: [
+    title: slide.title,
+    description: slide.subtitle,
+    // Se o slide tiver linkUrl no banco, usa ele. Se não, usa os botões padrão da ACIC.
+    buttons: slide.linkUrl ? [
+      { label: "Saiba mais", link: slide.linkUrl, type: "primary" }
+    ] : [
       { label: "Associe-se →", link: "/contatos", type: "primary" },
       { label: "Conheça a ACIC", link: "/quem-somos", type: "outline" }
     ]
   }));
 
-  const homeServicos = servicosMock.slice(0, 6).map((servico, index) => {
-    const icones = ['🏛️', '📜', '💻', '⚖️', '📊', '🤝', '🔍'];
+  const homeServicos = servicos.slice(0, 6).map((servico, index) => {
+    const iconesFallback = ['🏛️', '📜', '💻', '⚖️', '📊', '🤝'];
     return {
       ...servico,
-      icone: icones[index] || '📌'
+      // Se não houver ícone cadastrado no banco, injetamos um visual padrão
+      icon: servico.icon || iconesFallback[index] || '📌'
     };
   });
 
-  const homeEventos = eventosMock.slice(0, 3);
+  const homeEventos = eventos.slice(0, 3);
+  const homeNoticias = noticias.slice(0, 3);
 
   return (
     <>
@@ -50,17 +113,23 @@ export default function Home() {
     <main className="acic-home">
 
       {/* ── HERO SLIDER ── */}
-      <HeroSlider 
-        slides={homeSliderData} 
-        autoPlayTime={5500} 
-        titleAsH1={true} 
-        showControls={false}  
-        indicatorStyle="gold"
-      />
+      {homeSliderData.length > 0 ? (
+        <HeroSlider 
+          slides={homeSliderData} 
+          autoPlayTime={5500} 
+          titleAsH1={true} 
+          showControls={false}  
+          indicatorStyle="gold"
+        />
+      ) : (
+        <div style={{ height: '520px', background: 'var(--home-blue-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+          <h1>Bem-vindo à ACIC Crateús</h1>
+        </div>
+      )}
 
       {/* ── NÚMEROS ── */}
       <section className="secao-numeros">
-        {numerosMock.map((n, i) => (
+        {NUMEROS_ESTATICOS.map((n, i) => (
           <div className="numero-item" key={i}>
             <div className="numero-valor">{n.valor}</div>
             <div className="numero-label">{n.label}</div>
@@ -94,22 +163,32 @@ export default function Home() {
           </div>
           <Link to="/servicos" className="btn-link">Ver todos os serviços →</Link>
         </div>
-        <div className="grid-servicos">
-          {homeServicos.map(s => (
-            <ServiceCard key={s.id} service={s} variant="simples" />
-          ))}
-        </div>
+        
+        {homeServicos.length > 0 ? (
+          <div className="grid-servicos">
+            {homeServicos.map(s => (
+              <ServiceCard key={s.id} service={s} variant="simples" />
+            ))}
+          </div>
+        ) : (
+          <p style={{ color: 'var(--home-text-muted)' }}>Nenhum serviço cadastrado no momento.</p>
+        )}
       </section>
 
       {/* ── DIRETORIA ── */}
       <section className="secao-diretoria">
         <div className="secao-label">Gestão 2023–2025</div>
         <h2>Nossa Diretoria</h2>
-        <div className="grid-diretoria">
-          {diretoriaHomeMock.map(member => (
-            <DirectorCard key={member.id} member={member} />
-          ))}
-        </div>
+        
+        {diretoria.length > 0 ? (
+          <div className="grid-diretoria">
+            {diretoria.map(member => (
+              <DirectorCard key={member.id} member={member} />
+            ))}
+          </div>
+        ) : (
+          <p style={{ color: 'rgba(255,255,255,0.7)' }}>Nenhum membro da diretoria em destaque no momento.</p>
+        )}
       </section>
 
       {/* ── EVENTOS + NOTÍCIAS ── */}
@@ -119,11 +198,15 @@ export default function Home() {
           <div className="secao-label">Agenda</div>
           <h2>Próximos Eventos</h2>
           
-          <div className="lista-eventos">
-            {homeEventos.map(e => (
-              <EventRow key={e.id} event={e} />
-            ))}
-          </div>
+          {homeEventos.length > 0 ? (
+            <div className="lista-eventos">
+              {homeEventos.map(e => (
+                <EventRow key={e.id} event={e} />
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: 'var(--home-text-muted)' }}>Nenhum evento programado.</p>
+          )}
           
           <br />
           <Link to="/eventos" className="btn-link">Ver todos os eventos →</Link>
@@ -133,11 +216,15 @@ export default function Home() {
           <div className="secao-label">Comunicação</div>
           <h2>Últimas Notícias</h2>
           
-          <div className="lista-noticias">
-            {noticiasMock.map(n => (
-              <NewsCard key={n.id} news={n} />
-            ))}
-          </div>
+          {homeNoticias.length > 0 ? (
+            <div className="lista-noticias">
+              {homeNoticias.map(n => (
+                <NewsCard key={n.id} news={n} />
+              ))}
+            </div>
+          ) : (
+            <p style={{ color: 'var(--home-text-muted)' }}>Nenhuma notícia publicada recentemente.</p>
+          )}
           
           <br />
           <Link to="/noticias" className="btn-link">Ver todas as notícias →</Link>

@@ -18,7 +18,7 @@ export class CreatePresidenteDto {
   termEnd?: number;
 
   @ApiProperty({ example: 'https://imagens.acic.com/presidente.jpg', required: false })
-  @IsUrl()
+  @IsUrl({ require_tld: false })
   @IsOptional()
   photoUrl?: string;
 

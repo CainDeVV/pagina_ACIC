@@ -2,9 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // Inicializamos o NestJS com a tipagem específica do Express
+  // para termos acesso ao método useStaticAssets
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   // Habilita CORS para permitir comunicação com o frontend
   app.enableCors();
@@ -26,10 +30,15 @@ async function bootstrap() {
     .setTitle('API ACIC')
     .setDescription('Documentação dos endpoints do painel administrativo ACIC')
     .setVersion('1.0')
-    .addBearerAuth() // Deixa pronto o campo de Token JWT para o login do Cainã
+    .addBearerAuth() // Deixa pronto o campo de Token JWT
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
+  
+  // Configura o NestJS para servir arquivos estáticos da pasta "uploads"
+  app.useStaticAssets(join(__dirname, '..', '..', 'uploads'), {
+    prefix: '/uploads/',
+  });
 
   await app.listen(process.env.PORT ?? 3000);
 }

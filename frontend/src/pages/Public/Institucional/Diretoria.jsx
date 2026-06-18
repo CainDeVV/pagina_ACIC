@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import SaibaMaisLayout from "../../../components/Layout/SaibaMaisLayout";
 import DirectorCard from "../../../components/DirectorCard/DirectorCard";
-import { diretoriaPageMock } from "../../../mocks/institucionalMock";
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import { institucionalService } from '../../../services/institucionalService';
 import './Institucional.css';
 import './Diretoria.css';
 
 function Diretoria() {
-  // LÓGICA COMPLEXA: Gerenciamento do Modal
-  // Guardamos o objeto inteiro do 'membro' no estado. Se estiver nulo, o modal some.
-  // Ao clicar nos 3 pontinhos, setamos o membro clicado, o que faz a div .overlay aparecer.
+  const [diretoriaCategorias, setDiretoriaCategorias] = useState([]);
+  const [paginaIntro, setPaginaIntro] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+  
+  // Gerenciamento do Modal
   const [selectedMember, setSelectedMember] = useState(null);
 
   const openModal = (member) => {
@@ -20,55 +23,99 @@ function Diretoria() {
     setSelectedMember(null);
   };
 
+  useEffect(() => {
+    async function buscarDados() {
+      try {
+        const [dadosDiretores, dadosIntro] = await Promise.all([
+          institucionalService.buscarDiretoria(),
+          institucionalService.buscarPagina('diretoria')
+        ]);
+        
+        // Passa os dados puros diretamente do backend para o estado
+        setDiretoriaCategorias(dadosDiretores || []);
+        setPaginaIntro(dadosIntro);
+      } catch (error) {
+        console.error("Erro ao buscar dados da Diretoria:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+    buscarDados();
+  }, []);
+
+  if (carregando) {
+    return (
+      <SaibaMaisLayout activeItem="diretoria" titulo="Carregando...">
+        <p style={{ padding: '20px' }}>Carregando informações...</p>
+      </SaibaMaisLayout>
+    );
+  }
+
   return (
     <>
     <Helmet>
-      <title>Diretoria | ACIC</title>
+      <title>{paginaIntro ? paginaIntro.title : 'Diretoria'} | ACIC</title>
     </Helmet>
-    <SaibaMaisLayout activeItem="diretoria" titulo="Diretoria">
+    <SaibaMaisLayout activeItem="diretoria" titulo={paginaIntro ? paginaIntro.title : "Diretoria"}>
       <div className="diretoria-page">
-        <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
-        <p className="pag-subtitulo">Triênio 2023/2025</p>
-
-        {/* LÓGICA COMPLEXA: Mapeamento Duplo
-            Primeiro mapeamos as categorias (Presidente, Tesoureiro, etc.).
-            Depois, criamos um Grid e mapeamos os membros pertencentes àquela categoria. */}
-        {diretoriaPageMock.map((category, idx) => (
-          <div key={idx}>
-            <div className="section">
-              <div className="role-label">{category.roleLabel}</div>
-              
-              <div className="cards-grid">
-                {category.members.map((member) => (
-                  <DirectorCard 
-                    key={member.id} 
-                    member={member} 
-                    variant="light" 
-                    onMoreInfo={openModal} 
-                  />
-                ))}
-              </div>
-            </div>
-            {/* Oculta a linha divisória após a última seção */}
-            {idx < diretoriaPageMock.length - 1 && <hr className="section-dividir" />}
+        
+        {/* Cabeçalho Editável (Mini-CMS) */}
+        {paginaIntro ? (
+          <div style={{ marginBottom: '40px' }}>
+            <h1 className="page-titulo">{paginaIntro.title}</h1>
+            <BlockRenderer blocks={paginaIntro.content?.blocks || []} />
           </div>
-        ))}
+        ) : (
+          <div style={{ marginBottom: '40px' }}>
+            <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
+            <p className="pag-subtitulo">Triênio 2023/2025</p>
+            <p>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
+          </div>
+        )}
+
+        {/* Mapeamento das Categorias e Membros */}
+        {diretoriaCategorias.length > 0 ? (
+          diretoriaCategorias.map((category, idx) => (
+            <div key={idx}>
+              <div className="section">
+                <div className="role-label">{category.roleLabel}</div>
+                
+                <div className="cards-grid">
+                  {category.members.map((member) => (
+                    <DirectorCard 
+                      key={member.id} 
+                      member={member} 
+                      variant="light" 
+                      onMoreInfo={openModal} 
+                    />
+                  ))}
+                </div>
+              </div>
+              {/* Oculta a linha divisória após a última seção */}
+              {idx < diretoriaCategorias.length - 1 && <hr className="section-dividir" />}
+            </div>
+          ))
+        ) : (
+          <p style={{ padding: '20px 0', textAlign: 'center' }}>
+            Nenhum membro da diretoria cadastrado no banco de dados.
+          </p>
+        )}
       </div>
 
-      {/* COMPONENTE DE MODAL (Exibe apenas se selectedMember existir) */}
+      {/* COMPONENTE DE MODAL (Agora lendo tudo do banco de dados) */}
       <div className={`overlay ${selectedMember ? 'open' : ''}`} onClick={closeModal}>
         {selectedMember && (
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              {selectedMember.imagem_url ? (
-                <img src={selectedMember.imagem_url} alt={selectedMember.nome} className="modal-avatar" />
+              {selectedMember.photoUrl ? (
+                <img src={selectedMember.photoUrl} alt={selectedMember.name} className="modal-avatar" />
               ) : (
                 <div className="modal-avatar placeholder-sm">👤</div>
               )}
               
               <div className="modal-header-text">
-                <h3 className="modal-name">{selectedMember.nome}</h3>
-                <div className="modal-role">{selectedMember.cargo}</div>
+                <h3 className="modal-name">{selectedMember.name}</h3>
+                <div className="modal-role">{selectedMember.role}</div>
               </div>
 
               <button className="modal-close" onClick={closeModal} title="Fechar modal">
@@ -78,7 +125,7 @@ function Diretoria() {
 
             <div className="modal-body">
               <p className="modal-bio">
-                {selectedMember.biografia || "Nenhuma biografia cadastrada no momento."}
+                {selectedMember.bio || "Nenhuma biografia cadastrada no momento."}
               </p>
             </div>
           </div>

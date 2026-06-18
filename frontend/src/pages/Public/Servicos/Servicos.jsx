@@ -1,24 +1,47 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { servicosMock } from '../../../mocks/servicosMock';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
+import { servicosService } from '../../../services/servicosService';
 import './Servicos.css';
 
 function Servicos() {
+  const [servicos, setServicos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
-  // 1. Filtra apenas os serviços marcados como destaque
-  // (Caso nenhum esteja como destaque no Mock, exibimos todos temporariamente para não quebrar a tela)
-  const servicosDestaque = servicosMock.filter(s => s.destaque);
-  const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicosMock;
+  useEffect(() => {
+    async function carregarServicos() {
+      try {
+        const dados = await servicosService.buscarTodos();
+        setServicos(dados || []);
+      } catch (error) {
+        console.error("Erro ao carregar serviços:", error);
+      } finally {
+        setCarregando(false);
+      }
+    }
+    carregarServicos();
+  }, []);
+
+  if (carregando) {
+    return (
+      <div className="servicos-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
+        <p>Carregando serviços...</p>
+      </div>
+    );
+  }
+
+  // Filtra os serviços para o Slider e prepara o objeto
+  const servicosDestaque = servicos.filter(s => s.destaque);
+  const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicos;
 
   const sliderData = servicosParaSlider.map((servico) => ({
     id: servico.id,
-    image: servico.bannerUrl,
+    image: servico.imageUrl || 'https://placehold.co/1200x400?text=Banner',
     badge: "Serviços",
-    badgeStyle: "white", // Passamos o estilo branco para os Serviços
-    title: servico.titulo,
-    description: servico.resumo,
+    badgeStyle: "white",
+    title: servico.title,
+    description: servico.summary,
     link: `/servicos/${servico.slug}` 
   }));
 
@@ -28,13 +51,19 @@ function Servicos() {
       <title>Serviços | ACIC</title>
     </Helmet>
     <div className="servicos-page">
-      <HeroSlider slides={sliderData} autoPlayTime={5000} />
+      {sliderData.length > 0 && <HeroSlider slides={sliderData} autoPlayTime={5000} />}
 
       <div className="servicos-container">
         <div className="servicos-grid">
-          {servicosMock.map(servico => (
-            <ServiceCard key={servico.id} service={servico} />
-          ))}
+          {servicos.length > 0 ? (
+            servicos.map(servico => (
+              <ServiceCard key={servico.id} service={servico} />
+            ))
+          ) : (
+            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
+              Nenhum serviço cadastrado no banco de dados no momento.
+            </p>
+          )}
         </div>
       </div>
     </div>

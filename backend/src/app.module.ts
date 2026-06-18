@@ -10,6 +10,8 @@ import { SlidesModule } from './modules/slides/slides.module';
 import { QuemSomosModule } from './modules/quem-somos/quem-somos.module';
 import { ServicosModule } from './modules/servicos/servicos.module';
 import { EventosModule } from './modules/eventos/eventos.module';
+import { DiretoriaModule } from './modules/diretoria/diretoria.module';
+import { UploadModule } from './modules/upload/upload.module';
 
 @Module({
   imports: [
@@ -24,7 +26,9 @@ import { EventosModule } from './modules/eventos/eventos.module';
     SlidesModule,
     QuemSomosModule,
     ServicosModule,
-    EventosModule
+    EventosModule,
+    DiretoriaModule,
+    UploadModule
   ],
   controllers: [AppController],
   providers: [AppService],
