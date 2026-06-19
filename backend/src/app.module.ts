@@ -12,6 +12,7 @@ import { ServicosModule } from './modules/servicos/servicos.module';
 import { EventosModule } from './modules/eventos/eventos.module';
 import { DiretoriaModule } from './modules/diretoria/diretoria.module';
 import { UploadModule } from './modules/upload/upload.module';
+import { NoticiasModule } from './modules/noticias/noticias.module';
 
 @Module({
   imports: [
@@ -28,7 +29,8 @@ import { UploadModule } from './modules/upload/upload.module';
     ServicosModule,
     EventosModule,
     DiretoriaModule,
-    UploadModule
+    UploadModule,
+    NoticiasModule
   ],
   controllers: [AppController],
   providers: [AppService],
