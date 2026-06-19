@@ -2,21 +2,19 @@ import { FaEllipsisH } from 'react-icons/fa';
 import './DirectorCard.css';
 
 const DirectorCard = ({ member, variant = 'dark', onMoreInfo }) => {
-  // LÓGICA COMPLEXA: Fallback de Imagem e Biografia
-  // Verificamos se há imagem para exibir o placeholder
-  const hasImage = Boolean(member.imagem_url);
+  // Fallback de Imagem e Biografia
+  const hasImage = Boolean(member.photoUrl);
   
-  // Verificamos se a biografia existe e não está vazia. O trim() evita 
-  // que espaços em branco acionem o botão sem ter texto de fato.
-  const hasBio = Boolean(member.biografia && member.biografia.trim() !== "");
+  // O trim() evita que espaços em branco acionem o botão sem ter texto de fato.
+  const hasBio = Boolean(member.bio && member.bio.trim() !== "");
 
   return (
     <div className={`director-card variant-${variant}`}>
       <div className="director-img-wrapper">
         {hasImage ? (
           <img 
-            src={member.imagem_url} 
-            alt={member.nome} 
+            src={member.photoUrl} 
+            alt={member.name} 
             loading="lazy" 
             className="director-img" 
           />
@@ -26,15 +24,13 @@ const DirectorCard = ({ member, variant = 'dark', onMoreInfo }) => {
           </div>
         )}
         
-        {/* LÓGICA COMPLEXA: Ação Inteligente do Modal
-            O botão só é renderizado se a função 'onMoreInfo' foi passada PELO PAI (ex: Diretoria.jsx)
-            E se o membro tiver algo escrito na 'biografia' do banco de dados (mock). */}
+        {/* Ação Inteligente do Modal */}
         {onMoreInfo && hasBio && (
           <button 
             className="director-dots-btn" 
             onClick={() => onMoreInfo(member)} 
             title="Ver mais informações"
-            aria-label={`Ver detalhes de ${member.nome}`}
+            aria-label={`Ver detalhes de ${member.name}`}
           >
             <FaEllipsisH />
           </button>
@@ -42,8 +38,8 @@ const DirectorCard = ({ member, variant = 'dark', onMoreInfo }) => {
       </div>
 
       <div className="director-info">
-        <h3 className="director-name">{member.nome}</h3>
-        <div className="director-role">{member.cargo}</div>
+        <h3 className="director-name">{member.name}</h3>
+        <div className="director-role">{member.role}</div>
       </div>
     </div>
   );

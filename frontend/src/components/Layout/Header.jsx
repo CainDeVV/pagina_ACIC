@@ -27,7 +27,7 @@ function Header() {
                 Serviços
               </Link>
               <div className="dropdown-content">
-                <Link to="/servicos/registro-de-marcas">Registro de Marcas e Patentes</Link>
+                <Link to="/servicos/registro-de-marcas-softwares-e-patentes">Registro de Marcas e Patentes</Link>
                 <Link to="/servicos/certificado-de-origem">Certificado de Origem</Link>
                 <Link to="/servicos/certificado-digital">Certificado Digital</Link>
               </div>

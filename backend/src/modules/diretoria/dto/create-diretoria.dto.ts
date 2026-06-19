@@ -1,0 +1,34 @@
+import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CreateDiretoriaDto {
+  @ApiProperty({ example: 'João Silva' })
+  @IsString()
+  @IsNotEmpty({ message: 'O nome é obrigatório.' })
+  name!: string;
+
+  @ApiProperty({ example: 'Presidente' })
+  @IsString()
+  @IsNotEmpty({ message: 'O cargo é obrigatório.' })
+  role!: string;
+
+  @ApiProperty({ example: 'PRESIDENTE', description: 'Categoria usada para agrupar na tela' })
+  @IsString()
+  @IsNotEmpty({ message: 'A categoria é obrigatória.' })
+  category!: string;
+
+  @ApiProperty({ example: 'https://imagens.acic.com/diretor.jpg', required: false })
+  @IsUrl({}, { message: 'A imagem deve ser uma URL válida.' })
+  @IsOptional()
+  photoUrl?: string;
+
+  @ApiProperty({ example: 'Biografia do diretor...', required: false })
+  @IsString()
+  @IsOptional()
+  bio?: string;
+
+  @ApiProperty({ example: 1, required: false })
+  @IsInt()
+  @IsOptional()
+  sortOrder?: number;
+}

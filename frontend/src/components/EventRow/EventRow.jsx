@@ -2,17 +2,12 @@ import { Link } from 'react-router-dom';
 import './EventRow.css';
 
 const EventRow = ({ event }) => {
-  // LÓGICA COMPLEXA 1: Extração Segura de Data
-  // Como os dados costumam vir em strings completas (ex: "14 Mai 2025"), 
-  // quebramos a string por espaços vazios (.split) para isolar o Dia e o Mês.
-  // Usamos fallback ("--") para evitar que o site quebre caso falte algum dado na API.
-  const dateParts = event.data ? event.data.split(' ') : [];
-  const day = dateParts[0] || '--';
-  const month = dateParts[1] || 'Mês';
+  // Lendo a data oficial do banco de dados (startsAt em formato ISO)
+  const dateObj = new Date(event.startsAt);
+  const day = dateObj.toLocaleDateString('pt-BR', { day: '2-digit' });
+  const month = dateObj.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
+  const horaFormatada = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 
-  // LÓGICA COMPLEXA 2: Fallback Seguro de Roteamento
-  // Se o evento possuir um slug, o link leva para a página de detalhes dele.
-  // Caso não possua, redireciona o usuário de forma segura para a grade geral de eventos.
   const linkDestino = event.slug ? `/eventos/${event.slug}` : '/eventos';
 
   return (
@@ -23,10 +18,10 @@ const EventRow = ({ event }) => {
       </div>
       
       <div className="event-info">
-        <h3>{event.titulo}</h3>
+        <h3>{event.title}</h3>
         <div className="event-meta">
-          {event.hora && <span>🕐 {event.hora}</span>}
-          {event.local && <span>📍 {event.local}</span>}
+          <span>🕐 {horaFormatada}</span>
+          {event.location && <span>📍 {event.location}</span>}
         </div>
       </div>
     </Link>
