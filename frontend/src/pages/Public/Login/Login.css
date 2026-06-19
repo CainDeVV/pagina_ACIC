@@ -33,7 +33,7 @@
   padding: 10px;
 }
 
-button {
+.login-button {
   width: 100%;
   padding: 10px;
   cursor: pointer;
