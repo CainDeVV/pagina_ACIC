@@ -1,4 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import Dashboard from './pages/Admin/Dashboard/Dashboard';
+import Login from './pages/Public/Login/Login';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import Header from './components/Layout/Header';
 import Navbar from './components/Navbar/Navbar';
@@ -24,6 +27,14 @@ function App() {
       <Header />
       <Navbar />
       <Routes>
+        <Route
+  path="/admin"
+  element={
+    <PrivateRoute>
+      <Dashboard />
+    </PrivateRoute>
+  }
+/>
         <Route path="/" element={<Home />} />
         <Route path="/quem-somos" element={<QuemSomos />} />
         <Route path="/diretoria" element={<Diretoria />} />
@@ -36,6 +47,7 @@ function App() {
         <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/eventos/:slug" element={<EventoDetalhe />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Footer />
