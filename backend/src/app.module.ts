@@ -18,7 +18,7 @@ import { NoticiasModule } from './modules/noticias/noticias.module';
   imports: [
     ThrottlerModule.forRoot([{
       ttl: 60000,
-      limit: 5,
+      limit: 100,
     }]),
     PrismaModule, 
     AuthModule, 
