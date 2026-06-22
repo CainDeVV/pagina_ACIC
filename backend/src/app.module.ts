@@ -13,6 +13,9 @@ import { EventosModule } from './modules/eventos/eventos.module';
 import { DiretoriaModule } from './modules/diretoria/diretoria.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { NoticiasModule } from './modules/noticias/noticias.module';
+import { AssociadosModule } from './modules/associados/associados.module';
+import { InscricoesModule } from './modules/inscricoes/inscricoes.module';
+import { CertificadosModule } from './modules/certificados/certificados.module';
 
 @Module({
   imports: [
@@ -30,7 +33,10 @@ import { NoticiasModule } from './modules/noticias/noticias.module';
     EventosModule,
     DiretoriaModule,
     UploadModule,
-    NoticiasModule
+    NoticiasModule,
+    AssociadosModule,
+    InscricoesModule,
+    CertificadosModule
   ],
   controllers: [AppController],
   providers: [AppService],
