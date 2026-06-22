@@ -1,8 +1,10 @@
 import api from '../../../services/api';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [erro, setErro] = useState('');
@@ -28,11 +30,18 @@ function Login() {
                 password,
             });
 
-            localStorage.setItem(
-                'acic_access_token',
-                response.data.access_token
-            );
-            window.location.href = '/admin';
+            const { access_token, user } = response.data;
+
+            localStorage.setItem('acic_access_token', access_token);
+            localStorage.setItem('acic_user', JSON.stringify(user));
+
+            if (user.role === 'ADMIN' || user.role === 'EDITOR') {
+                navigate('/admin');
+            } else if (user.role === 'ASSOCIADO') {
+                navigate('/associado');
+            } else {
+                navigate('/');
+            }
 
             console.log('Login realizado com sucesso!');
             console.log(response.data);

@@ -49,5 +49,21 @@ export const institucionalService = {
   deletarPresidente: async (id) => {
     const resposta = await api.delete(`/admin/presidentes/${id}`);
     return resposta.data;
+  },
+
+  // --- Gestão de Diretoria ---
+  criarDiretoria: async (dados) => {
+    const resposta = await api.post('/admin/diretoria', dados);
+    return resposta.data;
+  },
+
+  atualizarDiretoria: async (id, dados) => {
+    const resposta = await api.patch(`/admin/diretoria/${id}`, dados);
+    return resposta.data;
+  },
+
+  deletarDiretoria: async (id) => {
+    const resposta = await api.delete(`/admin/diretoria/${id}`);
+    return resposta.data;
   }
 };

@@ -6,18 +6,18 @@ export const eventosService = {
     return resposta.data;
   },
 
-  buscarPorSlugOuId: async (idOrSlug) => {
-    const resposta = await api.get(`/eventos/${idOrSlug}`);
+  buscarPorId: async (id) => {
+    const resposta = await api.get(`/eventos/${id}`);
     return resposta.data;
   },
 
-  criar: async (dadosEvento) => {
-    const resposta = await api.post('/admin/eventos', dadosEvento);
+  criar: async (dados) => {
+    const resposta = await api.post('/admin/eventos', dados);
     return resposta.data;
   },
 
-  atualizar: async (id, dadosEvento) => {
-    const resposta = await api.patch(`/admin/eventos/${id}`, dadosEvento);
+  atualizar: async (id, dados) => {
+    const resposta = await api.patch(`/admin/eventos/${id}`, dados);
     return resposta.data;
   },
 

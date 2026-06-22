@@ -1,0 +1,11 @@
+.rich-editor-container {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+  background-color: #fff;
+  min-height: 200px;
+}
+
+.rich-editor-container .codex-editor__redactor {
+  padding-bottom: 20px !important;
+}
