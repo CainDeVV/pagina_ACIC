@@ -32,12 +32,8 @@ const RichEditor = ({ value, onChange }) => {
   const initEditor = () => {
     let initialData = undefined;
 
-    if (value && typeof value === 'string') {
-      try {
-        initialData = JSON.parse(value);
-      } catch (error) {
-        console.error('Failed to parse initial value as JSON:', error);
-      }
+    if (value && typeof value === 'object') {
+      initialData = value;
     }
 
     const editor = new EditorJS({
@@ -47,7 +43,7 @@ const RichEditor = ({ value, onChange }) => {
         if (onChange && editorInstance.current) {
           try {
             const outputData = await editorInstance.current.save();
-            onChange(JSON.stringify(outputData));
+            onChange(outputData); 
           } catch (error) {
             console.error('Saving EditorJS data failed:', error);
           }
