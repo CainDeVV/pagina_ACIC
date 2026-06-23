@@ -14,7 +14,7 @@ function EventoDetalhe() {
   useEffect(() => {
     async function carregarEvento() {
       try {
-        const dados = await eventosService.buscarPorSlugOuId(slug);
+        const dados = await eventosService.buscarPorId(slug);
         setEvento(dados);
       } catch (error) {
         console.error("Erro ao carregar o evento detalhado:", error);
