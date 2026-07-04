@@ -30,8 +30,9 @@ Thumbs.db
 .idea/
 .agent
 
-# Documentação
+# Documentação e Mocks
 docs/
+Mock/
 CONTEXTO_GERAL.md
 auditoria-completa.md
 
