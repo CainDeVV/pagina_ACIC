@@ -3,7 +3,7 @@ function BlockRenderer({ blocks }) {
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) return null;
 
   return (
-    <>
+    <div className="rich-text-content">
       {blocks.map((block, index) => {
         // No Editor.js, todo o payload (texto, url, nível) fica dentro de 'data'
         const { type, data } = block;
@@ -32,11 +32,33 @@ function BlockRenderer({ blocks }) {
           case 'list':
             // O Editor.js suporta listas ordenadas (ol) e não ordenadas (ul)
             const ListTag = data.style === 'ordered' ? 'ol' : 'ul';
+            
+            // Função recursiva para lidar com o formato novo do Editor.js (que envia objetos aninhados)
+            const renderListItems = (items) => {
+              if (!items || !Array.isArray(items)) return null;
+              
+              return items.map((item, i) => {
+                // Formato antigo (apenas string)
+                if (typeof item === 'string') {
+                  return <li key={i} dangerouslySetInnerHTML={{ __html: item }} />;
+                }
+                // Formato novo (objeto com content e items aninhados)
+                return (
+                  <li key={i}>
+                    <span dangerouslySetInnerHTML={{ __html: item.content }} />
+                    {item.items && item.items.length > 0 && (
+                      <ListTag style={{ marginTop: '8px' }}>
+                        {renderListItems(item.items)}
+                      </ListTag>
+                    )}
+                  </li>
+                );
+              });
+            };
+
             return (
-              <ListTag key={index} style={{ marginBottom: '24px', paddingLeft: '20px', color: 'var(--color-gray-dark)', lineHeight: '1.6' }}>
-                {data.items?.map((item, i) => (
-                  <li key={i} dangerouslySetInnerHTML={{ __html: item }} />
-                ))}
+              <ListTag key={index}>
+                {renderListItems(data.items)}
               </ListTag>
             );
 
@@ -124,7 +146,7 @@ function BlockRenderer({ blocks }) {
             return null;
         }
       })}
-    </>
+    </div>
   );
 }
 

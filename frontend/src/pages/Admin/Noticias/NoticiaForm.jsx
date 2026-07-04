@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { noticiasService } from '../../../services/noticiasService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function NoticiaForm() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ function NoticiaForm() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const toDatetimeLocal = (isoString) => {
     if (!isoString) return '';
@@ -77,12 +79,34 @@ function NoticiaForm() {
       }
     }
 
+    const errors = {};
+    if (!formData.title?.trim()) errors.title = 'O título é obrigatório.';
+    if (!finalContent) errors.content = 'O conteúdo da notícia é obrigatório.';
+
+    let parsedPublishedAt = undefined;
+    if (formData.publishedAt) {
+      const d = new Date(formData.publishedAt);
+      if (isNaN(d.getTime())) {
+        errors.publishedAt = 'Data e hora inválidas. Verifique o formato.';
+      } else {
+        parsedPublishedAt = d.toISOString();
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError('Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.');
+      setLoading(false);
+      return;
+    }
+
+    const { destaque, ...validFormData } = formData;
     const dataToSubmit = {
-      ...formData,
+      ...validFormData,
       content: finalContent,
-      summary: formData.summary === '' ? undefined : formData.summary,
-      coverImage: formData.coverImage === '' ? undefined : formData.coverImage,
-      publishedAt: formData.publishedAt ? new Date(formData.publishedAt).toISOString() : undefined
+      summary: formData.summary === '' ? null : formData.summary,
+      coverImage: formData.coverImage === '' ? null : formData.coverImage,
+      publishedAt: parsedPublishedAt
     };
 
     try {
@@ -112,6 +136,7 @@ function NoticiaForm() {
       <div className="form-group">
         <label>Título *</label>
         <input type="text" name="title" value={formData.title} onChange={handleChange} required />
+        {fieldErrors.title && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
@@ -121,12 +146,29 @@ function NoticiaForm() {
 
       <div className="form-group">
         <label>Conteúdo (Content) *</label>
-        <RichEditor ref={editorRef} value={formData.content} />
+        <RichEditor 
+          ref={editorRef} 
+          value={formData.content} 
+          uploadFolder="noticias"
+        />
+        {fieldErrors.content && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.content}</span>}
       </div>
 
       <div className="form-group">
-        <label>URL da Imagem de Capa</label>
-        <input type="text" name="coverImage" value={formData.coverImage} onChange={handleChange} />
+        <label>Imagem de Capa da Notícia</label>
+        <ImageUploader 
+          folder="noticias" 
+          currentUrl={formData.coverImage} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, coverImage: url }))} 
+        />
+        <input 
+          type="text" 
+          name="coverImage" 
+          value={formData.coverImage} 
+          onChange={handleChange} 
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
+        />
       </div>
 
       <div className="form-group">
@@ -141,6 +183,7 @@ function NoticiaForm() {
       <div className="form-group">
         <label>Data e Hora de Publicação</label>
         <input type="datetime-local" name="publishedAt" value={formData.publishedAt} onChange={handleChange} />
+        {fieldErrors.publishedAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.publishedAt}</span>}
       </div>
 
       {/* ADICIONADO AQUI */}

@@ -105,6 +105,7 @@ function QuemSomosForm() {
           <option value="estatuto">Estatuto da CACB</option>
           <option value="diretoria">Diretoria (Introdução)</option>
           <option value="presidentes">Presidentes (Introdução)</option>
+          <option value="contatos">Contatos</option>
         </select>
       </div>
 
@@ -118,6 +119,7 @@ function QuemSomosForm() {
         <RichEditor
           ref={editorRef}
           value={formData.content}
+          uploadFolder="institucional"
         />
       </div>
 

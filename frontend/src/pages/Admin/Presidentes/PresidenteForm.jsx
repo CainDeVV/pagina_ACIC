@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function PresidenteForm() {
   const { id } = useParams();
@@ -60,9 +61,9 @@ function PresidenteForm() {
 
     const dataToSubmit = {
       ...formData,
-      termEnd: formData.termEnd === '' ? undefined : Number(formData.termEnd),
-      photoUrl: formData.photoUrl === '' ? undefined : formData.photoUrl,
-      bio: formData.bio === '' ? undefined : formData.bio,
+      termEnd: formData.termEnd === '' ? null : Number(formData.termEnd),
+      photoUrl: formData.photoUrl === '' ? null : formData.photoUrl,
+      bio: formData.bio === '' ? null : formData.bio,
       sortOrder: formData.sortOrder === '' ? undefined : Number(formData.sortOrder)
     };
 
@@ -106,8 +107,20 @@ function PresidenteForm() {
       </div>
 
       <div className="form-group">
-        <label>URL da Foto</label>
-        <input type="text" name="photoUrl" value={formData.photoUrl} onChange={handleChange} />
+        <label>Foto do Presidente</label>
+        <ImageUploader 
+          folder="presidentes" 
+          currentUrl={formData.photoUrl} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, photoUrl: url }))} 
+        />
+        <input 
+          type="text" 
+          name="photoUrl" 
+          value={formData.photoUrl} 
+          onChange={handleChange} 
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
+        />
       </div>
 
       <div className="form-group">

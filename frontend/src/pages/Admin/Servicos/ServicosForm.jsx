@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { servicosService } from '../../../services/servicosService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function ServicosForm() {
   const { id } = useParams();
@@ -74,9 +75,9 @@ function ServicosForm() {
     const dataToSubmit = {
       ...formData,
       description: finalDescription,
-      summary: formData.summary === '' ? undefined : formData.summary,
-      icon: formData.icon === '' ? undefined : formData.icon,
-      imageUrl: formData.imageUrl === '' ? undefined : formData.imageUrl
+      summary: formData.summary === '' ? null : formData.summary,
+      icon: formData.icon === '' ? null : formData.icon,
+      imageUrl: formData.imageUrl === '' ? null : formData.imageUrl
     };
 
     try {
@@ -129,6 +130,7 @@ function ServicosForm() {
         <RichEditor
           ref={editorRef}
           value={formData.description}
+          uploadFolder="servicos"
         />
       </div>
 
@@ -143,12 +145,19 @@ function ServicosForm() {
       </div>
 
       <div className="form-group">
-        <label>URL da Imagem</label>
+        <label>Imagem do Serviço</label>
+        <ImageUploader 
+          folder="servicos" 
+          currentUrl={formData.imageUrl} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} 
+        />
         <input
           type="text"
           name="imageUrl"
           value={formData.imageUrl}
           onChange={handleChange}
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
         />
       </div>
 

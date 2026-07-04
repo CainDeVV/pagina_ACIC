@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function DiretoriaForm() {
   const { id } = useParams();
@@ -60,8 +61,8 @@ function DiretoriaForm() {
 
     const dataToSubmit = {
       ...formData,
-      photoUrl: formData.photoUrl === '' ? undefined : formData.photoUrl,
-      bio: formData.bio === '' ? undefined : formData.bio,
+      photoUrl: formData.photoUrl === '' ? null : formData.photoUrl,
+      bio: formData.bio === '' ? null : formData.bio,
       sortOrder: formData.sortOrder === '' ? undefined : Number(formData.sortOrder)
     };
 
@@ -95,18 +96,51 @@ function DiretoriaForm() {
       </div>
 
       <div className="form-group">
-        <label>Cargo (ex: Diretor de Inovação) *</label>
-        <input type="text" name="role" value={formData.role} onChange={handleChange} required />
+        <label>Empresa Representada (Role) *</label>
+        <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Ex: Gráfica Crateús" required />
       </div>
 
       <div className="form-group">
-        <label>Categoria (ex: DIRETORIA_EXECUTIVA, CONSELHO_FISCAL) *</label>
-        <input type="text" name="category" value={formData.category} onChange={handleChange} required />
+        <label>Cargo na ACIC (Categoria) *</label>
+        <input 
+          type="text" 
+          name="category" 
+          value={formData.category} 
+          onChange={handleChange} 
+          list="category-suggestions"
+          placeholder="Selecione ou digite o cargo..."
+          required 
+        />
+        <datalist id="category-suggestions">
+          <option value="PRESIDENTE" />
+          <option value="I VICE-PRESIDENTE" />
+          <option value="II VICE-PRESIDENTE" />
+          <option value="I SECRETÁRIO" />
+          <option value="II SECRETÁRIO" />
+          <option value="I TESOUREIRO" />
+          <option value="II TESOUREIRO" />
+          <option value="DIRETOR SOCIAL" />
+          <option value="RELAÇÕES PÚBLICAS" />
+          <option value="CONSELHO FISCAL" />
+          <option value="CONSELHO CONSULTIVO" />
+        </datalist>
       </div>
 
       <div className="form-group">
-        <label>URL da Foto</label>
-        <input type="text" name="photoUrl" value={formData.photoUrl} onChange={handleChange} />
+        <label>Foto do Membro da Diretoria</label>
+        <ImageUploader 
+          folder="diretoria" 
+          currentUrl={formData.photoUrl} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, photoUrl: url }))} 
+        />
+        <input 
+          type="text" 
+          name="photoUrl" 
+          value={formData.photoUrl} 
+          onChange={handleChange} 
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
+        />
       </div>
 
       <div className="form-group">

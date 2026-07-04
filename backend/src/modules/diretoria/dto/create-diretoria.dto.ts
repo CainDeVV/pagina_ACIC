@@ -18,7 +18,7 @@ export class CreateDiretoriaDto {
   category!: string;
 
   @ApiProperty({ example: 'https://imagens.acic.com/diretor.jpg', required: false })
-  @IsUrl({}, { message: 'A imagem deve ser uma URL válida.' })
+  @IsUrl({ require_tld: false }, { message: 'A imagem deve ser uma URL válida.' })
   @IsOptional()
   photoUrl?: string;
 

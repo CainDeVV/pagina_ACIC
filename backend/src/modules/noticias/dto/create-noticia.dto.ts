@@ -37,7 +37,7 @@ export class CreateNoticiaDto {
     example: 'https://imagens.acic.com/noticia.jpg',
     required: false,
   })
-  @IsUrl({}, { message: 'A imagem de capa deve ser uma URL válida.' })
+  @IsUrl({ require_tld: false }, { message: 'A imagem de capa deve ser uma URL válida.' })
   @IsOptional()
   coverImage?: string;
 

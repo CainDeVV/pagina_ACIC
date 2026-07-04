@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { eventosService } from '../../../services/eventosService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function EventoForm() {
   const { id } = useParams();
@@ -25,6 +26,7 @@ function EventoForm() {
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   // Tratamento limpo de fuso horário para exibição no input datetime-local
   const toDatetimeLocal = (isoString) => {
@@ -82,15 +84,51 @@ function EventoForm() {
       }
     }
 
+    const errors = {};
+    if (!formData.title?.trim()) errors.title = 'O título é obrigatório.';
+    if (!finalDescription) errors.description = 'A descrição é obrigatória.';
+
+    let parsedStartsAt = '';
+    if (!formData.startsAt) {
+      errors.startsAt = 'A data de início é obrigatória.';
+    } else {
+      const d = new Date(formData.startsAt);
+      if (isNaN(d.getTime())) {
+        errors.startsAt = 'Data de início inválida. Verifique o formato.';
+      } else {
+        parsedStartsAt = d.toISOString();
+      }
+    }
+
+    let parsedEndsAt = undefined;
+    if (formData.endsAt) {
+      const d = new Date(formData.endsAt);
+      if (isNaN(d.getTime())) {
+        errors.endsAt = 'Data de término inválida. Verifique o formato.';
+      } else {
+        parsedEndsAt = d.toISOString();
+        if (parsedStartsAt && new Date(parsedStartsAt) >= d) {
+          errors.endsAt = 'A data de término deve ser posterior à data de início.';
+        }
+      }
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      setError('Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.');
+      setLoading(false);
+      return;
+    }
+
     // Limpeza rigorosa: Opcionais vazios viram 'undefined', obrigatórios repassam o erro
     const dataToSubmit = {
       ...formData,
       description: finalDescription,
-      startsAt: formData.startsAt ? new Date(formData.startsAt).toISOString() : '',
-      endsAt: formData.endsAt ? new Date(formData.endsAt).toISOString() : undefined,
-      capacity: formData.capacity === '' ? undefined : Number(formData.capacity),
-      coverImage: formData.coverImage === '' ? undefined : formData.coverImage,
-      location: formData.location === '' ? undefined : formData.location,
+      startsAt: parsedStartsAt,
+      endsAt: parsedEndsAt,
+      capacity: formData.capacity === '' ? null : Number(formData.capacity),
+      coverImage: formData.coverImage === '' ? null : formData.coverImage,
+      location: formData.location === '' ? null : formData.location,
     };
 
     try {
@@ -126,6 +164,7 @@ function EventoForm() {
           onChange={handleChange}
           required
         />
+        {fieldErrors.title && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
@@ -133,7 +172,9 @@ function EventoForm() {
         <RichEditor
           ref={editorRef}
           value={formData.description}
+          uploadFolder="eventos"
         />
+        {fieldErrors.description && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.description}</span>}
       </div>
 
       <div className="form-group">
@@ -155,6 +196,7 @@ function EventoForm() {
           onChange={handleChange}
           required
         />
+        {fieldErrors.startsAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.startsAt}</span>}
       </div>
 
       <div className="form-group">
@@ -165,6 +207,7 @@ function EventoForm() {
           value={formData.endsAt}
           onChange={handleChange}
         />
+        {fieldErrors.endsAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.endsAt}</span>}
       </div>
 
       <div className="form-group">
@@ -178,12 +221,19 @@ function EventoForm() {
       </div>
 
       <div className="form-group">
-        <label>URL da Imagem de Capa</label>
+        <label>Imagem de Capa do Evento</label>
+        <ImageUploader 
+          folder="eventos" 
+          currentUrl={formData.coverImage} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, coverImage: url }))} 
+        />
         <input
           type="text"
           name="coverImage"
           value={formData.coverImage}
           onChange={handleChange}
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
         />
       </div>
 

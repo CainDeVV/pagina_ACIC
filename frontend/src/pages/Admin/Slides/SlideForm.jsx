@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { slidesService } from '../../../services/slidesService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
 
 function SlideForm() {
   const { id } = useParams();
@@ -112,13 +113,20 @@ function SlideForm() {
       </div>
 
       <div className="form-group">
-        <label>URL da Imagem *</label>
+        <label>Imagem do Slide *</label>
+        <ImageUploader 
+          folder="slides" 
+          currentUrl={formData.imageUrl} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} 
+        />
         <input
           type="text"
           name="imageUrl"
           value={formData.imageUrl}
           onChange={handleChange}
           required
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
         />
       </div>
 
