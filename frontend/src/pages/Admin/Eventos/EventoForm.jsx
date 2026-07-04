@@ -11,7 +11,7 @@ function EventoForm() {
 
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
+    description: null, // Deixamos null inicialmente para o Editor.js saber que está vazio
     location: '',
     startsAt: '',
     endsAt: '',
@@ -25,18 +25,27 @@ function EventoForm() {
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
 
-  // Converte string ISO para YYYY-MM-DDTHH:mm para o input datetime-local
-  const toDatetimeLocal = (iso) => (iso ? iso.slice(0, 16) : '');
+  // --- TRATAMENTO LIMPO DE FUSO HORÁRIO (TIMEZONE) ---
+  // Converte a string ISO do banco (UTC) para a hora local exata da máquina do usuário
+  const toDatetimeLocal = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  };
 
   useEffect(() => {
     if (isEditing) {
       const fetchEvento = async () => {
         try {
           const data = await eventosService.buscarPorId(id);
+          
           setFormData({
             title: data.title || '',
-            description: data.description || '',
+            // O Prisma + Axios já entregam um objeto JSON perfeito. Sem necessidade de tradução!
+            description: data.description || null,
             location: data.location || '',
+            // Aplica a conversão de fuso na leitura
             startsAt: toDatetimeLocal(data.startsAt),
             endsAt: toDatetimeLocal(data.endsAt),
             capacity: data.capacity || '',
@@ -68,9 +77,11 @@ function EventoForm() {
     setLoading(true);
     setError(null);
 
+    // Prepara os dados para o banco, revertendo a hora local para ISO Global (UTC)
     const dataToSubmit = {
       ...formData,
-      endsAt: formData.endsAt === '' ? null : formData.endsAt,
+      startsAt: formData.startsAt ? new Date(formData.startsAt).toISOString() : '',
+      endsAt: formData.endsAt ? new Date(formData.endsAt).toISOString() : null,
       capacity: formData.capacity === '' ? null : Number(formData.capacity)
     };
 
@@ -83,7 +94,7 @@ function EventoForm() {
       navigate('/admin/eventos');
     } catch (err) {
       console.error(err);
-      setError('Erro ao salvar evento.');
+      setError('Erro ao salvar evento. Verifique os dados e tente novamente.');
       setLoading(false);
     }
   };
@@ -91,16 +102,16 @@ function EventoForm() {
   return (
     <div className="admin-form-page-container">
       <Link to="/admin/eventos" className="back-link">← Voltar</Link>
-      
+
       <div className="admin-form-content">
         <h1>{isEditing ? 'Editar Evento' : 'Novo Evento'}</h1>
-        
+
         {fetching ? (
           <p>Carregando...</p>
         ) : (
           <form onSubmit={handleSubmit} className="crud-form">
             {error && <p className="error-msg">{error}</p>}
-            
+
             <div className="form-group">
               <label>Título *</label>
               <input
