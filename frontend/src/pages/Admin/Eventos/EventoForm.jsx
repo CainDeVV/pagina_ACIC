@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { eventosService } from '../../../services/eventosService';
 import RichEditor from '../../../components/RichEditor';
-import './EventoForm.css';
+import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 
 function EventoForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
+  const editorRef = useRef(null);
 
   const [formData, setFormData] = useState({
     title: '',
-    description: null, // Deixamos null inicialmente para o Editor.js saber que está vazio
+    description: null,
     location: '',
     startsAt: '',
     endsAt: '',
@@ -25,8 +26,7 @@ function EventoForm() {
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
 
-  // --- TRATAMENTO LIMPO DE FUSO HORÁRIO (TIMEZONE) ---
-  // Converte a string ISO do banco (UTC) para a hora local exata da máquina do usuário
+  // Tratamento limpo de fuso horário para exibição no input datetime-local
   const toDatetimeLocal = (isoString) => {
     if (!isoString) return '';
     const date = new Date(isoString);
@@ -39,13 +39,10 @@ function EventoForm() {
       const fetchEvento = async () => {
         try {
           const data = await eventosService.buscarPorId(id);
-          
           setFormData({
             title: data.title || '',
-            // O Prisma + Axios já entregam um objeto JSON perfeito. Sem necessidade de tradução!
             description: data.description || null,
             location: data.location || '',
-            // Aplica a conversão de fuso na leitura
             startsAt: toDatetimeLocal(data.startsAt),
             endsAt: toDatetimeLocal(data.endsAt),
             capacity: data.capacity || '',
@@ -77,12 +74,23 @@ function EventoForm() {
     setLoading(true);
     setError(null);
 
-    // Prepara os dados para o banco, revertendo a hora local para ISO Global (UTC)
+    let finalDescription = formData.description;
+    if (editorRef.current) {
+      const editorData = await editorRef.current.save();
+      if (editorData) {
+        finalDescription = editorData;
+      }
+    }
+
+    // Limpeza rigorosa: Opcionais vazios viram 'undefined', obrigatórios repassam o erro
     const dataToSubmit = {
       ...formData,
+      description: finalDescription,
       startsAt: formData.startsAt ? new Date(formData.startsAt).toISOString() : '',
-      endsAt: formData.endsAt ? new Date(formData.endsAt).toISOString() : null,
-      capacity: formData.capacity === '' ? null : Number(formData.capacity)
+      endsAt: formData.endsAt ? new Date(formData.endsAt).toISOString() : undefined,
+      capacity: formData.capacity === '' ? undefined : Number(formData.capacity),
+      coverImage: formData.coverImage === '' ? undefined : formData.coverImage,
+      location: formData.location === '' ? undefined : formData.location,
     };
 
     try {
@@ -100,121 +108,106 @@ function EventoForm() {
   };
 
   return (
-    <div className="admin-form-page-container">
-      <Link to="/admin/eventos" className="back-link">← Voltar</Link>
-
-      <div className="admin-form-content">
-        <h1>{isEditing ? 'Editar Evento' : 'Novo Evento'}</h1>
-
-        {fetching ? (
-          <p>Carregando...</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="crud-form">
-            {error && <p className="error-msg">{error}</p>}
-
-            <div className="form-group">
-              <label>Título *</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Descrição *</label>
-              <RichEditor
-                value={formData.description}
-                onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Localização</label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Data e Hora de Início *</label>
-              <input
-                type="datetime-local"
-                name="startsAt"
-                value={formData.startsAt}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Data e Hora de Término</label>
-              <input
-                type="datetime-local"
-                name="endsAt"
-                value={formData.endsAt}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Capacidade (nº de vagas)</label>
-              <input
-                type="number"
-                name="capacity"
-                value={formData.capacity}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>URL da Imagem de Capa</label>
-              <input
-                type="text"
-                name="coverImage"
-                value={formData.coverImage}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Status *</label>
-              <select name="status" value={formData.status} onChange={handleChange} required>
-                <option value="DRAFT">Rascunho (DRAFT)</option>
-                <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-                <option value="CANCELLED">Cancelado (CANCELLED)</option>
-                <option value="FINISHED">Finalizado (FINISHED)</option>
-              </select>
-            </div>
-
-            <div className="form-group form-group-checkbox">
-              <input
-                type="checkbox"
-                name="destaque"
-                id="destaque"
-                checked={formData.destaque}
-                onChange={handleChange}
-              />
-              <label htmlFor="destaque">Destacar este evento na página inicial?</label>
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => navigate('/admin/eventos')}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Salvando...' : 'Salvar'}
-              </button>
-            </div>
-          </form>
-        )}
+    <AdminFormLayout
+      title="Evento"
+      backPath="/admin/eventos"
+      isEditing={isEditing}
+      fetching={fetching}
+      loading={loading}
+      error={error}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label>Título *</label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
       </div>
-    </div>
+
+      <div className="form-group">
+        <label>Descrição *</label>
+        <RichEditor
+          ref={editorRef}
+          value={formData.description}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Localização</label>
+        <input
+          type="text"
+          name="location"
+          value={formData.location}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Data e Hora de Início *</label>
+        <input
+          type="datetime-local"
+          name="startsAt"
+          value={formData.startsAt}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Data e Hora de Término</label>
+        <input
+          type="datetime-local"
+          name="endsAt"
+          value={formData.endsAt}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Capacidade (nº de vagas)</label>
+        <input
+          type="number"
+          name="capacity"
+          value={formData.capacity}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>URL da Imagem de Capa</label>
+        <input
+          type="text"
+          name="coverImage"
+          value={formData.coverImage}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Status *</label>
+        <select name="status" value={formData.status} onChange={handleChange} required>
+          <option value="DRAFT">Rascunho (DRAFT)</option>
+          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
+          <option value="CANCELLED">Cancelado (CANCELLED)</option>
+          <option value="FINISHED">Finalizado (FINISHED)</option>
+        </select>
+      </div>
+
+      <div className="form-group form-group-checkbox">
+        <input
+          type="checkbox"
+          name="destaque"
+          id="destaque"
+          checked={formData.destaque}
+          onChange={handleChange}
+        />
+        <label htmlFor="destaque">Destacar este evento na página inicial?</label>
+      </div>
+    </AdminFormLayout>
   );
 }
 

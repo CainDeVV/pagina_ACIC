@@ -1,25 +1,22 @@
 import api from './api';
 
 export const institucionalService = {
-  // Busca as páginas de texto usando a chave (ex: 'quem-somos', 'estatuto')
+  // --- Gestão de Conteúdo (Quem Somos, Estatuto, CMEC...) ---
+  buscarTodasPaginas: async () => {
+    const resposta = await api.get('/quem-somos');
+    return resposta.data;
+  },
+
   buscarPagina: async (chave) => {
     const resposta = await api.get(`/quem-somos/${chave}`);
     return resposta.data;
   },
 
-  // Busca todos os presidentes cadastrados
-  buscarPresidentes: async () => {
-    const resposta = await api.get('/presidentes');
+  buscarPaginaPorId: async (id) => {
+    const resposta = await api.get(`/quem-somos/${id}`);
     return resposta.data;
   },
 
-  // Buscar a lista de membros da Diretoria
-  buscarDiretoria: async () => {
-    const resposta = await api.get('/diretoria');
-    return resposta.data;
-  },
-
-  // --- Gestão de Conteúdo (Quem Somos, Estatuto, CMEC...) ---
   criarPagina: async (dados) => {
     const resposta = await api.post('/admin/quem-somos', dados);
     return resposta.data;
@@ -36,6 +33,16 @@ export const institucionalService = {
   },
 
   // --- Gestão de Presidentes ---
+  buscarPresidentes: async () => {
+    const resposta = await api.get('/presidentes');
+    return resposta.data;
+  },
+
+  buscarPresidentePorId: async (id) => {
+    const resposta = await api.get(`/presidentes/${id}`);
+    return resposta.data;
+  },
+
   criarPresidente: async (dados) => {
     const resposta = await api.post('/admin/presidentes', dados);
     return resposta.data;
@@ -52,6 +59,16 @@ export const institucionalService = {
   },
 
   // --- Gestão de Diretoria ---
+  buscarDiretoria: async () => {
+    const resposta = await api.get('/diretoria');
+    return resposta.data;
+  },
+
+  buscarDiretorPorId: async (id) => {
+    const resposta = await api.get(`/diretoria/${id}`);
+    return resposta.data;
+  },
+
   criarDiretoria: async (dados) => {
     const resposta = await api.post('/admin/diretoria', dados);
     return resposta.data;

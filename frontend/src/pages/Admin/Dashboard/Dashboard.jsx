@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import '../../../components/Admin/AdminGlobal.css';
 import './Dashboard.css';
 
 function Dashboard() {
@@ -31,11 +32,13 @@ function Dashboard() {
     { name: 'Serviços', path: '/admin/servicos' },
     { name: 'Eventos', path: '/admin/eventos' },
     { name: 'Notícias', path: '/admin/noticias' },
+    { name: 'Páginas Institucionais', path: '/admin/quemsomos' },
   ];
 
   return (
-    <div className="admin-dashboard">
-      <header className="dashboard-header">
+    <div className="admin-page-container">
+      {/* Reaproveitamos a classe global do cabeçalho que já criamos antes */}
+      <header className="admin-page-header" style={{ borderBottom: '1px solid #ccc', paddingBottom: '16px' }}>
         <h1>Painel Administrativo — ACIC</h1>
         <button className="btn-logout" onClick={handleLogout}>
           Sair
@@ -44,6 +47,7 @@ function Dashboard() {
 
       <div className="dashboard-welcome">
         <p>Bem-vindo{userName ? <>, <strong>{userName}</strong></> : ''}!</p>
+        <p className="dashboard-subtitle">Selecione o módulo que deseja gerenciar:</p>
       </div>
 
       <div className="dashboard-grid">

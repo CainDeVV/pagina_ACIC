@@ -1,0 +1,33 @@
+{
+  "key": "estatuto",
+  "title": "Estatuto",
+  "status": "PUBLISHED",
+  "sortOrder": 3,
+  "content": {
+    "blocks": [
+      {
+        "type": "heading",
+        "level": 1,
+        "content": "Estatuto da CACB",
+        "className": "institutional-title"
+      },
+      {
+        "type": "section",
+        "blocks": [
+          {
+            "type": "paragraph",
+            "content": "A CACB é uma organização multissetorial que reúne empresários de todos os setores da economia, como comércio, indústria, agropecuária e serviços, de empresas de todos os portes e profissionais liberais."
+          },
+          {
+            "type": "paragraph",
+            "content": "Para <a href='https://cacb.org.br/downloads/Estatuto_Atual_CACB.pdf' target='_blank' rel='noopener noreferrer' style='color: #0266b0; font-weight: bold; text-decoration: none;'>baixar o estatuto em PDF clique aqui</a>. Se preferir você pode ver o documento que está disponibilizado a seguir:"
+          }
+        ]
+      },
+      {
+        "type": "pdfEmbed",
+        "url": "https://cacb.org.br/downloads/Estatuto_Atual_CACB.pdf"
+      }
+    ]
+  }
+}

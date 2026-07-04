@@ -1,0 +1,23 @@
+{
+  "title": "Fortalecendo o comércio de Crateús",
+  "subtitle": "Há décadas unindo empresários e impulsionando a economia regional",
+  "imageUrl": "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&q=80",
+  "sortOrder": 1,
+  "status": "PUBLISHED"
+}
+
+{
+  "title": "Conectando empresários de todos os setores",
+  "subtitle": "Comércio, indústria, agropecuária e serviços em um só lugar",
+  "imageUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&q=80",
+  "sortOrder": 2,
+  "status": "PUBLISHED"
+}
+
+{
+  "title": "Sua voz no desenvolvimento regional",
+  "subtitle": "Representação política e institucional para o empresário cearense",
+  "imageUrl": "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=1400&q=80",
+  "sortOrder": 3,
+  "status": "PUBLISHED"
+}

@@ -1,0 +1,26 @@
+{
+  "key": "contatos",
+  "title": "Contatos",
+  "status": "PUBLISHED",
+  "sortOrder": 4,
+  "content": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "content": "<strong>Presidente</strong><br/>Alfredo Cotait Neto<br/>61 – 3321.1311<br/><a href='mailto:presidente@cacb.org.br' class='institutional-link'>presidente@cacb.org.br</a>"
+      },
+      {
+        "type": "paragraph",
+        "content": "<strong>Superintendente</strong><br/>Carlos Rezende<br/>61 – 3321.1311<br/><a href='mailto:rezende@cacb.org.br' class='institutional-link'>rezende@cacb.org.br</a>"
+      },
+      {
+        "type": "paragraph",
+        "content": "<strong>Assessora da Diretoria</strong><br/>Ana Paula Passos<br/>61 – 3321.1311<br/><a href='mailto:ana.passos@cacb.org.br' class='institutional-link'>ana.passos@cacb.org.br</a>"
+      },
+      {
+        "type": "paragraph",
+        "content": "<strong>Dúvidas sobre proteção de dados</strong><br/><a href='mailto:protecaodedados@cacb.org.br' class='institutional-link'>protecaodedados@cacb.org.br</a>"
+      }
+    ]
+  }
+}

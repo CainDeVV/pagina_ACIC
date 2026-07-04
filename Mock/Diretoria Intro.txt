@@ -1,0 +1,14 @@
+{
+  "key": "diretoria",
+  "title": "Diretoria",
+  "status": "PUBLISHED",
+  "sortOrder": 5,
+  "content": {
+    "blocks": [
+      {
+        "type": "paragraph",
+        "content": "Conheça a composição completa da nossa diretoria executiva, conselhos fiscais e consultivos que atuam em prol do ecossistema empresarial de Crateús."
+      }
+    ]
+  }
+}

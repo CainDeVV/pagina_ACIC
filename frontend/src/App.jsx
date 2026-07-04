@@ -9,6 +9,8 @@ import Footer from './components/Layout/Footer';
 import Dashboard from './pages/Admin/Dashboard/Dashboard';
 
 // Páginas Administrativas (CRUDs)
+import QuemSomosList from './pages/Admin/QuemSomos/QuemSomosList';
+import QuemSomosForm from './pages/Admin/QuemSomos/QuemSomosForm';
 import SlidesList from './pages/Admin/Slides/SlidesList';
 import SlideForm from './pages/Admin/Slides/SlideForm';
 import PresidentesList from './pages/Admin/Presidentes/PresidentesList';
@@ -21,6 +23,7 @@ import EventosList from './pages/Admin/Eventos/EventosList';
 import EventoForm from './pages/Admin/Eventos/EventoForm';
 import NoticiasList from './pages/Admin/Noticias/NoticiasList';
 import NoticiaForm from './pages/Admin/Noticias/NoticiaForm';
+
 
 // Páginas Públicas
 import Home from './pages/Public/Home/Home';
@@ -49,34 +52,38 @@ function App() {
       <Routes>
         {/* === ROTAS ADMINISTRATIVAS === */}
         <Route path="/admin" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-        
+
+        <Route path="/admin/quemsomos" element={<PrivateRoute><QuemSomosList /></PrivateRoute>} />
+        <Route path="/admin/quemsomos/novo" element={<PrivateRoute><QuemSomosForm /></PrivateRoute>} />
+        <Route path="/admin/quemsomos/:id/editar" element={<PrivateRoute><QuemSomosForm /></PrivateRoute>} />
+
         <Route path="/admin/slides" element={<PrivateRoute><SlidesList /></PrivateRoute>} />
         <Route path="/admin/slides/novo" element={<PrivateRoute><SlideForm /></PrivateRoute>} />
         <Route path="/admin/slides/:id/editar" element={<PrivateRoute><SlideForm /></PrivateRoute>} />
-        
+
         <Route path="/admin/presidentes" element={<PrivateRoute><PresidentesList /></PrivateRoute>} />
         <Route path="/admin/presidentes/novo" element={<PrivateRoute><PresidenteForm /></PrivateRoute>} />
         <Route path="/admin/presidentes/:id/editar" element={<PrivateRoute><PresidenteForm /></PrivateRoute>} />
-        
+
         <Route path="/admin/diretoria" element={<PrivateRoute><DiretoriaList /></PrivateRoute>} />
         <Route path="/admin/diretoria/novo" element={<PrivateRoute><DiretoriaForm /></PrivateRoute>} />
         <Route path="/admin/diretoria/:id/editar" element={<PrivateRoute><DiretoriaForm /></PrivateRoute>} />
-        
+
         <Route path="/admin/servicos" element={<PrivateRoute><ServicosList /></PrivateRoute>} />
         <Route path="/admin/servicos/novo" element={<PrivateRoute><ServicosForm /></PrivateRoute>} />
         <Route path="/admin/servicos/:id/editar" element={<PrivateRoute><ServicosForm /></PrivateRoute>} />
-        
+
         <Route path="/admin/eventos" element={<PrivateRoute><EventosList /></PrivateRoute>} />
         <Route path="/admin/eventos/novo" element={<PrivateRoute><EventoForm /></PrivateRoute>} />
         <Route path="/admin/eventos/:id/editar" element={<PrivateRoute><EventoForm /></PrivateRoute>} />
-        
+
         <Route path="/admin/noticias" element={<PrivateRoute><NoticiasList /></PrivateRoute>} />
         <Route path="/admin/noticias/novo" element={<PrivateRoute><NoticiaForm /></PrivateRoute>} />
         <Route path="/admin/noticias/:id/editar" element={<PrivateRoute><NoticiaForm /></PrivateRoute>} />
 
         {/* === ROTAS PÚBLICAS === */}
         <Route path="/" element={<Home />} />
-        
+
         <Route path="/quem-somos" element={<QuemSomos />} />
         <Route path="/diretoria" element={<Diretoria />} />
         <Route path="/estatuto" element={<Estatuto />} />
@@ -84,18 +91,18 @@ function App() {
         <Route path="/cmec" element={<Cmec />} />
         <Route path="/contatos" element={<Contatos />} />
         <Route path="/galeria-presidentes" element={<GaleriaPresidentes />} />
-        
+
         <Route path="/servicos" element={<Servicos />} />
         <Route path="/servicos/:slug" element={<ServicoDetalhe />} />
-        
+
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/eventos/:slug" element={<EventoDetalhe />} />
-        
+
         <Route path="/noticias" element={<Noticias />} />
         <Route path="/noticias/:slug" element={<NoticiaDetalhe />} />
-        
+
         <Route path="/login" element={<Login />} />
-        
+
         {/* Fallback */}
         <Route path="*" element={<NotFound />} />
       </Routes>

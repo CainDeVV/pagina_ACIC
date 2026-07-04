@@ -42,14 +42,24 @@ function BlockRenderer({ blocks }) {
 
           case 'image':
             // Padrão do plugin oficial @editorjs/image
+            let cleanAlt = data.caption ? data.caption.replace(/<[^>]*>?/gm, '') : 'Imagem do conteúdo';
+            let showCaption = true;
+            
+            // Truque mágico: se a legenda estiver entre colchetes [Texto], 
+            // usamos apenas como Alt Text e NÃO mostramos na tela.
+            if (cleanAlt.trim().startsWith('[') && cleanAlt.trim().endsWith(']')) {
+              cleanAlt = cleanAlt.trim().slice(1, -1);
+              showCaption = false;
+            }
+            
             return (
               <figure key={index} className="institutional-figure">
                 <img 
                   src={data.file?.url} 
-                  alt={data.caption || 'Imagem do conteúdo'} 
+                  alt={cleanAlt} 
                   style={{ maxWidth: '100%', borderRadius: '8px' }} 
                 />
-                {data.caption && (
+                {(data.caption && showCaption) && (
                   <figcaption 
                     className="institutional-caption" 
                     dangerouslySetInnerHTML={{ __html: data.caption }} 
@@ -91,6 +101,21 @@ function BlockRenderer({ blocks }) {
                   <h3>{data.title}</h3>
                   <p dangerouslySetInnerHTML={{ __html: data.text }} />
                 </div>
+              </div>
+            );
+
+          case 'gallery':
+            return (
+              <div key={index} className="institutional-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginTop: '24px' }}>
+                {data.images?.map((img, i) => (
+                  <figure key={i} style={{ margin: 0 }}>
+                    <img 
+                      src={img.url} 
+                      alt={img.alt || 'Imagem da galeria'} 
+                      style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }} 
+                    />
+                  </figure>
+                ))}
               </div>
             );
 

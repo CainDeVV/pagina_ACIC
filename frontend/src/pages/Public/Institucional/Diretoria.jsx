@@ -26,16 +26,28 @@ function Diretoria() {
   useEffect(() => {
     async function buscarDados() {
       try {
-        const [dadosDiretores, dadosIntro] = await Promise.all([
+        // Promise.allSettled é o padrão da indústria para requisições concorrentes independentes.
+        // Ele aguarda todas finalizarem e não "quebra" se uma delas falhar (como o 404 da intro).
+        const [resultadoDiretores, resultadoIntro] = await Promise.allSettled([
           institucionalService.buscarDiretoria(),
           institucionalService.buscarPagina('diretoria')
         ]);
         
-        // Passa os dados puros diretamente do backend para o estado
+        // Tratamento elegante dos resultados individuais
+        const dadosDiretores = resultadoDiretores.status === 'fulfilled' ? resultadoDiretores.value : [];
+        if (resultadoDiretores.status === 'rejected') {
+          console.error("Erro ao carregar diretores:", resultadoDiretores.reason);
+        }
+
+        const dadosIntro = resultadoIntro.status === 'fulfilled' ? resultadoIntro.value : null;
+        if (resultadoIntro.status === 'rejected') {
+          console.warn("Introdução não publicada no CMS (Ignorado).");
+        }
+        
         setDiretoriaCategorias(dadosDiretores || []);
         setPaginaIntro(dadosIntro);
       } catch (error) {
-        console.error("Erro ao buscar dados da Diretoria:", error);
+        console.error("Erro fatal inesperado ao buscar dados da Diretoria:", error);
       } finally {
         setCarregando(false);
       }

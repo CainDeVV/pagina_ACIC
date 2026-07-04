@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { slidesService } from '../../../services/slidesService';
-import './SlideForm.css';
+import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 
 function SlideForm() {
   const { id } = useParams();
@@ -49,7 +49,7 @@ function SlideForm() {
     const { name, value, type } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'number' ? Number(value) : value
+      [name]: type === 'number' ? (value === '' ? '' : Number(value)) : value
     }));
   };
 
@@ -58,106 +58,99 @@ function SlideForm() {
     setLoading(true);
     setError(null);
 
+    // Limpeza para campos opcionais e tratamento do sortOrder como número
+    const dataToSubmit = {
+      ...formData,
+      subtitle: formData.subtitle === '' ? undefined : formData.subtitle,
+      linkUrl: formData.linkUrl === '' ? undefined : formData.linkUrl,
+      sortOrder: formData.sortOrder === '' ? 0 : Number(formData.sortOrder)
+    };
+
     try {
       if (isEditing) {
-        await slidesService.atualizar(id, formData);
+        await slidesService.atualizar(id, dataToSubmit);
       } else {
-        await slidesService.criar(formData);
+        await slidesService.criar(dataToSubmit);
       }
       navigate('/admin/slides');
     } catch (err) {
       console.error(err);
-      setError('Erro ao salvar slide.');
+      setError('Erro ao salvar slide. Verifique os dados e tente novamente.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-form-page-container">
-      <Link to="/admin/slides" className="back-link">← Voltar</Link>
-      
-      <div className="admin-form-content">
-        <h1>{isEditing ? 'Editar Slide' : 'Novo Slide'}</h1>
-        
-        {fetching ? (
-          <p>Carregando...</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="crud-form">
-            {error && <p className="error-msg">{error}</p>}
-            
-            <div className="form-group">
-              <label>Título *</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Subtítulo</label>
-              <input
-                type="text"
-                name="subtitle"
-                value={formData.subtitle}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>URL da Imagem *</label>
-              <input
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Link (URL de destino)</label>
-              <input
-                type="text"
-                name="linkUrl"
-                value={formData.linkUrl}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Status *</label>
-              <select name="status" value={formData.status} onChange={handleChange} required>
-                <option value="DRAFT">Rascunho (DRAFT)</option>
-                <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-                <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Ordem</label>
-              <input
-                type="number"
-                name="sortOrder"
-                value={formData.sortOrder}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => navigate('/admin/slides')}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Salvando...' : 'Salvar'}
-              </button>
-            </div>
-          </form>
-        )}
+    <AdminFormLayout
+      title="Slide"
+      backPath="/admin/slides"
+      isEditing={isEditing}
+      fetching={fetching}
+      loading={loading}
+      error={error}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label>Título *</label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
       </div>
-    </div>
+
+      <div className="form-group">
+        <label>Subtítulo</label>
+        <input
+          type="text"
+          name="subtitle"
+          value={formData.subtitle}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>URL da Imagem *</label>
+        <input
+          type="text"
+          name="imageUrl"
+          value={formData.imageUrl}
+          onChange={handleChange}
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Link (URL de destino)</label>
+        <input
+          type="text"
+          name="linkUrl"
+          value={formData.linkUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Status *</label>
+        <select name="status" value={formData.status} onChange={handleChange} required>
+          <option value="DRAFT">Rascunho (DRAFT)</option>
+          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
+          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label>Ordem de Exibição (sortOrder)</label>
+        <input
+          type="number"
+          name="sortOrder"
+          value={formData.sortOrder}
+          onChange={handleChange}
+        />
+      </div>
+    </AdminFormLayout>
   );
 }
 

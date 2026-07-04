@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { servicosService } from '../../../services/servicosService';
 import RichEditor from '../../../components/RichEditor';
-import './ServicosForm.css';
+import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 
 function ServicosForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
+  const editorRef = useRef(null);
 
   const [formData, setFormData] = useState({
     title: '',
     summary: '',
-    description: '',
+    description: null,
     icon: '',
     imageUrl: '',
     destaque: false,
@@ -31,7 +32,7 @@ function ServicosForm() {
           setFormData({
             title: data.title || '',
             summary: data.summary || '',
-            description: data.description || '',
+            description: data.description || null,
             icon: data.icon || '',
             imageUrl: data.imageUrl || '',
             destaque: !!data.destaque,
@@ -61,114 +62,116 @@ function ServicosForm() {
     setLoading(true);
     setError(null);
 
+    let finalDescription = formData.description;
+    if (editorRef.current) {
+      const editorData = await editorRef.current.save();
+      if (editorData) {
+        finalDescription = editorData;
+      }
+    }
+
+    // Limpeza rigorosa: converte strings vazias em undefined para os opcionais
+    const dataToSubmit = {
+      ...formData,
+      description: finalDescription,
+      summary: formData.summary === '' ? undefined : formData.summary,
+      icon: formData.icon === '' ? undefined : formData.icon,
+      imageUrl: formData.imageUrl === '' ? undefined : formData.imageUrl
+    };
+
     try {
       if (isEditing) {
-        await servicosService.atualizar(id, formData);
+        await servicosService.atualizar(id, dataToSubmit);
       } else {
-        await servicosService.criar(formData);
+        await servicosService.criar(dataToSubmit);
       }
       navigate('/admin/servicos');
     } catch (err) {
       console.error(err);
-      setError('Erro ao salvar serviço.');
+      setError('Erro ao salvar serviço. Verifique os dados e tente novamente.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-form-page-container">
-      <Link to="/admin/servicos" className="back-link">← Voltar</Link>
-      
-      <div className="admin-form-content">
-        <h1>{isEditing ? 'Editar Serviço' : 'Novo Serviço'}</h1>
-        
-        {fetching ? (
-          <p>Carregando...</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="crud-form">
-            {error && <p className="error-msg">{error}</p>}
-            
-            <div className="form-group">
-              <label>Título *</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Resumo (Summary)</label>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange}
-                rows="3"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Descrição (Conteúdo Principal) *</label>
-              <RichEditor
-                value={formData.description}
-                onChange={(val) => setFormData(prev => ({ ...prev, description: val }))}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Ícone (Nome ou URL)</label>
-              <input
-                type="text"
-                name="icon"
-                value={formData.icon}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>URL da Imagem</label>
-              <input
-                type="text"
-                name="imageUrl"
-                value={formData.imageUrl}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Status *</label>
-              <select name="status" value={formData.status} onChange={handleChange} required>
-                <option value="DRAFT">Rascunho (DRAFT)</option>
-                <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-                <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
-              </select>
-            </div>
-
-            <div className="form-group form-group-checkbox">
-              <input
-                type="checkbox"
-                name="destaque"
-                id="destaque"
-                checked={formData.destaque}
-                onChange={handleChange}
-              />
-              <label htmlFor="destaque">Destacar este serviço na página inicial?</label>
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => navigate('/admin/servicos')}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Salvando...' : 'Salvar'}
-              </button>
-            </div>
-          </form>
-        )}
+    <AdminFormLayout
+      title="Serviço"
+      backPath="/admin/servicos"
+      isEditing={isEditing}
+      fetching={fetching}
+      loading={loading}
+      error={error}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label>Título *</label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title}
+          onChange={handleChange}
+          required
+        />
       </div>
-    </div>
+
+      <div className="form-group">
+        <label>Resumo (Summary)</label>
+        <textarea
+          name="summary"
+          value={formData.summary}
+          onChange={handleChange}
+          rows="3"
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Descrição (Conteúdo Principal) *</label>
+        <RichEditor
+          ref={editorRef}
+          value={formData.description}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Ícone (Nome ou URL)</label>
+        <input
+          type="text"
+          name="icon"
+          value={formData.icon}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>URL da Imagem</label>
+        <input
+          type="text"
+          name="imageUrl"
+          value={formData.imageUrl}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Status *</label>
+        <select name="status" value={formData.status} onChange={handleChange} required>
+          <option value="DRAFT">Rascunho (DRAFT)</option>
+          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
+          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+        </select>
+      </div>
+
+      <div className="form-group form-group-checkbox">
+        <input
+          type="checkbox"
+          name="destaque"
+          id="destaque"
+          checked={formData.destaque}
+          onChange={handleChange}
+        />
+        <label htmlFor="destaque">Destacar este serviço na página inicial?</label>
+      </div>
+    </AdminFormLayout>
   );
 }
 

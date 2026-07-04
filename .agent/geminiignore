@@ -1,0 +1,47 @@
+# Dependências — nunca precisam ser lidas pelo agente
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build outputs
+backend/dist/
+frontend/dist/
+frontend/build/
+
+# Prisma gerado (o agente lê o schema.prisma, não o client gerado)
+backend/node_modules/.prisma/
+backend/src/generated/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Cache e temporários
+.cache/
+.vite/
+*.tmp
+
+# Cobertura de testes
+coverage/
+backend/coverage/
+
+# Docker volumes locais
+.docker/
+
+# Variáveis de ambiente reais (sensível)
+.env
+.env.local
+.env.production
+
+# Lock files (grandes, raramente úteis pro agente)
+package-lock.json
+backend/package-lock.json
+frontend/package-lock.json
+
+# Assets binários (imagens, fontes)
+frontend/src/assets/galeria/
+frontend/public/
+
+# Migrations antigas (manter apenas schema.prisma e a migration mais recente)
+# Descomente se quiser ocultar histórico de migrations antigas:
+# backend/prisma/migrations/

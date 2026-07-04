@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { noticiasService } from '../../../services/noticiasService';
 import RichEditor from '../../../components/RichEditor';
-import './NoticiaForm.css';
+import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 
 function NoticiaForm() {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEditing = !!id;
+  const editorRef = useRef(null);
 
   const [formData, setFormData] = useState({
     title: '',
     summary: '',
-    content: '',
+    content: null,
     coverImage: '',
+    destaque: false, // <-- ADICIONADO AQUI
     status: 'DRAFT',
     publishedAt: ''
   });
@@ -22,8 +24,12 @@ function NoticiaForm() {
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
 
-  // Converte string ISO para YYYY-MM-DDTHH:mm para o input datetime-local
-  const toDatetimeLocal = (iso) => (iso ? iso.slice(0, 16) : '');
+  const toDatetimeLocal = (isoString) => {
+    if (!isoString) return '';
+    const date = new Date(isoString);
+    const offset = date.getTimezoneOffset() * 60000;
+    return new Date(date.getTime() - offset).toISOString().slice(0, 16);
+  };
 
   useEffect(() => {
     if (isEditing) {
@@ -33,8 +39,9 @@ function NoticiaForm() {
           setFormData({
             title: data.title || '',
             summary: data.summary || '',
-            content: data.content || '',
+            content: data.content || null,
             coverImage: data.coverImage || '',
+            destaque: !!data.destaque, // <-- ADICIONADO AQUI
             status: data.status || 'DRAFT',
             publishedAt: toDatetimeLocal(data.publishedAt)
           });
@@ -50,10 +57,10 @@ function NoticiaForm() {
   }, [id, isEditing]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -62,9 +69,20 @@ function NoticiaForm() {
     setLoading(true);
     setError(null);
 
+    let finalContent = formData.content;
+    if (editorRef.current) {
+      const editorData = await editorRef.current.save();
+      if (editorData) {
+        finalContent = editorData;
+      }
+    }
+
     const dataToSubmit = {
       ...formData,
-      publishedAt: formData.publishedAt === '' ? null : formData.publishedAt
+      content: finalContent,
+      summary: formData.summary === '' ? undefined : formData.summary,
+      coverImage: formData.coverImage === '' ? undefined : formData.coverImage,
+      publishedAt: formData.publishedAt ? new Date(formData.publishedAt).toISOString() : undefined
     };
 
     try {
@@ -76,94 +94,61 @@ function NoticiaForm() {
       navigate('/admin/noticias');
     } catch (err) {
       console.error(err);
-      setError('Erro ao salvar notícia.');
+      setError('Erro ao salvar notícia. Verifique os dados e tente novamente.');
       setLoading(false);
     }
   };
 
   return (
-    <div className="admin-form-page-container">
-      <Link to="/admin/noticias" className="back-link">← Voltar</Link>
-      
-      <div className="admin-form-content">
-        <h1>{isEditing ? 'Editar Notícia' : 'Nova Notícia'}</h1>
-        
-        {fetching ? (
-          <p>Carregando...</p>
-        ) : (
-          <form onSubmit={handleSubmit} className="crud-form">
-            {error && <p className="error-msg">{error}</p>}
-            
-            <div className="form-group">
-              <label>Título *</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Resumo (Summary)</label>
-              <textarea
-                name="summary"
-                value={formData.summary}
-                onChange={handleChange}
-                rows="3"
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Conteúdo (Content) *</label>
-              <RichEditor
-                value={formData.content}
-                onChange={(val) => setFormData(prev => ({ ...prev, content: val }))}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>URL da Imagem de Capa</label>
-              <input
-                type="text"
-                name="coverImage"
-                value={formData.coverImage}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Status *</label>
-              <select name="status" value={formData.status} onChange={handleChange} required>
-                <option value="DRAFT">Rascunho (DRAFT)</option>
-                <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-                <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Data e Hora de Publicação</label>
-              <input
-                type="datetime-local"
-                name="publishedAt"
-                value={formData.publishedAt}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="form-actions">
-              <button type="button" className="btn-cancel" onClick={() => navigate('/admin/noticias')}>
-                Cancelar
-              </button>
-              <button type="submit" className="btn-primary" disabled={loading}>
-                {loading ? 'Salvando...' : 'Salvar'}
-              </button>
-            </div>
-          </form>
-        )}
+    <AdminFormLayout
+      title="Notícia"
+      backPath="/admin/noticias"
+      isEditing={isEditing}
+      fetching={fetching}
+      loading={loading}
+      error={error}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label>Título *</label>
+        <input type="text" name="title" value={formData.title} onChange={handleChange} required />
       </div>
-    </div>
+
+      <div className="form-group">
+        <label>Resumo (Summary)</label>
+        <textarea name="summary" value={formData.summary} onChange={handleChange} rows="3" />
+      </div>
+
+      <div className="form-group">
+        <label>Conteúdo (Content) *</label>
+        <RichEditor ref={editorRef} value={formData.content} />
+      </div>
+
+      <div className="form-group">
+        <label>URL da Imagem de Capa</label>
+        <input type="text" name="coverImage" value={formData.coverImage} onChange={handleChange} />
+      </div>
+
+      <div className="form-group">
+        <label>Status *</label>
+        <select name="status" value={formData.status} onChange={handleChange} required>
+          <option value="DRAFT">Rascunho (DRAFT)</option>
+          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
+          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label>Data e Hora de Publicação</label>
+        <input type="datetime-local" name="publishedAt" value={formData.publishedAt} onChange={handleChange} />
+      </div>
+
+      {/* ADICIONADO AQUI */}
+      <div className="form-group form-group-checkbox">
+        <input type="checkbox" name="destaque" id="destaque" checked={formData.destaque} onChange={handleChange} />
+        <label htmlFor="destaque">Destacar esta notícia na página inicial?</label>
+      </div>
+    </AdminFormLayout>
   );
 }
 

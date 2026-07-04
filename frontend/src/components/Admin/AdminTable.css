@@ -1,0 +1,70 @@
+.admin-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th, 
+.admin-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.admin-table th {
+  background-color: #f0f0f0;
+  color: #333;
+  font-weight: 600;
+}
+
+.admin-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+.admin-table-empty {
+  text-align: center;
+  padding: 32px;
+  color: #666;
+  font-style: italic;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  background-color: #e67e00;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-edit:hover {
+  background-color: #cc7000;
+}
+
+.btn-delete {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.btn-delete:hover {
+  background-color: #c82333;
+}

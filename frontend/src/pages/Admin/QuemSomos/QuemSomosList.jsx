@@ -3,62 +3,60 @@ import { useNavigate } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 
-function PresidentesList() {
+function QuemSomosList() {
   const navigate = useNavigate();
-  const [presidentes, setPresidentes] = useState([]);
+  const [paginas, setPaginas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const fetchPresidentes = async () => {
+  const fetchPaginas = async () => {
     setLoading(true);
     try {
-      const data = await institucionalService.buscarPresidentes();
-      setPresidentes(data || []);
+      const data = await institucionalService.buscarTodasPaginas();
+      setPaginas(data || []);
     } catch (err) {
       console.error(err);
-      setError('Erro ao carregar presidentes.');
+      setError('Erro ao carregar páginas institucionais.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchPresidentes();
+    fetchPaginas();
   }, []);
 
   const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este presidente?')) {
+    if (window.confirm('Tem certeza que deseja excluir esta página institucional?')) {
       try {
-        await institucionalService.deletarPresidente(id);
-        fetchPresidentes();
+        await institucionalService.deletarPagina(id);
+        fetchPaginas();
       } catch (err) {
         console.error(err);
-        alert('Erro ao excluir presidente.');
+        alert('Erro ao excluir página.');
       }
     }
   };
 
   const columns = [
-    { label: 'Nome', key: 'name' },
-    { 
-      label: 'Período', 
-      render: (row) => `${row.termStart} - ${row.termEnd || 'Atual'}` 
-    },
+    { label: 'Chave (URL)', key: 'key' },
+    { label: 'Título', key: 'title' },
+    { label: 'Status', key: 'status' },
     { label: 'Ordem', key: 'sortOrder' }
   ];
 
   return (
     <AdminListLayout
-      title="Presidentes"
-      createPath="/admin/presidentes/novo"
+      title="Páginas Institucionais"
+      createPath="/admin/quemsomos/novo"
       loading={loading}
       error={error}
-      data={presidentes}
+      data={paginas}
       columns={columns}
-      onEdit={(row) => navigate(`/admin/presidentes/${row.id}/editar`)}
+      onEdit={(row) => navigate(`/admin/quemsomos/${row.id}/editar`)}
       onDelete={handleDelete}
     />
   );
 }
 
-export default PresidentesList;
+export default QuemSomosList;

@@ -46,7 +46,7 @@ function Noticias() {
         ) : (
           <div className="public-noticias-grid">
             {noticias.map(noticia => (
-              <NewsCard key={noticia.id} noticia={noticia} />
+              <NewsCard key={noticia.id} news={noticia} />
             ))}
           </div>
         )}

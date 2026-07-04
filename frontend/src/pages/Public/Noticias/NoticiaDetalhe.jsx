@@ -47,7 +47,7 @@ function NoticiaDetalhe() {
     );
   }
 
-  const parsedContent = noticia.content ? JSON.parse(noticia.content) : { blocks: [] };
+  const parsedContent = noticia.content || { blocks: [] };
   const formattedDate = noticia.publishedAt 
     ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR', { dateStyle: 'long' })
     : null;
