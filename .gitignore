@@ -32,5 +32,7 @@ Thumbs.db
 
 # Documentação
 docs/
+CONTEXTO_GERAL.md
+auditoria-completa.md
 
 .agent.zip
