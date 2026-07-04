@@ -71,7 +71,7 @@ function EventoDetalhe() {
           <h1>{evento.title}</h1>
           {evento.location && <p>📍 {evento.location}</p>}
           <span className="evento-data">
-            {new Date(evento.startsAt).toLocaleDateString('pt-BR', {
+            {new Date(evento.startsAt).toLocaleString('pt-BR', {
               day: '2-digit',
               month: 'long',
               year: 'numeric',

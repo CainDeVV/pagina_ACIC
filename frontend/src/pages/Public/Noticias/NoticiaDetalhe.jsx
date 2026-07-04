@@ -87,7 +87,7 @@ function NoticiaDetalhe() {
         )}
 
         <div className="noticia-detalhe-body">
-          <BlockRenderer content={parsedContent} />
+          <BlockRenderer blocks={parsedContent.blocks} />
         </div>
       </div>
     </div>

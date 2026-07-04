@@ -5,7 +5,9 @@ import {
   UploadedFile,
   BadRequestException,
   UseGuards,
+  Req
 } from '@nestjs/common';
+import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -17,7 +19,7 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Upload')
-@Controller('admin/upload')
+@Controller('upload')
 export class UploadController {
   // ROTA ADMINISTRATIVA PROTEGIDA — mesmo padrão de eventos.controller.ts e servicos.controller.ts
   @ApiBearerAuth()
@@ -59,18 +61,20 @@ export class UploadController {
       },
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
+  uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     if (!file) {
       throw new BadRequestException('Nenhum arquivo válido foi enviado.');
     }
 
     // Retorna o caminho RELATIVO — o frontend monta a URL completa via VITE_API_URL
     // (já configurado em frontend/src/services/api.js)
-    const fileUrl = `/uploads/${file.filename}`;
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${file.filename}`;
 
     return {
-      message: 'Arquivo processado com sucesso',
-      url: fileUrl,
+      success: 1,
+      file: {
+        url: fileUrl,
+      },
       filename: file.filename,
       mimetype: file.mimetype,
     };

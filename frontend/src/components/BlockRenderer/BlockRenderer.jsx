@@ -1,136 +1,101 @@
-/**
- * Componente BlockRenderer
- * * Este componente recebe um array de objetos (blocks) e converte cada objeto
- * na sua respectiva tag HTML. Ele funciona como um "tradutor" entre o formato
- * JSON salvo no banco de dados/mock e o visual final na tela.
- */
 function BlockRenderer({ blocks }) {
-  // Trava de segurança: se a página não tiver blocos ou a variável vier vazia,
-  // não renderiza nada (evita que o React quebre mostrando erro de "map of undefined").
-  if (!blocks || blocks.length === 0) return null;
+  // Trava de segurança
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) return null;
 
   return (
-    // O Fragmento vazio <> </> é usado para retornar múltiplos elementos 
-    // sem precisar criar uma <div> desnecessária em volta de tudo.
     <>
       {blocks.map((block, index) => {
-        
-        // O switch analisa a propriedade 'type' de cada bloco para decidir o que desenhar
-        switch (block.type) {
-          
-          case 'heading':
-            // Cria a tag de título dinamicamente. Se o mock não informar o 'level',
-            // ele assume que é um <h2> por padrão. Ex: Tag = 'h1', 'h2', etc.
-            const Tag = `h${block.level || 2}`;
+        // No Editor.js, todo o payload (texto, url, nível) fica dentro de 'data'
+        const { type, data } = block;
+
+        // Se o bloco não tiver a propriedade data por algum erro de salvamento, ignoramos
+        if (!data) return null;
+
+        switch (type) {
+          case 'header':
+            const Tag = `h${data.level || 2}`;
             return (
-              // A prop 'key' é obrigatória no React quando fazemos um map.
-              <Tag key={index} className={block.className} id={block.id}>
-                {block.content}
-              </Tag>
+              <Tag 
+                key={index} 
+                dangerouslySetInnerHTML={{ __html: data.text }} 
+              />
             );
 
           case 'paragraph':
             return (
               <p 
                 key={index} 
-                style={block.style} 
-                // O dangerouslySetInnerHTML diz ao React: "Confie em mim, tem HTML dentro desse texto".
-                // Isso é necessário para que tags como <strong> ou <a> enviadas no texto 
-                // do mock funcionem de verdade, em vez de serem impressas como texto puro na tela.
-                dangerouslySetInnerHTML={{ __html: block.content }} 
+                dangerouslySetInnerHTML={{ __html: data.text }} 
               />
             );
 
-          case 'section':
+          case 'list':
+            // O Editor.js suporta listas ordenadas (ol) e não ordenadas (ul)
+            const ListTag = data.style === 'ordered' ? 'ol' : 'ul';
             return (
-              <section key={index}>
-                {/* RECURSIVIDADE: Se a seção tiver blocos dentro dela, 
-                    o componente chama a si mesmo para desenhar os "filhos". */}
-                <BlockRenderer blocks={block.blocks} />
-              </section>
+              <ListTag key={index} style={{ marginBottom: '24px', paddingLeft: '20px', color: 'var(--color-gray-dark)', lineHeight: '1.6' }}>
+                {data.items?.map((item, i) => (
+                  <li key={i} dangerouslySetInnerHTML={{ __html: item }} />
+                ))}
+              </ListTag>
             );
 
           case 'image':
+            // Padrão do plugin oficial @editorjs/image
             return (
-              // Renderiza uma imagem simples isolada
-              <img 
-                key={index} 
-                src={block.url} 
-                alt={block.alt} 
-                className={block.className} 
-              />
-            );
-
-          case 'figure':
-            return (
-              // Renderiza uma imagem com uma estrutura semântica avançada (<figure>),
-              // permitindo acoplar uma legenda (<figcaption>) logo abaixo dela.
               <figure key={index} className="institutional-figure">
-                <img src={block.url} alt={block.alt} />
-                {/* Se existir uma legenda no mock, renderiza o figcaption. Se não, ignora. */}
-                {block.caption && (
-                  <figcaption className="institutional-caption">
-                    {block.caption}
-                  </figcaption>
+                <img 
+                  src={data.file?.url} 
+                  alt={data.caption || 'Imagem do conteúdo'} 
+                  style={{ maxWidth: '100%', borderRadius: '8px' }} 
+                />
+                {data.caption && (
+                  <figcaption 
+                    className="institutional-caption" 
+                    dangerouslySetInnerHTML={{ __html: data.caption }} 
+                  />
                 )}
               </figure>
             );
 
-          case 'gallery':
-            return (
-              // Renderiza uma "caixa" (div) contendo várias imagens dentro.
-              <div key={index} className={block.className}>
-                {/* Faz um sub-map para percorrer o array de imagens exclusivo desta galeria */}
-                {block.images.map((img, i) => (
-                  <img key={i} src={img.url} alt={img.alt} />
-                ))}
-              </div>
-            );
-
+          /* * BLOCOS CUSTOMIZADOS
+           * Mantidos aqui caso você crie plugins customizados para o Editor.js
+           * no futuro. Eles também seguirão a regra de ler de "block.data".
+           */
           case 'pdfLink':
             return (
-              // Cria um link especial configurado para abrir documentos (como PDFs)
-              <a 
-                key={index} 
-                href={block.url} 
-                target="_blank" // Abre em uma nova aba para o usuário não sair do seu site
-                rel="noopener noreferrer" // Trava de segurança essencial quando usamos target="_blank"
-                className={block.className}
-              >
-                {block.text}
+              <a key={index} href={data.url} target="_blank" rel="noopener noreferrer" className={data.className || 'institutional-pdf-link'}>
+                {data.text}
               </a>
             );
 
           case 'pdfEmbed':
-            // Renderiza um visualizador de PDF (iframe) diretamente na página
             return (
-              <iframe
-                key={index}
-                src={block.url}
-                width="100%"
-                height="800px" // Altura generosa para leitura do documento
-                style={{ border: '1px solid #ddd', borderRadius: '8px', marginTop: '24px' }}
-                title="Visualizador de PDF do Estatuto"
+              <iframe 
+                key={index} 
+                src={data.url} 
+                width="100%" 
+                height="800px" 
+                style={{ border: '1px solid #ddd', borderRadius: '8px', marginTop: '24px' }} 
+                title="Visualizador de PDF" 
               />
             );
-          
+
           case 'imageTextHighlight':
             return (
               <div key={index} className="image-text-highlight">
                 <div className="ith-image-container">
-                  <img src={block.imageUrl} alt={block.title} />
+                  <img src={data.imageUrl} alt={data.title} />
                 </div>
                 <div className="ith-text-container">
-                  <h3>{block.title}</h3>
-                  <p>{block.text}</p>
+                  <h3>{data.title}</h3>
+                  <p dangerouslySetInnerHTML={{ __html: data.text }} />
                 </div>
               </div>
             );
 
           default:
-            // Se alguém tentar enviar um tipo de bloco que não existe (ex: type: 'video'),
-            // o componente não quebra. Ele apenas avisa no console do navegador e pula o bloco.
-            console.warn(`Unknown block type: ${block.type}`);
+            console.warn(`Tipo de bloco desconhecido ignorado: ${type}`);
             return null;
         }
       })}

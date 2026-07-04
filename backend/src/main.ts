@@ -34,11 +34,13 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
-  
+
   // Configura o NestJS para servir arquivos estáticos da pasta "uploads"
-  app.useStaticAssets(join(__dirname, '..', '..', 'uploads'), {
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
     prefix: '/uploads/',
   });
+
+  app.enableShutdownHooks();
 
   await app.listen(process.env.PORT ?? 3000);
 }
