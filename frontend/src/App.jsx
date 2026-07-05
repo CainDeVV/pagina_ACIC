@@ -20,6 +20,8 @@ const DiretoriaList = lazy(() => import('./pages/Admin/Diretoria/DiretoriaList')
 const DiretoriaForm = lazy(() => import('./pages/Admin/Diretoria/DiretoriaForm'));
 const ServicosList = lazy(() => import('./pages/Admin/Servicos/ServicosList'));
 const ServicosForm = lazy(() => import('./pages/Admin/Servicos/ServicosForm'));
+const PatrocinadoresList = lazy(() => import('./pages/Admin/Patrocinadores/PatrocinadoresList'));
+const PatrocinadorForm = lazy(() => import('./pages/Admin/Patrocinadores/PatrocinadorForm'));
 const EventosList = lazy(() => import('./pages/Admin/Eventos/EventosList'));
 const EventoForm = lazy(() => import('./pages/Admin/Eventos/EventoForm'));
 const NoticiasList = lazy(() => import('./pages/Admin/Noticias/NoticiasList'));
@@ -82,7 +84,10 @@ function App() {
 
             <Route path="servicos" element={<ServicosList />} />
             <Route path="servicos/novo" element={<ServicosForm />} />
-            <Route path="servicos/:id/editar" element={<ServicosForm />} />
+            <Route path="servicos/editar/:id" element={<ServicosForm />} />
+            <Route path="patrocinadores" element={<PatrocinadoresList />} />
+            <Route path="patrocinadores/novo" element={<PatrocinadorForm />} />
+            <Route path="patrocinadores/editar/:id" element={<PatrocinadorForm />} />
 
             <Route path="eventos" element={<EventosList />} />
             <Route path="eventos/novo" element={<EventoForm />} />

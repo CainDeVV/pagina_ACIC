@@ -16,6 +16,7 @@ import { NoticiasModule } from './modules/noticias/noticias.module';
 import { AssociadosModule } from './modules/associados/associados.module';
 import { InscricoesModule } from './modules/inscricoes/inscricoes.module';
 import { CertificadosModule } from './modules/certificados/certificados.module';
+import { PatrocinadoresModule } from './modules/patrocinadores/patrocinadores.module';
 
 @Module({
   imports: [
@@ -36,7 +37,8 @@ import { CertificadosModule } from './modules/certificados/certificados.module';
     NoticiasModule,
     AssociadosModule,
     InscricoesModule,
-    CertificadosModule
+    CertificadosModule,
+    PatrocinadoresModule
   ],
   controllers: [AppController],
   providers: [AppService],
