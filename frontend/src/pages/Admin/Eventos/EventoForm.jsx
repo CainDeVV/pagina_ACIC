@@ -1,169 +1,144 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useState, useRef } from 'react';
+import { useParams } from 'react-router-dom';
 import { eventosService } from '../../../services/eventosService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import CoverImageFields from '../../../components/Admin/CoverImageFields';
 import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
 import { toDatetimeLocal } from '../../../utils/dateUtils';
-import { Helmet } from 'react-helmet-async';
+import { useAdminForm } from '../../../hooks/useAdminForm';
 
 function EventoForm() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const isEditing = !!id;
   const editorRef = useRef(null);
 
-  const [formData, setFormData] = useState({
-    title: '',
-    description: null,
-    location: '',
-    startsAt: '',
-    endsAt: '',
-    capacity: '',
-    coverImage: '',
-    coverImageCaption: '',
-    showCoverImage: true,
-    destaque: false,
-    status: CONTENT_STATUS.DRAFT
-  });
-
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(isEditing);
-  const [error, setError] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
 
+  const {
+    formData,
+    setFormData,
+    loading,
+    fetching,
+    error,
+    setError,
+    handleChange,
+    handleSubmit
+  } = useAdminForm({
+    id,
+    service: eventosService,
+    redirectPath: '/admin/eventos',
+    initialData: {
+      title: '',
+      description: null,
+      location: '',
+      startsAt: '',
+      endsAt: '',
+      capacity: '',
+      coverImage: '',
+      coverImageCaption: '',
+      showCoverImage: true,
+      destaque: false,
+      status: CONTENT_STATUS.DRAFT
+    }
+  });
 
+  // Corrige formato da data quando vem da API
+  React.useEffect(() => {
+    if (formData.startsAt && formData.startsAt.includes('T') && formData.startsAt.endsWith('Z')) {
+      setFormData(prev => ({ 
+        ...prev, 
+        startsAt: toDatetimeLocal(prev.startsAt),
+        endsAt: prev.endsAt ? toDatetimeLocal(prev.endsAt) : ''
+      }));
+    }
+  }, [formData.startsAt, setFormData]);
 
-  useEffect(() => {
-    if (isEditing) {
-      const fetchEvento = async () => {
-        try {
-          const data = await eventosService.buscarPorId(id);
-          setFormData({
-            title: data.title || '',
-            description: data.description || null,
-            location: data.location || '',
-            startsAt: toDatetimeLocal(data.startsAt),
-            endsAt: toDatetimeLocal(data.endsAt),
-            capacity: data.capacity || '',
-            coverImage: data.coverImage || '',
-            coverImageCaption: data.coverImageCaption || '',
-            showCoverImage: data.showCoverImage !== false,
-            destaque: !!data.destaque,
-            status: data.status || CONTENT_STATUS.DRAFT
-          });
-        } catch (err) {
-          console.error(err);
-          setError('Erro ao carregar dados do evento.');
-        } finally {
-          setFetching(false);
+  const onSave = (e) => {
+    setFieldErrors({});
+
+    handleSubmit(e, 
+      // validationFn
+      (currentData) => {
+        const errors = {};
+        if (!currentData.title?.trim()) errors.title = 'O título é obrigatório.';
+
+        if (!currentData.startsAt) {
+          errors.startsAt = 'A data de início é obrigatória.';
+        } else {
+          const d = new Date(currentData.startsAt);
+          if (isNaN(d.getTime())) {
+            errors.startsAt = 'Data de início inválida. Verifique o formato.';
+          }
         }
-      };
-      fetchEvento();
-    }
-  }, [id, isEditing]);
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    let finalDescription = formData.description;
-    if (editorRef.current) {
-      const editorData = await editorRef.current.save();
-      if (editorData) {
-        finalDescription = editorData;
-      }
-    }
-
-    const errors = {};
-    if (!formData.title?.trim()) errors.title = 'O título é obrigatório.';
-    if (!finalDescription) errors.description = 'A descrição é obrigatória.';
-
-    let parsedStartsAt = '';
-    if (!formData.startsAt) {
-      errors.startsAt = 'A data de início é obrigatória.';
-    } else {
-      const d = new Date(formData.startsAt);
-      if (isNaN(d.getTime())) {
-        errors.startsAt = 'Data de início inválida. Verifique o formato.';
-      } else {
-        parsedStartsAt = d.toISOString();
-      }
-    }
-
-    let parsedEndsAt = undefined;
-    if (formData.endsAt) {
-      const d = new Date(formData.endsAt);
-      if (isNaN(d.getTime())) {
-        errors.endsAt = 'Data de término inválida. Verifique o formato.';
-      } else {
-        parsedEndsAt = d.toISOString();
-        if (parsedStartsAt && new Date(parsedStartsAt) >= d) {
-          errors.endsAt = 'A data de término deve ser posterior à data de início.';
+        if (currentData.endsAt) {
+          const d = new Date(currentData.endsAt);
+          if (isNaN(d.getTime())) {
+            errors.endsAt = 'Data de término inválida. Verifique o formato.';
+          } else {
+            const startsAtDate = new Date(currentData.startsAt);
+            if (!isNaN(startsAtDate.getTime()) && startsAtDate >= d) {
+              errors.endsAt = 'A data de término deve ser posterior à data de início.';
+            }
+          }
         }
+
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
+        }
+        return null;
+      },
+      // mapDataFn
+      async (currentData) => {
+        let finalDescription = currentData.description;
+        if (editorRef.current) {
+          const editorData = await editorRef.current.save();
+          if (editorData) {
+            finalDescription = editorData;
+          }
+        }
+
+        if (!finalDescription) {
+          setFieldErrors(prev => ({ ...prev, description: 'A descrição é obrigatória.' }));
+          setError('Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.');
+          throw new Error('Validação falhou');
+        }
+
+        let parsedStartsAt = new Date(currentData.startsAt).toISOString();
+        let parsedEndsAt = currentData.endsAt ? new Date(currentData.endsAt).toISOString() : undefined;
+
+        return {
+          ...currentData,
+          description: finalDescription,
+          startsAt: parsedStartsAt,
+          endsAt: parsedEndsAt,
+          capacity: currentData.capacity === '' ? null : Number(currentData.capacity),
+          coverImage: currentData.coverImage === '' ? null : currentData.coverImage,
+          coverImageCaption: currentData.coverImageCaption === '' ? null : currentData.coverImageCaption,
+          showCoverImage: currentData.showCoverImage,
+          location: currentData.location === '' ? null : currentData.location,
+        };
       }
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      setError('Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.');
-      setLoading(false);
-      return;
-    }
-
-    // Limpeza rigorosa: Opcionais vazios viram 'undefined', obrigatórios repassam o erro
-    const dataToSubmit = {
-      ...formData,
-      description: finalDescription,
-      startsAt: parsedStartsAt,
-      endsAt: parsedEndsAt,
-      capacity: formData.capacity === '' ? null : Number(formData.capacity),
-      coverImage: formData.coverImage === '' ? null : formData.coverImage,
-      coverImageCaption: formData.coverImageCaption === '' ? null : formData.coverImageCaption,
-      showCoverImage: formData.showCoverImage,
-      location: formData.location === '' ? null : formData.location,
-    };
-
-    try {
-      if (isEditing) {
-        await eventosService.atualizar(id, dataToSubmit);
-      } else {
-        await eventosService.criar(dataToSubmit);
-      }
-      navigate('/admin/eventos');
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao salvar evento. Verifique os dados e tente novamente.');
-      setLoading(false);
-    }
+    );
   };
 
   return (
     <AdminFormLayout
       title="Evento"
       backPath="/admin/eventos"
-      isEditing={isEditing}
+      isEditing={!!id}
       fetching={fetching}
       loading={loading}
       error={error}
-      onSubmit={handleSubmit}
+      onSubmit={onSave}
     >
       <div className="form-group">
         <label>Título *</label>
         <input
           type="text"
           name="title"
-          value={formData.title}
+          value={formData.title || ''}
           onChange={handleChange}
           required
         />
@@ -172,11 +147,13 @@ function EventoForm() {
 
       <div className="form-group">
         <label>Descrição *</label>
-        <RichEditor
-          ref={editorRef}
-          value={formData.description}
-          uploadFolder="eventos"
-        />
+        {!fetching && (
+          <RichEditor
+            ref={editorRef}
+            value={formData.description}
+            uploadFolder="eventos"
+          />
+        )}
         {fieldErrors.description && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.description}</span>}
       </div>
 
@@ -185,7 +162,7 @@ function EventoForm() {
         <input
           type="text"
           name="location"
-          value={formData.location}
+          value={formData.location || ''}
           onChange={handleChange}
         />
       </div>
@@ -195,7 +172,7 @@ function EventoForm() {
         <input
           type="datetime-local"
           name="startsAt"
-          value={formData.startsAt}
+          value={formData.startsAt || ''}
           onChange={handleChange}
           required
         />
@@ -207,7 +184,7 @@ function EventoForm() {
         <input
           type="datetime-local"
           name="endsAt"
-          value={formData.endsAt}
+          value={formData.endsAt || ''}
           onChange={handleChange}
         />
         {fieldErrors.endsAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.endsAt}</span>}
@@ -218,7 +195,7 @@ function EventoForm() {
         <input
           type="number"
           name="capacity"
-          value={formData.capacity}
+          value={formData.capacity || ''}
           onChange={handleChange}
         />
       </div>
@@ -233,7 +210,7 @@ function EventoForm() {
 
       <div className="form-group">
         <label>Status *</label>
-        <select name="status" value={formData.status} onChange={handleChange} required>
+        <select name="status" value={formData.status || ''} onChange={handleChange} required>
           <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
           <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
           <option value={CONTENT_STATUS.CANCELLED}>{STATUS_LABELS[CONTENT_STATUS.CANCELLED]}</option>
@@ -246,7 +223,7 @@ function EventoForm() {
           type="checkbox"
           name="destaque"
           id="destaque"
-          checked={formData.destaque}
+          checked={formData.destaque || false}
           onChange={handleChange}
         />
         <label htmlFor="destaque">Destacar este evento na página inicial?</label>

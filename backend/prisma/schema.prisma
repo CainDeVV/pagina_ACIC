@@ -147,6 +147,7 @@ model Servico {
   imageUrl    String?
   destaque    Boolean       @default(false)
   status      PublishStatus @default(DRAFT)
+  sortOrder   Int           @default(0)
   authorId    String?
   author      User?         @relation("ServicoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   createdAt   DateTime      @default(now())

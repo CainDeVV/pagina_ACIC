@@ -1,61 +1,45 @@
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { Helmet } from 'react-helmet-async';
+import { useAdminList } from '../../../hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
 
 function QuemSomosList() {
   const navigate = useNavigate();
-  const [paginas, setPaginas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchPaginas = async () => {
-    setLoading(true);
-    try {
-      const data = await institucionalService.buscarTodasPaginas();
-      setPaginas(data || []);
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao carregar páginas institucionais.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPaginas();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir esta página institucional?')) {
-      try {
-        await institucionalService.deletarPagina(id);
-        fetchPaginas();
-      } catch (err) {
-        console.error(err);
-        alert('Erro ao excluir página.');
-      }
-    }
-  };
+  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+    fetchMethod: institucionalService.buscarTodasPaginas,
+    deleteMethod: institucionalService.deletarPagina,
+    updateMethod: institucionalService.atualizarPagina,
+    itemName: 'página institucional'
+  });
 
   const columns = [
     { label: 'Chave (URL)', key: 'key' },
     { label: 'Título', key: 'title' },
-    { label: 'Status', key: 'status' },
-    { label: 'Ordem', key: 'sortOrder' }
+    { 
+      label: 'Status', 
+      key: 'status',
+      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+    },
+    { 
+      label: 'Ordem', 
+      key: 'sortOrder',
+      render: (row) => <InlineOrderInput row={row} onUpdate={handleUpdateField} />
+    }
   ];
 
   return (
     <AdminListLayout
-      title="Páginas Institucionais"
-      createPath="/admin/quemsomos/novo"
+      title="Páginas 'Quem Somos'"
+      createButtonLabel="Nova Página"
+      createPath="/admin/quem-somos/nova"
       loading={loading}
       error={error}
-      data={paginas}
+      data={data}
       columns={columns}
-      onEdit={(row) => navigate(`/admin/quemsomos/${row.id}/editar`)}
+      onEdit={(row) => navigate(`/admin/quem-somos/${row.id}/editar`)}
       onDelete={handleDelete}
+      onReorder={handleReorder}
     />
   );
 }

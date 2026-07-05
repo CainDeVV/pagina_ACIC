@@ -1,60 +1,45 @@
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { servicosService } from '../../../services/servicosService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { Helmet } from 'react-helmet-async';
+import { useAdminList } from '../../../hooks/useAdminList';
+import { InlineStatusSelect, InlineOrderInput } from '../../../components/Admin/TableCells';
 
 function ServicosList() {
   const navigate = useNavigate();
-  const [servicos, setServicos] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchServicos = async () => {
-    setLoading(true);
-    try {
-      const data = await servicosService.buscarTodos();
-      setServicos(data);
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao carregar serviços.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchServicos();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este serviço?')) {
-      try {
-        await servicosService.deletar(id);
-        fetchServicos();
-      } catch (err) {
-        console.error(err);
-        alert('Erro ao excluir serviço.');
-      }
-    }
-  };
+  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+    fetchMethod: servicosService.buscarTodos,
+    deleteMethod: servicosService.deletar,
+    updateMethod: servicosService.atualizar,
+    itemName: 'serviço'
+  });
 
   const columns = [
     { label: 'Título', key: 'title' },
-    { label: 'Status', key: 'status' },
-    { label: 'Destaque', render: (row) => row.destaque ? 'Sim' : 'Não' }
+    { 
+      label: 'Status', 
+      key: 'status',
+      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+    },
+    { label: 'Destaque', render: (row) => row.destaque ? 'Sim' : 'Não' },
+    { 
+      label: 'Ordem', 
+      key: 'sortOrder',
+      render: (row) => <InlineOrderInput row={row} onUpdate={handleUpdateField} />
+    }
   ];
 
   return (
     <AdminListLayout
       title="Serviços"
+      createButtonLabel="Novo Serviço"
       createPath="/admin/servicos/novo"
       loading={loading}
       error={error}
-      data={servicos}
+      data={data}
       columns={columns}
       onEdit={(row) => navigate(`/admin/servicos/${row.id}/editar`)}
       onDelete={handleDelete}
+      onReorder={handleReorder}
     />
   );
 }

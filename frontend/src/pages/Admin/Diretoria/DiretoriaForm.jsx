@@ -1,104 +1,66 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
-import { Helmet } from 'react-helmet-async';
+import { useAdminForm } from '../../../hooks/useAdminForm';
 
 function DiretoriaForm() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const isEditing = !!id;
 
-  const [formData, setFormData] = useState({
-    name: '',
-    role: '',
-    category: '',
-    photoUrl: '',
-    bio: '',
-    sortOrder: ''
+  const {
+    formData,
+    setFormData,
+    loading,
+    fetching,
+    error,
+    handleChange,
+    handleSubmit
+  } = useAdminForm({
+    id,
+    service: { 
+      buscarPorId: institucionalService.buscarDiretorPorId, 
+      criar: institucionalService.criarDiretoria, 
+      atualizar: institucionalService.atualizarDiretoria 
+    },
+    redirectPath: '/admin/diretoria',
+    initialData: {
+      name: '',
+      role: '',
+      category: '',
+      photoUrl: '',
+      bio: '',
+      sortOrder: ''
+    }
   });
 
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(isEditing);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (isEditing) {
-      const fetchDiretor = async () => {
-        try {
-          const data = await institucionalService.buscarDiretorPorId(id);
-          setFormData({
-            name: data.name || '',
-            role: data.role || '',
-            category: data.category || '',
-            photoUrl: data.photoUrl || '',
-            bio: data.bio || '',
-            sortOrder: data.sortOrder ?? ''
-          });
-        } catch (err) {
-          console.error(err);
-          setError('Erro ao carregar dados do diretor.');
-        } finally {
-          setFetching(false);
-        }
-      };
-      fetchDiretor();
-    }
-  }, [id, isEditing]);
-
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'number' ? (value === '' ? '' : Number(value)) : value
+  const onSave = (e) => {
+    handleSubmit(e, null, (currentData) => ({
+      ...currentData,
+      photoUrl: currentData.photoUrl === '' ? null : currentData.photoUrl,
+      bio: currentData.bio === '' ? null : currentData.bio,
+      sortOrder: currentData.sortOrder === '' ? undefined : Number(currentData.sortOrder)
     }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    const dataToSubmit = {
-      ...formData,
-      photoUrl: formData.photoUrl === '' ? null : formData.photoUrl,
-      bio: formData.bio === '' ? null : formData.bio,
-      sortOrder: formData.sortOrder === '' ? undefined : Number(formData.sortOrder)
-    };
-
-    try {
-      if (isEditing) {
-        await institucionalService.atualizarDiretoria(id, dataToSubmit);
-      } else {
-        await institucionalService.criarDiretoria(dataToSubmit);
-      }
-      navigate('/admin/diretoria');
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao salvar diretor. Verifique os dados e tente novamente.');
-      setLoading(false);
-    }
   };
 
   return (
     <AdminFormLayout
       title="Membro da Diretoria"
       backPath="/admin/diretoria"
-      isEditing={isEditing}
+      isEditing={!!id}
       fetching={fetching}
       loading={loading}
       error={error}
-      onSubmit={handleSubmit}
+      onSubmit={onSave}
     >
       <div className="form-group">
         <label>Nome *</label>
-        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+        <input type="text" name="name" value={formData.name || ''} onChange={handleChange} required />
       </div>
 
       <div className="form-group">
         <label>Empresa Representada (Role) *</label>
-        <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Ex: Gráfica Crateús" required />
+        <input type="text" name="role" value={formData.role || ''} onChange={handleChange} placeholder="Ex: Gráfica Crateús" required />
       </div>
 
       <div className="form-group">
@@ -106,7 +68,7 @@ function DiretoriaForm() {
         <input 
           type="text" 
           name="category" 
-          value={formData.category} 
+          value={formData.category || ''} 
           onChange={handleChange} 
           list="category-suggestions"
           placeholder="Selecione ou digite o cargo..."
@@ -137,7 +99,7 @@ function DiretoriaForm() {
         <input 
           type="text" 
           name="photoUrl" 
-          value={formData.photoUrl} 
+          value={formData.photoUrl || ''} 
           onChange={handleChange} 
           placeholder="Ou cole uma URL direta da imagem aqui..."
           style={{ marginTop: '10px' }}
@@ -146,12 +108,12 @@ function DiretoriaForm() {
 
       <div className="form-group">
         <label>Biografia (bio)</label>
-        <textarea name="bio" value={formData.bio} onChange={handleChange} rows="4" />
+        <textarea name="bio" value={formData.bio || ''} onChange={handleChange} rows="4" />
       </div>
 
       <div className="form-group">
         <label>Ordem de Exibição (sortOrder)</label>
-        <input type="number" name="sortOrder" value={formData.sortOrder} onChange={handleChange} />
+        <input type="number" name="sortOrder" value={formData.sortOrder === undefined ? '' : formData.sortOrder} onChange={handleChange} />
       </div>
     </AdminFormLayout>
   );

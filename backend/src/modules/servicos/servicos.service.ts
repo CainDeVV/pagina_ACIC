@@ -29,7 +29,7 @@ export class ServicosService {
 
   async findAll() {
     return this.prisma.servico.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { sortOrder: 'asc' },
       include: {
         author: {
           select: { name: true, email: true },

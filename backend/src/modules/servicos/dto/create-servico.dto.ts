@@ -37,4 +37,8 @@ export class CreateServicoDto {
   @IsEnum(PublishStatus)
   @IsOptional()
   status?: PublishStatus;
+
+  @ApiProperty({ example: 0, description: 'Ordem de exibição', required: false })
+  @IsOptional()
+  sortOrder?: number;
 }

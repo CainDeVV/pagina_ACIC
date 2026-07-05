@@ -1,43 +1,17 @@
-import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { patrocinadoresService } from '../../../services/patrocinadoresService';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { useAdminList } from '../../../hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
 
 function PatrocinadoresList() {
-  const [patrocinadores, setPatrocinadores] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchPatrocinadores();
-  }, []);
-
-  const fetchPatrocinadores = async () => {
-    setLoading(true);
-    try {
-      const data = await patrocinadoresService.buscarTodosAdmin();
-      setPatrocinadores(data);
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao carregar patrocinadores.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este patrocinador?')) {
-      try {
-        await patrocinadoresService.excluir(id);
-        fetchPatrocinadores();
-      } catch (err) {
-        console.error(err);
-        alert('Erro ao excluir patrocinador.');
-      }
-    }
-  };
+  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+    fetchMethod: patrocinadoresService.buscarTodosAdmin,
+    deleteMethod: patrocinadoresService.excluir,
+    updateMethod: patrocinadoresService.atualizar,
+    itemName: 'patrocinador'
+  });
 
   const columns = [
     { key: 'name', label: 'Nome' },
@@ -45,25 +19,27 @@ function PatrocinadoresList() {
     {
       key: 'status',
       label: 'Status',
-      render: (row) => (
-        <span className={`status-badge ${row.status === CONTENT_STATUS.PUBLISHED ? 'published' : 'draft'}`}>
-          {row.status === CONTENT_STATUS.PUBLISHED ? 'Público' : 'Rascunho'}
-        </span>
-      )
+      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
     },
-    { key: 'sortOrder', label: 'Ordem' }
+    { 
+      key: 'sortOrder', 
+      label: 'Ordem',
+      render: (row) => <InlineOrderInput row={row} onUpdate={handleUpdateField} />
+    }
   ];
 
   return (
     <AdminListLayout
       title="Patrocinadores"
+      createButtonLabel="Novo Patrocinador"
       createPath="/admin/patrocinadores/novo"
       loading={loading}
       error={error}
-      data={patrocinadores}
+      data={data}
       columns={columns}
-      onEdit={(row) => navigate(`/admin/patrocinadores/editar/${row.id}`)}
-      onDelete={(id) => handleDelete(id)}
+      onEdit={(row) => navigate(`/admin/patrocinadores/${row.id}/editar`)}
+      onDelete={handleDelete}
+      onReorder={handleReorder}
     />
   );
 }

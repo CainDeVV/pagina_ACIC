@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import AdminTable from './AdminTable';
 import './AdminGlobal.css'; // Importamos o CSS Global aqui
 
-function AdminListLayout({ title, createPath, loading, error, data, columns, onEdit, onDelete }) {
+function AdminListLayout({ title, createButtonLabel, createPath, loading, error, data, columns, onEdit, onDelete, onReorder }) {
   const navigate = useNavigate();
 
   return (
@@ -14,7 +14,7 @@ function AdminListLayout({ title, createPath, loading, error, data, columns, onE
       <div className="admin-page-header">
         <h1>{title}</h1>
         <button className="btn-primary" onClick={() => navigate(createPath)}>
-          Novo {title.slice(0, -1)} {/* Remove o 's' do plural para o botão */}
+          {createButtonLabel || `Novo(a) ${title}`}
         </button>
       </div>
 
@@ -29,6 +29,7 @@ function AdminListLayout({ title, createPath, loading, error, data, columns, onE
             data={data} 
             onEdit={onEdit} 
             onDelete={onDelete} 
+            onReorder={onReorder}
           />
         )}
       </div>

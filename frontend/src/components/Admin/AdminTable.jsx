@@ -1,29 +1,88 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, Edit, Trash2, ChevronLeft, ChevronRight, GripVertical } from 'lucide-react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import './AdminTable.css';
 
-/**
- * Componente genérico para padronizar as tabelas do painel administrativo.
- * @param {Array} columns - Definição das colunas: [{ label: 'Nome', key: 'name', render: (row) => ... }]
- * @param {Array} data - Lista de objetos vindos da API
- * @param {Function} onEdit - Função disparada ao clicar em Editar
- * @param {Function} onDelete - Função disparada ao clicar em Excluir
- */
-function AdminTable({ columns, data, onEdit, onDelete }) {
+function SortableRow({ row, columns, onEdit, onDelete }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: row.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 1 : 0,
+    position: 'relative',
+    backgroundColor: isDragging ? 'var(--color-gray-light, #f8f9fa)' : undefined,
+    boxShadow: isDragging ? '0 5px 15px rgba(0,0,0,0.1)' : undefined,
+  };
+
+  return (
+    <tr ref={setNodeRef} style={style}>
+      <td style={{ width: '40px', textAlign: 'center', cursor: 'grab' }} {...attributes} {...listeners}>
+        <GripVertical size={16} color="var(--color-gray-medium)" />
+      </td>
+      {columns.map((col, colIndex) => (
+        <td key={colIndex}>
+          {col.render ? col.render(row) : row[col.key]}
+        </td>
+      ))}
+      {(onEdit || onDelete) && (
+        <td className="actions-cell">
+          {onEdit && (
+            <button className="btn-edit-icon" onClick={() => onEdit(row)} title="Editar">
+              <Edit size={16} />
+            </button>
+          )}
+          {onDelete && (
+            <button className="btn-delete-icon" onClick={() => onDelete(row.id)} title="Excluir">
+              <Trash2 size={16} />
+            </button>
+          )}
+        </td>
+      )}
+    </tr>
+  );
+}
+
+function AdminTable({ columns, data, onEdit, onDelete, onReorder }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  // Filtragem local baseada na barra de busca
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   const filteredData = useMemo(() => {
     if (!searchTerm) return data || [];
     const lowerSearch = searchTerm.toLowerCase();
     
     return (data || []).filter(row => {
-      // Verifica se algum valor em qualquer coluna corresponde à busca
       return columns.some(col => {
-        // Se a coluna tiver um custom render, a busca local por string pode ser complexa.
-        // Focamos em buscar pelos valores puros da chave (col.key)
         const val = row[col.key];
         if (typeof val === 'string' || typeof val === 'number') {
           return String(val).toLowerCase().includes(lowerSearch);
@@ -33,17 +92,28 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
     });
   }, [data, searchTerm, columns]);
 
-  // Paginação
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const paginatedData = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredData.slice(start, start + itemsPerPage);
   }, [filteredData, currentPage]);
 
-  // Resetar a página ao buscar algo novo
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
+  };
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = data.findIndex(item => item.id === active.id);
+      const newIndex = data.findIndex(item => item.id === over.id);
+      
+      const newArray = arrayMove(data, oldIndex, newIndex);
+      if (onReorder) {
+        onReorder(newArray);
+      }
+    }
   };
 
   if (!data || data.length === 0) {
@@ -52,7 +122,6 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
 
   return (
     <div className="admin-table-container">
-      {/* BARRA DE FERRAMENTAS (Busca e Contagem) */}
       <div className="admin-table-toolbar">
         <div className="admin-search-wrapper">
           <Search className="admin-search-icon" size={18} />
@@ -70,53 +139,42 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
       </div>
 
       <div className="admin-table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              {columns.map((col, index) => (
-                <th key={index}>{col.label}</th>
-              ))}
-              {(onEdit || onDelete) && <th>Ações</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedData.length > 0 ? (
-              paginatedData.map((row, rowIndex) => (
-                <tr key={row.id || rowIndex}>
-                  {columns.map((col, colIndex) => (
-                    <td key={colIndex}>
-                      {col.render ? col.render(row) : row[col.key]}
-                    </td>
-                  ))}
-                  
-                  {(onEdit || onDelete) && (
-                    <td className="actions-cell">
-                      {onEdit && (
-                        <button className="btn-edit-icon" onClick={() => onEdit(row)} title="Editar">
-                          <Edit size={16} />
-                        </button>
-                      )}
-                      {onDelete && (
-                        <button className="btn-delete-icon" onClick={() => onDelete(row.id)} title="Excluir">
-                          <Trash2 size={16} />
-                        </button>
-                      )}
-                    </td>
-                  )}
-                </tr>
-              ))
-            ) : (
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <table className="admin-table">
+            <thead>
               <tr>
-                <td colSpan={columns.length + (onEdit || onDelete ? 1 : 0)} className="admin-table-no-results">
-                  Nenhum registro encontrado para a busca "{searchTerm}".
-                </td>
+                <th style={{ width: '40px' }}></th>
+                {columns.map((col, index) => (
+                  <th key={index}>{col.label}</th>
+                ))}
+                {(onEdit || onDelete) && <th>Ações</th>}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              <SortableContext items={paginatedData.map(r => r.id)} strategy={verticalListSortingStrategy}>
+                {paginatedData.length > 0 ? (
+                  paginatedData.map((row) => (
+                    <SortableRow 
+                      key={row.id} 
+                      row={row} 
+                      columns={columns} 
+                      onEdit={onEdit} 
+                      onDelete={onDelete} 
+                    />
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={columns.length + (onEdit || onDelete ? 2 : 1)} className="admin-table-no-results">
+                      Nenhum registro encontrado para a busca "{searchTerm}".
+                    </td>
+                  </tr>
+                )}
+              </SortableContext>
+            </tbody>
+          </table>
+        </DndContext>
       </div>
 
-      {/* CONTROLES DE PAGINAÇÃO */}
       {totalPages > 1 && (
         <div className="admin-pagination">
           <button 

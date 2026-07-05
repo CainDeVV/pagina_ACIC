@@ -1,95 +1,51 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams } from 'react-router-dom';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
 import { patrocinadoresService } from '../../../services/patrocinadoresService';
 import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
+import { useAdminForm } from '../../../hooks/useAdminForm';
 
 function PatrocinadorForm() {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const isEditing = !!id;
 
-  const [formData, setFormData] = useState({
-    name: '',
-    logoUrl: '',
-    linkUrl: '',
-    status: CONTENT_STATUS.PUBLISHED,
-    sortOrder: 0
+  const {
+    formData,
+    setFormData,
+    loading,
+    fetching,
+    error,
+    handleChange,
+    handleSubmit
+  } = useAdminForm({
+    id,
+    service: patrocinadoresService,
+    redirectPath: '/admin/patrocinadores',
+    initialData: {
+      name: '',
+      logoUrl: '',
+      linkUrl: '',
+      status: CONTENT_STATUS.PUBLISHED,
+      sortOrder: 0
+    }
   });
 
-  const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(isEditing);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (isEditing) {
-      const fetchPatrocinador = async () => {
-        try {
-          const data = await patrocinadoresService.buscarPorId(id);
-          setFormData({
-            name: data.name || '',
-            logoUrl: data.logoUrl || '',
-            linkUrl: data.linkUrl || '',
-            status: data.status || CONTENT_STATUS.PUBLISHED,
-            sortOrder: data.sortOrder ?? 0
-          });
-        } catch (err) {
-          console.error(err);
-          setError('Erro ao carregar dados do patrocinador.');
-        } finally {
-          setFetching(false);
-        }
-      };
-      fetchPatrocinador();
-    }
-  }, [id, isEditing]);
-
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'number' ? Number(value) : value
-    }));
-  };
-
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-
-    if (!formData.logoUrl) {
-      setError('A logomarca é obrigatória!');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      if (isEditing) {
-        await patrocinadoresService.atualizar(id, formData);
-      } else {
-        await patrocinadoresService.criar(formData);
-      }
-      navigate('/admin/patrocinadores');
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao salvar patrocinador. Verifique os dados e tente novamente.');
-    } finally {
-      setLoading(false);
-    }
+  const onSave = (e) => {
+    handleSubmit(e, (data) => {
+      if (!data.logoUrl) return 'A logomarca é obrigatória!';
+      return null;
+    });
   };
 
   return (
     <AdminFormLayout
       title="Patrocinador"
       backPath="/admin/patrocinadores"
-      isEditing={isEditing}
+      isEditing={!!id}
       fetching={fetching}
       loading={loading}
       error={error}
-      onSubmit={handleSubmit}
+      onSubmit={onSave}
     >
       <div className="form-group">
         <label>Nome do Patrocinador *</label>

@@ -1,60 +1,44 @@
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { slidesService } from '../../../services/slidesService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { Helmet } from 'react-helmet-async';
+import { useAdminList } from '../../../hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
 
 function SlidesList() {
   const navigate = useNavigate();
-  const [slides, setSlides] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchSlides = async () => {
-    setLoading(true);
-    try {
-      const data = await slidesService.buscarTodos();
-      setSlides(data || []);
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao carregar slides.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSlides();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este slide?')) {
-      try {
-        await slidesService.deletar(id);
-        fetchSlides();
-      } catch (err) {
-        console.error(err);
-        alert('Erro ao excluir slide.');
-      }
-    }
-  };
+  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+    fetchMethod: slidesService.buscarTodos,
+    deleteMethod: slidesService.deletar,
+    updateMethod: slidesService.atualizar,
+    itemName: 'slide'
+  });
 
   const columns = [
     { label: 'Título', key: 'title' },
-    { label: 'Status', key: 'status' },
-    { label: 'Ordem', key: 'sortOrder' }
+    { 
+      label: 'Status', 
+      key: 'status',
+      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+    },
+    { 
+      label: 'Ordem', 
+      key: 'sortOrder',
+      render: (row) => <InlineOrderInput row={row} onUpdate={handleUpdateField} />
+    }
   ];
 
   return (
     <AdminListLayout
       title="Slides"
+      createButtonLabel="Novo Slide"
       createPath="/admin/slides/novo"
       loading={loading}
       error={error}
-      data={slides}
+      data={data}
       columns={columns}
       onEdit={(row) => navigate(`/admin/slides/${row.id}/editar`)}
       onDelete={handleDelete}
+      onReorder={handleReorder}
     />
   );
 }

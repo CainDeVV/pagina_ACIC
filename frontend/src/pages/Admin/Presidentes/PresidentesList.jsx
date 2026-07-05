@@ -1,43 +1,17 @@
-import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { Helmet } from 'react-helmet-async';
+import { useAdminList } from '../../../hooks/useAdminList';
+import { InlineOrderInput } from '../../../components/Admin/TableCells';
 
 function PresidentesList() {
   const navigate = useNavigate();
-  const [presidentes, setPresidentes] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const fetchPresidentes = async () => {
-    setLoading(true);
-    try {
-      const data = await institucionalService.buscarPresidentes();
-      setPresidentes(data || []);
-    } catch (err) {
-      console.error(err);
-      setError('Erro ao carregar presidentes.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPresidentes();
-  }, []);
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Tem certeza que deseja excluir este presidente?')) {
-      try {
-        await institucionalService.deletarPresidente(id);
-        fetchPresidentes();
-      } catch (err) {
-        console.error(err);
-        alert('Erro ao excluir presidente.');
-      }
-    }
-  };
+  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+    fetchMethod: institucionalService.buscarPresidentes,
+    deleteMethod: institucionalService.deletarPresidente,
+    updateMethod: institucionalService.atualizarPresidente,
+    itemName: 'presidente'
+  });
 
   const columns = [
     { label: 'Nome', key: 'name' },
@@ -45,19 +19,25 @@ function PresidentesList() {
       label: 'Período', 
       render: (row) => `${row.termStart} - ${row.termEnd || 'Atual'}` 
     },
-    { label: 'Ordem', key: 'sortOrder' }
+    { 
+      label: 'Ordem', 
+      key: 'sortOrder',
+      render: (row) => <InlineOrderInput row={row} onUpdate={handleUpdateField} />
+    }
   ];
 
   return (
     <AdminListLayout
       title="Presidentes"
+      createButtonLabel="Novo Presidente"
       createPath="/admin/presidentes/novo"
       loading={loading}
       error={error}
-      data={presidentes}
+      data={data}
       columns={columns}
       onEdit={(row) => navigate(`/admin/presidentes/${row.id}/editar`)}
       onDelete={handleDelete}
+      onReorder={handleReorder}
     />
   );
 }
