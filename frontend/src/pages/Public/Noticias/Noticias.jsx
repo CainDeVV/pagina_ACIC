@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { noticiasService } from '../../../services/noticiasService';
+import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import NewsCard from '../../../components/NewsCard/NewsCard';
-import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import './Noticias.css';
 
 function Noticias() {
@@ -14,7 +14,8 @@ function Noticias() {
     const fetchNoticias = async () => {
       try {
         const data = await noticiasService.buscarTodos();
-        setNoticias(data);
+        const noticiasPublicas = data.filter(n => n.status === 'PUBLISHED');
+        setNoticias(noticiasPublicas);
       } catch (err) {
         console.error(err);
         setError('Erro ao carregar notícias.');
@@ -25,28 +26,36 @@ function Noticias() {
     fetchNoticias();
   }, []);
 
+  const sliderData = noticias.slice(0, 4).map((noticia) => ({
+    id: noticia.id,
+    image: noticia.coverImage || 'https://placehold.co/1200x400?text=Notícia+ACIC',
+    badge: "Notícias",
+    badgeStyle: "white",
+    title: noticia.title,
+    description: noticia.summary || 'Leia as principais informações do nosso portal',
+    link: `/noticias/${noticia.slug}`
+  }));
+
   return (
-    <div className="public-noticias-container">
+    <div className="noticias-page">
       <Helmet>
         <title>Notícias | ACIC</title>
         <meta name="description" content="Fique por dentro das últimas notícias da ACIC." />
       </Helmet>
 
-      <div className="public-noticias-content">
-        <Breadcrumb items={[{ label: 'Início', href: '/' }, { label: 'Notícias' }]} />
-        
-        <h1 className="public-noticias-title">Notícias</h1>
+      {sliderData.length > 0 && <HeroSlider slides={sliderData} autoPlayTime={5000} />}
 
+      <div className="noticias-content">
         {loading ? (
-          <p className="public-noticias-msg">Carregando notícias...</p>
+          <div className="noticias-vazio"><p>Carregando notícias...</p></div>
         ) : error ? (
-          <p className="public-noticias-msg error">{error}</p>
+          <div className="noticias-vazio"><p className="error">{error}</p></div>
         ) : noticias.length === 0 ? (
-          <p className="public-noticias-msg">Nenhuma notícia publicada no momento.</p>
+          <div className="noticias-vazio"><p>Nenhuma notícia publicada no momento.</p></div>
         ) : (
-          <div className="public-noticias-grid">
+          <div className="noticias-grid">
             {noticias.map(noticia => (
-              <NewsCard key={noticia.id} news={noticia} />
+              <NewsCard key={noticia.id} news={noticia} variant="premium" />
             ))}
           </div>
         )}

@@ -1,6 +1,6 @@
 .btn-logout {
-  background-color: #dc3545;
-  color: #fff;
+  background-color: var(--color-danger);
+  color: var(--color-white);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -17,7 +17,7 @@
 .dashboard-welcome {
   margin-bottom: 32px;
   font-size: 20px;
-  color: #333;
+  color: var(--color-gray-dark);
 }
 
 .dashboard-welcome p {
@@ -27,7 +27,7 @@
 
 .dashboard-subtitle {
   font-size: 16px;
-  color: #666;
+  color: var(--color-gray-medium);
 }
 
 .dashboard-grid {
@@ -38,13 +38,13 @@
 }
 
 .dashboard-card {
-  background-color: #fff;
+  background-color: var(--color-white);
   border: 1px solid #eaeaea;
   border-radius: 8px;
   padding: 32px;
   text-align: center;
   text-decoration: none;
-  color: #333;
+  color: var(--color-gray-dark);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   display: flex;

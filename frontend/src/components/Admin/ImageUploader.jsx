@@ -70,7 +70,7 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
             fontSize: '0.9rem', 
             cursor: uploading ? 'not-allowed' : 'pointer', 
             display: 'inline-block', 
-            backgroundColor: uploading ? '#ccc' : 'var(--color-primary)',
+            backgroundColor: uploading ? 'var(--color-gray-border)' : 'var(--color-primary)',
             color: 'white',
             borderRadius: '4px',
             fontWeight: 'bold',

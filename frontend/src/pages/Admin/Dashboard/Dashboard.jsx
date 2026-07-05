@@ -38,7 +38,7 @@ function Dashboard() {
   return (
     <div className="admin-page-container">
       {/* Reaproveitamos a classe global do cabeçalho que já criamos antes */}
-      <header className="admin-page-header" style={{ borderBottom: '1px solid #ccc', paddingBottom: '16px' }}>
+      <header className="admin-page-header" style={{ borderBottom: '1px solid var(--color-gray-border)', paddingBottom: '16px' }}>
         <h1>Painel Administrativo — ACIC</h1>
         <button className="btn-logout" onClick={handleLogout}>
           Sair

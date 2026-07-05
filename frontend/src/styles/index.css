@@ -20,6 +20,11 @@
   --color-gray-medium: #6c757d; /* Textos de apoio, legendas, placeholders */
   --color-gray-dark: #343a40; /* Textos principais de leitura */
   --color-black: #212529; /* Títulos muito fortes e textos em negrito */
+
+  /* Cores de Alerta / Sucesso */
+  --color-danger: #dc3545;
+  --color-danger-bg: #ffeaea;
+  --color-danger-hover: #ffd6d6;
 }
 
 * {
@@ -58,16 +63,16 @@ body {
   color: var(--color-primary-hover); 
 }
 
-/* H2: Subtítulos Principais (Cinza Escuro e Elegante) */
+/* H2: Subtítulos Principais (Azul Secundário) */
 .rich-text-content h2 { 
   font-size: 1.8rem; 
-  color: var(--color-gray-dark); 
+  color: var(--color-primary); 
 }
 
-/* H3: Subtítulos Secundários (Azul ACIC Padrão) - Pedido do usuário */
+/* H3: Subtítulos Menores (Cinza Escuro) */
 .rich-text-content h3 { 
   font-size: 1.4rem; 
-  color: var(--color-primary); 
+  color: var(--color-gray-dark); 
 }
 
 /* H4, H5, H6: Títulos de apoio (Tons de Cinza Escuro) */

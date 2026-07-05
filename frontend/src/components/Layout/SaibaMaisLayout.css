@@ -55,7 +55,7 @@
   font-size: 1.1rem; /* Um pouco menor para ficar mais discreto */
   margin-top: 0;
   margin-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0; /* Linha um pouco mais fina/clara */
+  border-bottom: 1px solid var(--color-gray-border); /* Linha um pouco mais fina/clara */
   padding-bottom: 15px;
   line-height: 1;
 }
@@ -88,6 +88,11 @@
 .institucional-content {
   flex: 1; /* Ocupa o restante do espaço */
   max-width: 1000px;
+}
+
+/* Garante que o primeiro elemento do conteúdo rico fique perfeitamente alinhado com o topo do "Saiba Mais" */
+.institucional-content .rich-text-content > :first-child {
+  margin-top: 0;
 }
 
 .institucional-content section {

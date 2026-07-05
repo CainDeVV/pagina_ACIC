@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaBars, FaTimes, FaChevronDown, FaHome, FaCalendarAlt } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaHome, FaCalendarAlt, FaNewspaper } from 'react-icons/fa';
 import './Navbar.css';
 
 function Navbar() {
@@ -22,7 +22,7 @@ function Navbar() {
     <>
       {/* PAINEL DO MENU MOBILE (Desliza para cima) */}
       <div className={menuOpen ? 'mobile-menu active' : 'mobile-menu'}>
-        
+
         {/* SUBMENU: INSTITUCIONAL */}
         <div className="menu-item" onClick={() => toggleSection('institucional')}>
           <span>Institucional</span>
@@ -61,6 +61,12 @@ function Navbar() {
           <span>Eventos</span>
           <FaCalendarAlt />
         </Link>
+
+        {/* LINK DIRETO: NOTÍCIAS */}
+        <Link to="/noticias" className="menu-item" onClick={closeMenu}>
+          <span>Notícias</span>
+          <FaNewspaper />
+        </Link>
       </div>
 
       {/* BARRA INFERIOR FIXA (Mais Fina) */}
@@ -83,6 +89,11 @@ function Navbar() {
         {/* Eventos */}
         <Link to="/eventos" className="bottom-item" onClick={closeMenu}>
           <FaCalendarAlt />
+        </Link>
+
+        {/* Notícias */}
+        <Link to="/noticias" className="bottom-item" onClick={closeMenu}>
+          <FaNewspaper />
         </Link>
       </div>
     </>

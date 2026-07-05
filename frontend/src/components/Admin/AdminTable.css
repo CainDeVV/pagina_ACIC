@@ -1,34 +1,73 @@
-.admin-table-wrapper {
+.admin-table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.admin-search-input {
   width: 100%;
+  max-width: 400px;
+  padding: 10px 16px;
+  border: 1px solid var(--color-gray-border);
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.admin-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.admin-table-count {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+}
+
+.admin-table-wrapper {
+  background-color: var(--color-white);
+  border-radius: 8px;
   overflow-x: auto;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .admin-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 600px;
 }
 
-.admin-table th, 
+.admin-table th,
 .admin-table td {
-  padding: 16px;
+  padding: 14px 20px;
   text-align: left;
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--color-gray-light);
 }
 
 .admin-table th {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: var(--color-gray-light);
   font-weight: 600;
+  color: var(--color-gray-dark);
 }
 
 .admin-table tbody tr:hover {
-  background-color: #fafafa;
+  background-color: var(--color-gray-light);
 }
 
-.admin-table-empty {
+.admin-table-empty, .admin-table-no-results {
   text-align: center;
-  padding: 32px;
-  color: #666;
+  padding: 40px;
+  color: var(--color-gray-medium);
   font-style: italic;
 }
 
@@ -37,34 +76,65 @@
   gap: 8px;
 }
 
-.btn-edit {
-  background-color: #e67e00;
-  color: white;
-  border: none;
+.btn-edit,
+.btn-delete {
   padding: 6px 12px;
+  border: none;
   border-radius: 4px;
+  font-size: 13px;
   cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  font-weight: 500;
+}
+
+.btn-edit {
+  background-color: var(--color-gray-border);
+  color: var(--color-gray-dark);
 }
 
 .btn-edit:hover {
-  background-color: #cc7000;
+  background-color: #dde0e3;
 }
 
 .btn-delete {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: background-color 0.2s;
+  background-color: var(--color-danger-bg);
+  color: var(--color-danger);
 }
 
 .btn-delete:hover {
-  background-color: #c82333;
+  background-color: var(--color-danger-hover);
+}
+
+/* Pagination */
+.admin-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  padding: 12px;
+}
+
+.btn-page {
+  padding: 8px 16px;
+  border: 1px solid var(--color-gray-border);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.btn-page:hover:not(:disabled) {
+  background: var(--color-gray-light);
+}
+
+.btn-page:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.95rem;
+  color: var(--color-gray-medium);
+  font-weight: 500;
 }

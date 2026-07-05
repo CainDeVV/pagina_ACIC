@@ -14,7 +14,11 @@ function QuemSomos() {
       try {
         // Usa o serviço passando a chave específica desta página no banco
         const dados = await institucionalService.buscarPagina('quem-somos');
-        setPagina(dados);
+        if (dados && dados.status === 'PUBLISHED') {
+          setPagina(dados);
+        } else {
+          setPagina(null);
+        }
       } catch (error) {
         console.error("Erro ao buscar conteúdo Institucional:", error);
       } finally {

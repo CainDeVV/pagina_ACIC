@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { noticiasService } from '../../../services/noticiasService';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
+import { noticiasService } from '../../../services/noticiasService';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import './NoticiaDetalhe.css';
 
@@ -29,19 +29,19 @@ function NoticiaDetalhe() {
 
   if (loading) {
     return (
-      <div className="noticia-detalhe-container">
-        <div className="noticia-detalhe-content">
-          <p>Carregando...</p>
-        </div>
+      <div className="noticia-detalhe-page">
+        <div className="noticia-vazia"><p>Carregando notícia...</p></div>
       </div>
     );
   }
 
   if (error || !noticia) {
     return (
-      <div className="noticia-detalhe-container">
-        <div className="noticia-detalhe-content">
+      <div className="noticia-detalhe-page">
+        <Helmet><title>Notícia Não Encontrada | ACIC</title></Helmet>
+        <div className="noticia-vazia">
           <p>Notícia não encontrada.</p>
+          <Link to="/noticias" className="btn-voltar">← Voltar para Notícias</Link>
         </div>
       </div>
     );
@@ -50,44 +50,46 @@ function NoticiaDetalhe() {
   const parsedContent = noticia.content || { blocks: [] };
   const formattedDate = noticia.publishedAt 
     ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR', { dateStyle: 'long' })
-    : null;
+    : new Date(noticia.createdAt).toLocaleDateString('pt-BR', { dateStyle: 'long' });
 
   return (
-    <div className="noticia-detalhe-container">
+    <div className="noticia-detalhe-page">
       <Helmet>
         <title>{noticia.title} | ACIC</title>
         <meta name="description" content={noticia.summary || "Leia esta notícia no portal da ACIC."} />
       </Helmet>
 
-      <div className="noticia-detalhe-content">
-        <Breadcrumb 
-          items={[
-            { label: 'Início', href: '/' }, 
-            { label: 'Notícias', href: '/noticias' }, 
-            { label: noticia.title }
-          ]} 
-        />
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
         
-        {noticia.coverImage && (
+        <Breadcrumb items={[{ label: 'Notícias', path: '/noticias' }, { label: noticia.title }]} />
+
+        {/* Cabeçalho Limpo (Novo Design) */}
+        <div className="noticia-detalhe-header-limpo">
+          <div className="noticia-detalhe-badges">
+            <div className="noticia-detalhe-meta">
+              <span className="noticia-detalhe-data-novo">📅 {formattedDate}</span>
+            </div>
+          </div>
+          <h1 className="noticia-detalhe-titulo-novo">{noticia.title}</h1>
+        </div>
+
+        {/* Imagem de Capa Arredondada */}
+        <div className="noticia-detalhe-cover-novo">
           <img 
-            src={noticia.coverImage} 
+            src={noticia.coverImage || 'https://placehold.co/1200x500?text=Capa+da+Noticia'} 
             alt={noticia.title} 
-            className="noticia-detalhe-cover"
           />
-        )}
+        </div>
 
-        <h1 className="noticia-detalhe-title">{noticia.title}</h1>
-        
-        {formattedDate && (
-          <p className="noticia-detalhe-date">Publicado em: {formattedDate}</p>
-        )}
+        {/* Área de Leitura */}
+        <div className="noticia-detalhe-conteudo-limpo">
+          {noticia.summary && (
+            <p className="noticia-resumo-destaque">{noticia.summary}</p>
+          )}
 
-        {noticia.summary && (
-          <p className="noticia-detalhe-summary">{noticia.summary}</p>
-        )}
-
-        <div className="noticia-detalhe-body">
-          <BlockRenderer blocks={parsedContent.blocks} />
+          <div className="noticia-corpo-texto">
+            <BlockRenderer blocks={parsedContent.blocks} />
+          </div>
         </div>
       </div>
     </div>

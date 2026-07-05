@@ -5,7 +5,7 @@
   width: 100%;
   height: 520px; /* Altura generosa para acomodar a Home */
   overflow: hidden;
-  background-color: var(--color-primary, #0266b0);
+  background-color: var(--color-primary, var(--color-primary));
 }
 
 .hero-slider-wrapper::after {
@@ -77,7 +77,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 
 .hero-slider-badge.white {
   background-color: white;
-  color: var(--color-primary, #0266b0);
+  color: var(--color-primary, var(--color-primary));
 }
 
 .hero-slider-badge.gold {
@@ -89,7 +89,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
   font-family: 'Sora', sans-serif;
   font-size: clamp(28px, 4vw, 46px);
   font-weight: 800;
-  color: #fff;
+  color: var(--color-white);
   line-height: 1.15;
   margin: 0 0 16px 0;
   text-shadow: 0 2px 10px rgba(0,0,0,0.3);
@@ -134,7 +134,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 
 .hero-btn-outline {
   background: transparent;
-  color: #fff;
+  color: var(--color-white);
   border: 2px solid rgba(255,255,255,0.6);
 }
 
@@ -169,7 +169,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 }
 
 .hero-slider-btn:hover {
-  background-color: var(--color-primary, #0266b0);
+  background-color: var(--color-primary, var(--color-primary));
   color: white;
   transform: scale(1.1);
 }

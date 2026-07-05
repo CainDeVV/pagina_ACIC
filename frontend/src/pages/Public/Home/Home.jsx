@@ -48,8 +48,8 @@ export default function Home() {
           noticiasService.buscarTodos().catch(() => [])
         ]);
 
-        setSlides(dadosSlides || []);
-        setServicos(dadosServicos || []);
+        setSlides((dadosSlides || []).filter(s => s.status === 'PUBLISHED'));
+        setServicos((dadosServicos || []).filter(s => s.status === 'PUBLISHED'));
         setEventos(dadosEventos || []);
         setNoticias(dadosNoticias || []);
 
@@ -102,8 +102,21 @@ export default function Home() {
     };
   });
 
-  const homeEventos = eventos.slice(0, 3);
-  const homeNoticias = noticias.slice(0, 3);
+  // Lógica de Eventos na Home: Mostrar próximos, se não tiver mostrar os últimos realizados
+  const agora = new Date();
+  const eventosPublicos = eventos.filter(e => e.status !== 'DRAFT');
+  
+  let proximosHome = eventosPublicos.filter(e => new Date(e.startsAt) > agora && e.status !== 'FINISHED' && e.status !== 'CANCELLED');
+  if (proximosHome.length > 0) {
+    proximosHome.sort((a,b) => new Date(a.startsAt) - new Date(b.startsAt));
+  } else {
+    proximosHome = eventosPublicos.sort((a,b) => new Date(b.startsAt) - new Date(a.startsAt));
+  }
+  const homeEventos = proximosHome.slice(0, 3);
+
+  // Lógica de Notícias na Home
+  const noticiasPublicas = noticias.filter(n => n.status === 'PUBLISHED');
+  const homeNoticias = noticiasPublicas.slice(0, 3);
 
   return (
     <>
@@ -122,7 +135,7 @@ export default function Home() {
           indicatorStyle="gold"
         />
       ) : (
-        <div style={{ height: '520px', background: 'var(--home-blue-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+        <div style={{ height: '520px', background: 'var(--home-blue-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-white)' }}>
           <h1>Bem-vindo à ACIC Crateús</h1>
         </div>
       )}

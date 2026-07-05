@@ -1,4 +1,15 @@
+/* ==========================================================================
+   BASE LINK FIX
+   ========================================================================== */
 .news-card {
+  text-decoration: none;
+  display: block;
+}
+
+/* ==========================================================================
+   COMPACT VARIANT (Home Page)
+   ========================================================================== */
+.news-card.compact {
   display: flex;
   gap: 16px;
   align-items: center;
@@ -7,15 +18,14 @@
   border-radius: 10px;
   border: 1px solid transparent;
   transition: border-color 0.2s ease, background 0.2s ease;
-  text-decoration: none; /* Garante que o texto dentro do link não ganhe sublinhado acidental */
 }
 
-.news-card:hover {
+.news-card.compact:hover {
   border-color: #E0E7F0;
-  background: #F5F6F8; /* Cor extraída da constante GRAY_BG da Home */
+  background: #F5F6F8;
 }
 
-.news-img {
+.compact-img {
   width: 96px;
   height: 72px;
   object-fit: cover;
@@ -23,35 +33,140 @@
   flex-shrink: 0;
 }
 
-.news-content {
+.compact-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.news-category {
+.compact-category {
   display: inline-block;
   font-size: 10px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #1A8A6E; /* Cor extraída da constante TEAL da Home */
-  background: #E6F5F1; /* Cor extraída da constante TEAL_LIGHT da Home */
+  color: #1A8A6E;
+  background: #E6F5F1;
   padding: 2px 8px;
   border-radius: 20px;
   margin-bottom: 6px;
 }
 
-.news-card h3 {
+.compact-title {
   font-size: 13px;
   font-weight: 600;
-  color: #1A1A2E; /* Cor extraída da constante TEXT da Home */
+  color: #1A1A2E;
   line-height: 1.45;
   margin: 0 0 4px 0;
 }
 
-.news-date {
+.compact-date {
   font-size: 11px;
-  color: #5A6172; /* Cor extraída da constante TEXT_MUTED da Home */
+  color: #5A6172;
   margin: 0;
+}
+
+/* ==========================================================================
+   PREMIUM VARIANT (Notícias Page)
+   ========================================================================== */
+.news-card.premium {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--color-gray-light);
+  height: 100%;
+}
+
+.news-card.premium:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-color: #E0E7F0;
+}
+
+.premium-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 220px;
+  overflow: hidden;
+}
+
+.premium-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.news-card.premium:hover .premium-img {
+  transform: scale(1.05);
+}
+
+.premium-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: var(--color-primary, var(--color-primary));
+  color: var(--color-white);
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.premium-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.premium-date {
+  font-size: 0.85rem;
+  color: var(--color-gray-medium);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.premium-title {
+  font-size: 1.25rem;
+  color: var(--color-heading, #1A1A2E);
+  line-height: 1.4;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.premium-summary {
+  font-size: 0.95rem;
+  color: var(--color-text, var(--color-gray-medium));
+  line-height: 1.6;
+  margin: 0 0 20px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.premium-read-more {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary, var(--color-primary));
+  margin-top: auto;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.news-card.premium:hover .premium-read-more {
+  color: var(--color-primary-hover, #003d82);
 }

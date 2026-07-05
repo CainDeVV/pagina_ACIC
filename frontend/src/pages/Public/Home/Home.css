@@ -3,13 +3,13 @@
    Mantemos as cores temáticas aqui para não vazar para o resto da aplicação
    ======================================================== */
 .acic-home {
-  --home-gold: #F5A500;
-  --home-gold-dark: #5C3A00;
-  --home-teal: #1A8A6E;
-  --home-blue-dark: #0E3F72;
-  --home-text: #1A1A2E;
-  --home-text-muted: #5A6172;
-  --home-gray-bg: #F5F6F8;
+  --home-gold: var(--color-brand-yellow);
+  --home-gold-dark: var(--color-black);
+  --home-teal: var(--color-brand-green);
+  --home-blue-dark: var(--color-primary-hover);
+  --home-text: var(--color-gray-dark);
+  --home-text-muted: var(--color-gray-medium);
+  --home-gray-bg: var(--color-gray-light);
   
   font-family: 'Inter', sans-serif;
   color: var(--home-text);
@@ -58,7 +58,7 @@
 
 /* ── QUEM SOMOS ── */
 .secao-quem-somos {
-  background: #fff;
+  background: var(--color-white);
   padding: 80px 6%;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -145,7 +145,7 @@
 .btn-azul {
   display: inline-block;
   background: var(--color-primary);
-  color: #fff;
+  color: var(--color-white);
   font-weight: 600;
   font-size: 14px;
   padding: 13px 28px;
@@ -223,7 +223,7 @@
   font-family: 'Sora', sans-serif;
   font-size: 28px;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-white);
   margin-top: 0;
   margin-bottom: 40px;
 }
@@ -236,7 +236,7 @@
 
 /* ── EVENTOS + NOTÍCIAS ── */
 .secao-en {
-  background: #fff;
+  background: var(--color-white);
   padding: 80px 6%;
   display: grid;
   grid-template-columns: 1fr 1.5fr;
@@ -274,7 +274,7 @@
   font-family: 'Sora', sans-serif;
   font-size: 28px;
   font-weight: 800;
-  color: #fff;
+  color: var(--color-white);
   margin: 0 0 8px 0;
 }
 
@@ -286,7 +286,7 @@
 
 .btn-cta {
   display: inline-block;
-  background: #fff;
+  background: var(--color-white);
   color: var(--home-teal);
   font-family: 'Sora', sans-serif;
   font-weight: 700;

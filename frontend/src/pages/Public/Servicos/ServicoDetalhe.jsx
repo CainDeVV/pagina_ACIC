@@ -52,7 +52,7 @@ function ServicoDetalhe() {
         </Helmet>
         <div className="servico-detalhe-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
           <h2>Serviço não encontrado.</h2>
-          <Link to="/servicos" style={{ color: '#0266b0', fontWeight: 'bold' }}>← Voltar para Serviços</Link>
+          <Link to="/servicos" style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>← Voltar para Serviços</Link>
         </div>
       </>
     );
@@ -104,7 +104,7 @@ function ServicoDetalhe() {
             <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
           </div>
 
-          <p style={{ lineHeight: '1.6', color: '#555', fontSize: '1.1rem' }}>
+          <p style={{ lineHeight: '1.6', color: 'var(--color-gray-medium)', fontSize: '1.1rem' }}>
             Para solicitar este serviço, entre em contato diretamente com a nossa equipe de atendimento.
             Estaremos prontos para te ajudar!
           </p>

@@ -40,7 +40,7 @@
   justify-content: center;
   font-size: 56px;
   background: linear-gradient(160deg, #c8d6ea 0%, #a8bed9 100%);
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 /* LÓGICA COMPLEXA: Z-Index e Posição do botão de modal */
@@ -64,7 +64,7 @@
 }
 
 .director-dots-btn:hover {
-  background: #ffffff;
+  background: var(--color-white);
   transform: scale(1.1);
 }
 
@@ -108,7 +108,7 @@
 }
 
 .variant-dark .director-name {
-  color: #ffffff;
+  color: var(--color-white);
 }
 
 .variant-dark .director-role {

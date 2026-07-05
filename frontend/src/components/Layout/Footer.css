@@ -1,6 +1,6 @@
 .footer-container {
-  background-color: #0266b0; /* Fundo azul escuro corporativo */
-  color: #ffffff;
+  background-color: var(--color-primary); /* Fundo azul escuro corporativo */
+  color: var(--color-white);
   padding: 40px 20px 0 20px;
   margin-top: 60px;
 }
@@ -38,16 +38,16 @@
 .footer-col li {
   margin-bottom: 10px;
   cursor: pointer;
-  color: #cccccc;
+  color: var(--color-gray-border);
 }
 
 .footer-col li:hover {
-  color: #ffffff;
+  color: var(--color-white);
   text-decoration: underline;
 }
 
 .footer-col p {
-  color: #cccccc;
+  color: var(--color-gray-border);
   line-height: 1.6;
   margin-bottom: 8px;
 }

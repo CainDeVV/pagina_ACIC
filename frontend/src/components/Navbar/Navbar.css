@@ -37,7 +37,7 @@
     height: 42px;
     background: transparent;
     border: none;
-    color: #ffffff;
+    color: var(--color-white);
     text-decoration: none;
     font-size: 0.75rem; /* Fonte um pouquinho menor para o texto de "Serviços" */
     font-weight: 500;
@@ -107,7 +107,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 30px;
     cursor: pointer;
     font-size: 1rem;
@@ -118,7 +118,7 @@
   }
 
   .submenu {
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 18px;
     margin: -8px 0 16px;
     padding: 12px 0 8px 0;
@@ -129,7 +129,7 @@
     display: block;
     padding: 12px 24px;
     text-decoration: none;
-    color: #555555;
+    color: var(--color-gray-medium);
     font-size: 0.95rem;
   }
 }

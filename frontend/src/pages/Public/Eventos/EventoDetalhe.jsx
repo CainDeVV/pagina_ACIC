@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import { eventosService } from '../../../services/eventosService';
 import './Eventos.css';
@@ -55,37 +56,42 @@ function EventoDetalhe() {
   // Prepara os blocos do Editor.js vindos do backend (campo description do NestJS)
   const contentBlocks = evento.description?.blocks || [];
 
+  const getBadgeText = (evento) => {
+    if (evento.status === 'CANCELLED') return 'Cancelado';
+    if (evento.status === 'FINISHED') return 'Realizado';
+    return new Date(evento.startsAt) > new Date() ? 'Em Breve' : 'Realizado';
+  };
+
   return (
     <>
     <Helmet>
       <title>{evento.title} | ACIC</title>
     </Helmet>
     <div className="eventos-page">
-      {/* Banner */}
-      <div className="evento-detalhe-banner">
-        <img src={evento.coverImage || 'https://placehold.co/1200x400?text=Banner+do+Evento'} alt={evento.title} />
-        <div className="evento-detalhe-banner-overlay">
-          <span className="evento-badge">
-            {evento.status === 'PUBLISHED' ? 'Evento' : 'Em Breve'}
-          </span>
-          <h1>{evento.title}</h1>
-          {evento.location && <p>📍 {evento.location}</p>}
-          <span className="evento-data">
-            {new Date(evento.startsAt).toLocaleString('pt-BR', {
-              day: '2-digit',
-              month: 'long',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })}
-          </span>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
+        <Breadcrumb items={[{ label: 'Eventos', path: '/eventos' }, { label: evento.title }]} />
+        
+        {/* Cabeçalho Limpo (Novo Design) */}
+        <div className="evento-detalhe-header-limpo">
+          <div className="evento-detalhe-badges">
+            <span className="evento-badge">{getBadgeText(evento)}</span>
+            <div className="evento-detalhe-meta">
+              <span className="evento-data">📅 {new Date(evento.startsAt).toLocaleString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+              {evento.location && <span className="evento-local">📍 {evento.location}</span>}
+            </div>
+          </div>
+          <h1 className="evento-detalhe-titulo">{evento.title}</h1>
         </div>
-      </div>
 
-      {/* Conteúdo */}
-      <div className="evento-detalhe-conteudo">
-        <Link to="/eventos" className="btn-voltar">← Voltar para Eventos</Link>
-        <BlockRenderer blocks={contentBlocks} />
+        {/* Imagem de Capa Arredondada */}
+        <div className="evento-detalhe-cover">
+          <img src={evento.coverImage || 'https://placehold.co/1200x500?text=Capa+do+Evento'} alt={evento.title} />
+        </div>
+
+        {/* Conteúdo Rico */}
+        <div className="evento-detalhe-conteudo-limpo">
+          <BlockRenderer blocks={contentBlocks} />
+        </div>
       </div>
     </div>
     </>

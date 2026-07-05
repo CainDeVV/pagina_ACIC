@@ -1,10 +1,11 @@
 /* Títulos e Subtítulos */
 .institutional-title {
-  color: var(--color-gray-dark);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary-hover);
   margin-top: 0;
   margin-bottom: 24px;
-  font-size: 2rem;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .institutional-subtitle {
@@ -58,7 +59,7 @@
 }
 
 .institutional-gallery img {
-  flex: 1 1 300px; 
+  flex: 1 1 300px;
   border-radius: 8px;
   max-width: 100%;
 }
@@ -83,7 +84,7 @@
   margin-bottom: 16px;
   padding: 12px 24px;
   background-color: var(--color-primary);
-  color: #ffffff;
+  color: var(--color-white);
   text-decoration: none;
   font-weight: bold;
   border-radius: 4px;

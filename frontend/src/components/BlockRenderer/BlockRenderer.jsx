@@ -108,7 +108,7 @@ function BlockRenderer({ blocks }) {
                 src={data.url} 
                 width="100%" 
                 height="800px" 
-                style={{ border: '1px solid #ddd', borderRadius: '8px', marginTop: '24px' }} 
+                style={{ border: '1px solid var(--color-gray-border)', borderRadius: '8px', marginTop: '24px' }} 
                 title="Visualizador de PDF" 
               />
             );

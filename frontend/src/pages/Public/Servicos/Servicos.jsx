@@ -13,7 +13,8 @@ function Servicos() {
     async function carregarServicos() {
       try {
         const dados = await servicosService.buscarTodos();
-        setServicos(dados || []);
+        const servicosPublicos = (dados || []).filter(s => s.status === 'PUBLISHED');
+        setServicos(servicosPublicos);
       } catch (error) {
         console.error("Erro ao carregar serviços:", error);
       } finally {
@@ -60,7 +61,7 @@ function Servicos() {
               <ServiceCard key={servico.id} service={servico} />
             ))
           ) : (
-            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
+            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: 'var(--color-gray-medium)' }}>
               Nenhum serviço cadastrado no banco de dados no momento.
             </p>
           )}

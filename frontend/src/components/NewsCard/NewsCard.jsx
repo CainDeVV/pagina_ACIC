@@ -1,29 +1,59 @@
 import { Link } from 'react-router-dom';
 import './NewsCard.css';
 
-const NewsCard = ({ news }) => {
+const NewsCard = ({ news, variant = 'compact' }) => {
   // Lendo as chaves exatas geradas pelo NestJS/Prisma
   const dataOficial = news.publishedAt ? new Date(news.publishedAt) : new Date(news.createdAt);
-  const dataFormatada = dataOficial.toLocaleDateString('pt-BR', { 
-    day: '2-digit', 
-    month: 'short', 
-    year: 'numeric' 
+  
+  // A formatação de data muda ligeiramente dependendo do formato
+  const dataFormatadaCompact = dataOficial.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric'
   }).replace(/de /g, '');
+
+  const dataFormatadaPremium = dataOficial.toLocaleDateString('pt-BR', { 
+    day: '2-digit', 
+    month: 'long', 
+    year: 'numeric' 
+  });
 
   const linkDestino = news.slug ? `/noticias/${news.slug}` : '#';
 
+  if (variant === 'premium') {
+    return (
+      <Link to={linkDestino} className="news-card premium">
+        <div className="premium-img-wrapper">
+          <img 
+            className="premium-img" 
+            src={news.coverImage || 'https://placehold.co/600x400?text=Notícia+ACIC'} 
+            alt={news.title} 
+            loading="lazy" 
+          />
+        </div>
+        <div className="premium-content">
+          <span className="premium-date">{dataFormatadaPremium}</span>
+          <h3 className="premium-title">{news.title}</h3>
+          {news.summary && <p className="premium-summary">{news.summary}</p>}
+          <span className="premium-read-more">Ler matéria →</span>
+        </div>
+      </Link>
+    );
+  }
+
+  // Padrão: Compact (usado na Home)
   return (
-    <Link to={linkDestino} className="news-card">
-      <img 
-        className="news-img" 
-        src={news.coverImage || 'https://placehold.co/96x72?text=Notícia'} 
-        alt={news.title} 
-        loading="lazy" 
+    <Link to={linkDestino} className="news-card compact">
+      <img
+        className="compact-img"
+        src={news.coverImage || 'https://placehold.co/96x72?text=Notícia'}
+        alt={news.title}
+        loading="lazy"
       />
-      <div className="news-content">
-        <span className="news-category">Notícia</span>
-        <h3>{news.title}</h3>
-        <div className="news-date">{dataFormatada}</div>
+      <div className="compact-content">
+        <span className="compact-category">Notícia</span>
+        <h3 className="compact-title">{news.title}</h3>
+        <div className="compact-date">{dataFormatadaCompact}</div>
       </div>
     </Link>
   );

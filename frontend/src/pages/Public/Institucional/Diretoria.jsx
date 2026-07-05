@@ -74,14 +74,11 @@ function Diretoria() {
         {/* Cabeçalho Editável (Mini-CMS) */}
         {paginaIntro ? (
           <div style={{ marginBottom: '40px' }}>
-            <h1 className="page-titulo">{paginaIntro.title}</h1>
             <BlockRenderer blocks={paginaIntro.content?.blocks || []} />
           </div>
         ) : (
           <div style={{ marginBottom: '40px' }}>
-            <h1 className="page-titulo">DIRETORIA DA ACIC</h1>
-            <p className="pag-subtitulo">Triênio 2023/2025</p>
-            <p>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
+            <p style={{ padding: '20px' }}>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
           </div>
         )}
 
