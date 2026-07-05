@@ -75,7 +75,7 @@ function ServicoDetalhe() {
           <div className="servico-banner-content">
             <h1>{servicoAtual.title}</h1>
             <button className="btn-eu-quero" onClick={() => setIsModalOpen(true)}>
-              Eu Quero
+              Obter
             </button>
           </div>
         </div>
@@ -101,7 +101,7 @@ function ServicoDetalhe() {
       <div className={`drawer-overlay ${isModalOpen ? 'open' : ''}`} onClick={() => setIsModalOpen(false)}>
         <div className="drawer-content" onClick={(e) => e.stopPropagation()}>
           <div className="drawer-header">
-            <h2>Eu Quero</h2>
+            <h2>Obter Serviço</h2>
             <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
           </div>
 

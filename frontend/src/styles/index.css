@@ -63,16 +63,16 @@ body {
   color: var(--color-primary-hover); 
 }
 
-/* H2: Subtítulos Principais (Azul Secundário) */
+/* H2: Subtítulos Principais (Cinza Escuro) */
 .rich-text-content h2 { 
   font-size: 1.8rem; 
-  color: var(--color-primary); 
+  color: var(--color-gray-dark); 
 }
 
-/* H3: Subtítulos Menores (Cinza Escuro) */
+/* H3: Subtítulos Menores (Azul Secundário) */
 .rich-text-content h3 { 
   font-size: 1.4rem; 
-  color: var(--color-gray-dark); 
+  color: var(--color-primary); 
 }
 
 /* H4, H5, H6: Títulos de apoio (Tons de Cinza Escuro) */

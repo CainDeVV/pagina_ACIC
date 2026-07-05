@@ -4,6 +4,7 @@ import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import ImageTool from '@editorjs/image';
 import PdfEmbedTool from './tools/PdfEmbedTool';
+import PdfLinkTool from './tools/PdfLinkTool';
 import GalleryTool from './tools/GalleryTool';
 import ImageTextHighlightTool from './tools/ImageTextHighlightTool';
 import './RichEditor.css';
@@ -57,6 +58,9 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
         },
         pdfEmbed: {
           class: PdfEmbedTool
+        },
+        pdfLink: {
+          class: PdfLinkTool
         },
         gallery: {
           class: GalleryTool

@@ -38,13 +38,14 @@
 .institutional-pdf-link {
   display: inline-block;
   padding: 12px 24px;
-  background-color: #0266b0;
-  color: white;
-  text-decoration: none;
+  background-color: var(--color-primary, #0266b0);
+  color: white !important;
+  text-decoration: none !important;
   border-radius: 8px;
   font-weight: 600;
   transition: background-color 0.2s ease;
   margin-top: 16px;
+  margin-right: 16px;
 }
 .institutional-pdf-link:hover {
   background-color: #014d86;
