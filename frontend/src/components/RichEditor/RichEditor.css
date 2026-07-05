@@ -1,11 +1,17 @@
 .rich-editor-container {
   border: 1px solid var(--color-gray-border);
-  border-radius: 4px;
-  padding: 12px;
+  border-radius: 6px;
+  padding: 16px 20px;
   background-color: var(--color-white);
-  min-height: 200px;
+  min-height: 300px;
+  transition: border-color 0.2s ease;
+}
+
+.rich-editor-container:focus-within {
+  border-color: #cccccc; /* Borda mais sutil em vez do azul chamativo */
+  outline: none;
 }
 
 .rich-editor-container .codex-editor__redactor {
-  padding-bottom: 20px !important;
+  padding-bottom: 30px !important;
 }

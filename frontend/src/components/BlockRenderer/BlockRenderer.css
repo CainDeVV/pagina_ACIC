@@ -1,0 +1,51 @@
+.gallery-thumbnail img {
+  transition: transform 0.3s ease;
+}
+.gallery-thumbnail:hover img {
+  transform: scale(1.1);
+}
+.gallery-thumbnail .gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0,0,0,0.4);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease;
+}
+.gallery-thumbnail:hover .gallery-overlay {
+  opacity: 1;
+}
+
+.gallery-lightbox-btn {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+.gallery-lightbox-btn:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.institutional-pdf-link {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #0266b0;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  margin-top: 16px;
+}
+.institutional-pdf-link:hover {
+  background-color: #014d86;
+}

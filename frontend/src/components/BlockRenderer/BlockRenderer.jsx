@@ -1,3 +1,72 @@
+import React, { useState } from 'react';
+import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import './BlockRenderer.css';
+
+const GalleryViewer = ({ images }) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  if (!images || images.length === 0) return null;
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  return (
+    <>
+      <div className="institutional-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginTop: '24px' }}>
+        {images.map((img, i) => (
+          <figure key={i} style={{ margin: 0, cursor: 'pointer', position: 'relative', overflow: 'hidden', borderRadius: '8px' }} onClick={() => setSelectedIndex(i)} className="gallery-thumbnail">
+            <img 
+              src={img.url} 
+              alt={img.alt || 'Imagem da galeria'} 
+              style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+            />
+            <div className="gallery-overlay">
+              <ZoomIn color="white" size={32} />
+            </div>
+          </figure>
+        ))}
+      </div>
+
+      {selectedIndex !== null && (
+        <div 
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.92)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          onClick={() => setSelectedIndex(null)}
+        >
+          <button style={{ position: 'absolute', top: '24px', right: '24px', background: 'none', border: 'none', color: 'white', cursor: 'pointer', zIndex: 10000 }} onClick={() => setSelectedIndex(null)}>
+            <X size={36} />
+          </button>
+          
+          {images.length > 1 && (
+            <button className="gallery-lightbox-btn" style={{ left: '24px' }} onClick={prevImage}>
+              <ChevronLeft size={36} />
+            </button>
+          )}
+
+          <img 
+            src={images[selectedIndex].url} 
+            alt={images[selectedIndex].alt} 
+            style={{ maxWidth: '85vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '8px' }} 
+            onClick={(e) => e.stopPropagation()} 
+          />
+
+          {images.length > 1 && (
+            <button className="gallery-lightbox-btn" style={{ right: '24px' }} onClick={nextImage}>
+              <ChevronRight size={36} />
+            </button>
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
 function BlockRenderer({ blocks }) {
   // Trava de segurança
   if (!blocks || !Array.isArray(blocks) || blocks.length === 0) return null;
@@ -127,19 +196,7 @@ function BlockRenderer({ blocks }) {
             );
 
           case 'gallery':
-            return (
-              <div key={index} className="institutional-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginTop: '24px' }}>
-                {data.images?.map((img, i) => (
-                  <figure key={i} style={{ margin: 0 }}>
-                    <img 
-                      src={img.url} 
-                      alt={img.alt || 'Imagem da galeria'} 
-                      style={{ width: '100%', height: '200px', objectFit: 'cover', borderRadius: '8px' }} 
-                    />
-                  </figure>
-                ))}
-              </div>
-            );
+            return <GalleryViewer key={index} images={data.images} />;
 
           default:
             console.warn(`Tipo de bloco desconhecido ignorado: ${type}`);

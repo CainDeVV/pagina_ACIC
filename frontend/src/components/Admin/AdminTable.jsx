@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Search, Edit, Trash2, ChevronLeft, ChevronRight } from 'lucide-react';
 import './AdminTable.css';
 
 /**
@@ -53,15 +54,18 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
     <div className="admin-table-container">
       {/* BARRA DE FERRAMENTAS (Busca e Contagem) */}
       <div className="admin-table-toolbar">
-        <input 
-          type="text" 
-          placeholder="Pesquisar registros..." 
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="admin-search-input"
-        />
+        <div className="admin-search-wrapper">
+          <Search className="admin-search-icon" size={18} />
+          <input 
+            type="text" 
+            placeholder="Pesquisar registros..." 
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="admin-search-input"
+          />
+        </div>
         <span className="admin-table-count">
-          {filteredData.length} registro(s) encontrado(s)
+          <strong>{filteredData.length}</strong> registro(s) encontrado(s)
         </span>
       </div>
 
@@ -88,13 +92,13 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
                   {(onEdit || onDelete) && (
                     <td className="actions-cell">
                       {onEdit && (
-                        <button className="btn-edit" onClick={() => onEdit(row)}>
-                          Editar
+                        <button className="btn-edit-icon" onClick={() => onEdit(row)} title="Editar">
+                          <Edit size={16} />
                         </button>
                       )}
                       {onDelete && (
-                        <button className="btn-delete" onClick={() => onDelete(row.id)}>
-                          Excluir
+                        <button className="btn-delete-icon" onClick={() => onDelete(row.id)} title="Excluir">
+                          <Trash2 size={16} />
                         </button>
                       )}
                     </td>
@@ -120,6 +124,7 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
             onClick={() => setCurrentPage(p => p - 1)}
             className="btn-page"
           >
+            <ChevronLeft size={18} />
             Anterior
           </button>
           <span className="page-info">Página {currentPage} de {totalPages}</span>
@@ -129,6 +134,7 @@ function AdminTable({ columns, data, onEdit, onDelete }) {
             className="btn-page"
           >
             Próxima
+            <ChevronRight size={18} />
           </button>
         </div>
       )}

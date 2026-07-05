@@ -6,8 +6,9 @@ class ImageTextHighlightTool {
     };
   }
 
-  constructor({ data, api }) {
+  constructor({ data, api, config }) {
     this.api = api;
+    this.config = config || {};
     this.data = {
       imageUrl: data.imageUrl || '',
       title: data.title || '',
@@ -41,6 +42,75 @@ class ImageTextHighlightTool {
     this.urlInput.value = this.data.imageUrl;
     this.urlInput.classList.add('cdx-input');
 
+    const uploadContainer = document.createElement('div');
+    uploadContainer.style.display = 'flex';
+    uploadContainer.style.gap = '10px';
+    uploadContainer.style.alignItems = 'center';
+
+    const uploadBtn = document.createElement('button');
+    uploadBtn.type = 'button';
+    uploadBtn.innerHTML = '📁 Enviar do Computador';
+    uploadBtn.style.padding = '8px 12px';
+    uploadBtn.style.border = '1px solid #0266b0';
+    uploadBtn.style.backgroundColor = 'white';
+    uploadBtn.style.color = '#0266b0';
+    uploadBtn.style.borderRadius = '4px';
+    uploadBtn.style.cursor = 'pointer';
+    
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+
+    uploadBtn.addEventListener('click', () => {
+      fileInput.click();
+    });
+
+    fileInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      uploadBtn.innerHTML = '⏳ Enviando...';
+      uploadBtn.disabled = true;
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const token = localStorage.getItem('acic_access_token');
+        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        
+        const response = await fetch(`${apiUrl}/api/upload?folder=geral`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        const result = await response.json();
+        if (result.success && result.file && result.file.url) {
+          this.urlInput.value = result.file.url;
+        } else {
+          alert('Erro ao fazer upload da imagem.');
+        }
+      } catch (error) {
+        console.error('Erro de upload:', error);
+        alert('Falha na conexão de upload.');
+      } finally {
+        uploadBtn.innerHTML = '📁 Enviar do Computador';
+        uploadBtn.disabled = false;
+        fileInput.value = '';
+      }
+    });
+
+    uploadContainer.appendChild(this.urlInput);
+    uploadContainer.appendChild(uploadBtn);
+    uploadContainer.appendChild(fileInput);
+    
+    // Para que o input de url ocupe o espaço restante
+    this.urlInput.style.flex = '1';
+
     this.titleInput = document.createElement('input');
     this.titleInput.placeholder = 'Título do Destaque (ex: Marca conhecida é marca registrada)...';
     this.titleInput.value = this.data.title;
@@ -54,7 +124,7 @@ class ImageTextHighlightTool {
     this.textInput.style.resize = 'vertical';
     this.textInput.style.fontFamily = 'inherit';
 
-    this.wrapper.appendChild(this.urlInput);
+    this.wrapper.appendChild(uploadContainer);
     this.wrapper.appendChild(this.titleInput);
     this.wrapper.appendChild(this.textInput);
 
