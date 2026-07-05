@@ -94,7 +94,7 @@ function NoticiaForm() {
           parsedPublishedAt = new Date(currentData.publishedAt).toISOString();
         }
 
-        const { destaque, ...validFormData } = currentData;
+        const { ...validFormData } = currentData;
         
         return {
           ...validFormData,

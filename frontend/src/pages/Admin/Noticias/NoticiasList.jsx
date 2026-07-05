@@ -3,7 +3,7 @@ import { noticiasService } from '../../../services/noticiasService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '../../../utils/dateUtils';
 import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineStatusSelect } from '../../../components/Admin/TableCells';
+import { InlineStatusSelect, InlineFeaturedToggle } from '../../../components/Admin/TableCells';
 import { CONTENT_STATUS } from '../../../constants/status';
 
 function NoticiasList() {
@@ -31,6 +31,10 @@ function NoticiasList() {
     { 
       label: 'Publicado em', 
       render: (row) => row.publishedAt ? formatNumericDateTime(row.publishedAt) : '—' 
+    },
+    { 
+      label: 'Destaque', 
+      render: (row) => <InlineFeaturedToggle row={row} onUpdate={handleUpdateField} /> 
     }
   ];
 

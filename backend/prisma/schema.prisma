@@ -80,6 +80,7 @@ model Noticia {
   coverImage  String?
   coverImageCaption String?
   showCoverImage    Boolean @default(true)
+  destaque    Boolean @default(false)
   status      PublishStatus @default(DRAFT)
   publishedAt DateTime?
   authorId    String?
