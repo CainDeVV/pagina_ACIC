@@ -221,7 +221,6 @@ export default function Home() {
             <p style={{ color: 'var(--home-text-muted)' }}>Nenhum evento programado.</p>
           )}
           
-          <br />
           <Link to="/eventos" className="btn-link">Ver todos os eventos →</Link>
         </div>
 
@@ -239,7 +238,6 @@ export default function Home() {
             <p style={{ color: 'var(--home-text-muted)' }}>Nenhuma notícia publicada recentemente.</p>
           )}
           
-          <br />
           <Link to="/noticias" className="btn-link">Ver todas as notícias →</Link>
         </div>
 

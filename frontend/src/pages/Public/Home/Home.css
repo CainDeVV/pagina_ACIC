@@ -241,7 +241,17 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
-  align-items: start;
+  align-items: stretch; /* Garante que ambas colunas tenham mesma altura */
+}
+
+.col-eventos, .col-noticias {
+  display: flex;
+  flex-direction: column;
+}
+
+.col-eventos .btn-link, .col-noticias .btn-link {
+  margin-top: auto; /* Empurra o botão pro fundo perfeitamente alinhado */
+  padding-top: 24px;
 }
 
 .col-eventos h2, .col-noticias h2 {
@@ -254,9 +264,15 @@
 }
 
 .lista-noticias, .lista-eventos {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
   gap: 16px;
+  flex: 1; /* Ocupa todo o espaço vertical disponível na coluna */
+}
+
+.lista-noticias > *, .lista-eventos > * {
+  height: 100%;
+  width: 100%;
 }
 
 /* ── FAIXA ASSOCIE-SE ── */
