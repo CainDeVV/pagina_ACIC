@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import { Helmet } from 'react-helmet-async';
 
 function QuemSomosForm() {
   const { id } = useParams();

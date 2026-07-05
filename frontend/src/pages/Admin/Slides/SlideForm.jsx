@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { slidesService } from '../../../services/slidesService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
+import { Helmet } from 'react-helmet-async';
 
 function SlideForm() {
   const { id } = useParams();

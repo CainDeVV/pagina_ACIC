@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './AdminGlobal.css';
 
 function AdminFormLayout({ title, backPath, isEditing, loading, fetching, error, onSubmit, children }) {
@@ -7,6 +7,7 @@ function AdminFormLayout({ title, backPath, isEditing, loading, fetching, error,
 
   return (
     <div className="admin-page-container">
+      <Helmet><title>{`${isEditing ? 'Editar' : 'Novo'} ${title} | ACIC`}</title></Helmet>
       <Link to={backPath} className="back-link">← Voltar</Link>
 
       <div className="admin-form-content">

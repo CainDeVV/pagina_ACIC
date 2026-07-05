@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
+import { Helmet } from 'react-helmet-async';
 
 function DiretoriaList() {
   const navigate = useNavigate();

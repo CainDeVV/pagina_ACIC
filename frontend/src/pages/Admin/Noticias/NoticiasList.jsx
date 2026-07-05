@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { noticiasService } from '../../../services/noticiasService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
+import { Helmet } from 'react-helmet-async';
 
 function NoticiasList() {
   const navigate = useNavigate();

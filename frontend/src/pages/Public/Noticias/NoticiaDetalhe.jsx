@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import { noticiasService } from '../../../services/noticiasService';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import NewsCard from '../../../components/NewsCard/NewsCard';
 import './NoticiaDetalhe.css';
 
 function NoticiaDetalhe() {
@@ -11,12 +12,22 @@ function NoticiaDetalhe() {
   const [noticia, setNoticia] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [noticiasRelacionadas, setNoticiasRelacionadas] = useState([]);
 
   useEffect(() => {
     const fetchNoticia = async () => {
       try {
         const data = await noticiasService.buscarPorSlug(slug);
         setNoticia(data);
+
+        const todasNoticias = await noticiasService.buscarTodos();
+        const relacionadas = todasNoticias
+          .filter(n => n.status === 'PUBLISHED')
+          .filter(n => n.id !== data.id)
+          .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt))
+          .slice(0, 3);
+        
+        setNoticiasRelacionadas(relacionadas);
       } catch (err) {
         console.error(err);
         setError(true);
@@ -30,6 +41,7 @@ function NoticiaDetalhe() {
   if (loading) {
     return (
       <div className="noticia-detalhe-page">
+        <Helmet><title>Carregando Notícia... | ACIC</title></Helmet>
         <div className="noticia-vazia"><p>Carregando notícia...</p></div>
       </div>
     );
@@ -55,7 +67,7 @@ function NoticiaDetalhe() {
   return (
     <div className="noticia-detalhe-page">
       <Helmet>
-        <title>{noticia.title} | ACIC</title>
+        <title>{`${noticia.title} | ACIC`}</title>
         <meta name="description" content={noticia.summary || "Leia esta notícia no portal da ACIC."} />
       </Helmet>
 
@@ -91,6 +103,20 @@ function NoticiaDetalhe() {
             <BlockRenderer blocks={parsedContent.blocks} />
           </div>
         </div>
+
+        {/* Notícias Relacionadas */}
+        {noticiasRelacionadas.length > 0 && (
+          <div style={{ marginTop: '64px' }}>
+            <h2 style={{ color: 'var(--color-primary-hover)', fontSize: '1.2rem', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '8px', marginBottom: '24px' }}>
+              Últimas Notícias
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+              {noticiasRelacionadas.map(noticiaRel => (
+                <NewsCard key={noticiaRel.id} news={noticiaRel} variant="premium" />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

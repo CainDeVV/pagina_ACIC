@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
 import './SaibaMaisLayout.css';
 
@@ -8,6 +9,7 @@ function SaibaMaisLayout({ titulo, children }) {
 
   return (
     <div className="institucional-page">
+      <Helmet><title>{`${titulo} | ACIC`}</title></Helmet>
       
       {/* Breadcrumb */}
       <Breadcrumb 

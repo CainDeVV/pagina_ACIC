@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
+import EventCard from '../../../components/EventCard/EventCard';
 import { eventosService } from '../../../services/eventosService';
 import './Eventos.css';
 
@@ -46,11 +47,7 @@ function Eventos() {
     carregarEventos();
   }, []);
 
-  const getBadgeText = (evento) => {
-    if (evento.status === 'CANCELLED') return 'Cancelado';
-    if (evento.status === 'FINISHED') return 'Realizado';
-    return new Date(evento.startsAt) > new Date() ? 'Em Breve' : 'Realizado';
-  };
+  // getBadgeText is removed as it's now handled by EventCard
 
   if (carregando) {
     return (
@@ -90,55 +87,22 @@ function Eventos() {
       {sliderData.length > 0 && <HeroSlider slides={sliderData} autoPlayTime={5000} />}
 
       {eventosDestaque.length > 0 && (
-        <section className="eventos-destaque-section">
+        <section className="eventos-lista-section">
           <h2 className="eventos-section-titulo">Em Destaque</h2>
-          {eventosDestaque.map((evento) => (
-            <Link
-              to={`/eventos/${evento.slug}`}
-              key={evento.id}
-              className="evento-destaque-card"
-            >
-              <div className="evento-destaque-img-wrapper">
-                <img src={evento.coverImage || 'https://placehold.co/800x400?text=Evento+ACIC'} alt={evento.title} />
-                <span className="evento-badge">
-                  {getBadgeText(evento)}
-                </span>
-              </div>
-              <div className="evento-destaque-info">
-                <span className="evento-data">
-                  {new Date(evento.startsAt).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}
-                </span>
-                <h3>{evento.title}</h3>
-                {evento.location && <p>📍 {evento.location}</p>}
-                <span className="btn-saiba-mais-evento">Saiba mais →</span>
-              </div>
-            </Link>
-          ))}
+          <div className="eventos-grid-moderno">
+            {eventosDestaque.map((evento) => (
+              <EventCard key={evento.id} event={evento} />
+            ))}
+          </div>
         </section>
       )}
 
       {proximosEventos.length > 0 && (
         <section className="eventos-lista-section">
           <h2 className="eventos-section-titulo">Próximos Eventos</h2>
-          <div className="eventos-grid">
+          <div className="eventos-grid-moderno">
             {proximosEventos.map((evento) => (
-              <Link
-                to={`/eventos/${evento.slug}`}
-                key={evento.id}
-                className="evento-card"
-              >
-                <img src={evento.coverImage || 'https://placehold.co/150x150?text=Evento'} alt={evento.title} />
-                <div className="evento-card-info">
-                  <span className="evento-badge">
-                    {getBadgeText(evento)}
-                  </span>
-                  <h3>{evento.title}</h3>
-                  {evento.location && <p>📍 {evento.location}</p>}
-                  <span className="evento-data">
-                    {new Date(evento.startsAt).toLocaleDateString('pt-BR')}
-                  </span>
-                </div>
-              </Link>
+              <EventCard key={evento.id} event={evento} />
             ))}
           </div>
         </section>
@@ -147,26 +111,9 @@ function Eventos() {
       {eventosPassados.length > 0 && (
         <section className="eventos-lista-section">
           <h2 className="eventos-section-titulo">Eventos Realizados</h2>
-          <div className="eventos-grid">
+          <div className="eventos-grid-moderno">
             {eventosPassados.map((evento) => (
-              <Link
-                to={`/eventos/${evento.slug}`}
-                key={evento.id}
-                className="evento-card"
-                style={{ opacity: 0.8 }}
-              >
-                <img src={evento.coverImage || 'https://placehold.co/150x150?text=Evento'} alt={evento.title} style={{ filter: 'grayscale(100%)' }} />
-                <div className="evento-card-info">
-                  <span className="evento-badge" style={{ background: 'var(--color-gray-medium)' }}>
-                    {getBadgeText(evento)}
-                  </span>
-                  <h3>{evento.title}</h3>
-                  {evento.location && <p>📍 {evento.location}</p>}
-                  <span className="evento-data">
-                    {new Date(evento.startsAt).toLocaleDateString('pt-BR')}
-                  </span>
-                </div>
-              </Link>
+              <EventCard key={evento.id} event={evento} variant="past" />
             ))}
           </div>
         </section>

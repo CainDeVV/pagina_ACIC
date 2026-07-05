@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
+import { Helmet } from 'react-helmet-async';
 
 function DiretoriaForm() {
   const { id } = useParams();

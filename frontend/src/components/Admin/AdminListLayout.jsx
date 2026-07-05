@@ -1,5 +1,5 @@
-import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import AdminTable from './AdminTable';
 import './AdminGlobal.css'; // Importamos o CSS Global aqui
 
@@ -8,6 +8,7 @@ function AdminListLayout({ title, createPath, loading, error, data, columns, onE
 
   return (
     <div className="admin-page-container">
+      <Helmet><title>{`Lista de ${title} | ACIC`}</title></Helmet>
       <Link to="/admin" className="back-link">← Voltar ao painel</Link>
 
       <div className="admin-page-header">

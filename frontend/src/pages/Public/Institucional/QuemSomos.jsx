@@ -49,9 +49,7 @@ function QuemSomos() {
 
   return (
     <>
-    <Helmet>
-      <title>{pagina.title} | ACIC</title>
-    </Helmet>
+    <Helmet><title>{`${pagina.title} | ACIC`}</title></Helmet>
     <SaibaMaisLayout titulo={pagina.title}>
       {/* O backend envia o JSON do Editor.js dentro do campo 'content' */}
       <BlockRenderer blocks={pagina.content?.blocks || []} />

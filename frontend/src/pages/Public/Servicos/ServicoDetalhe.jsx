@@ -39,6 +39,7 @@ function ServicoDetalhe() {
   if (carregando) {
     return (
       <div className="servico-detalhe-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
+        <Helmet><title>Carregando Serviço... | ACIC</title></Helmet>
         <p>Carregando detalhes do serviço...</p>
       </div>
     );
@@ -63,7 +64,7 @@ function ServicoDetalhe() {
   return (
     <>
       <Helmet>
-        <title>{servicoAtual.title} | ACIC</title>
+        <title>{`${servicoAtual.title} | ACIC`}</title>
       </Helmet>
 
       <div className="servico-detalhe-page">

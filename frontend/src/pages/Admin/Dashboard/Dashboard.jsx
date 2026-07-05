@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { 
   Monitor, 
   Users, 
@@ -48,6 +49,9 @@ function Dashboard() {
 
   return (
     <div className="admin-page-container">
+      <Helmet>
+        <title>Painel Administrativo | ACIC</title>
+      </Helmet>
       <header className="admin-page-header">
         <div className="admin-header-title">
           <Monitor size={28} className="header-icon" />

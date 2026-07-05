@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import EventCard from '../../../components/EventCard/EventCard';
 import { eventosService } from '../../../services/eventosService';
 import './Eventos.css';
 
@@ -11,12 +12,24 @@ function EventoDetalhe() {
   const [evento, setEvento] = useState(null);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(false);
+  const [eventosRelacionados, setEventosRelacionados] = useState([]);
 
   useEffect(() => {
     async function carregarEvento() {
       try {
         const dados = await eventosService.buscarPorId(slug);
         setEvento(dados);
+
+        const todosEventos = await eventosService.buscarTodos();
+        const agora = new Date();
+        const relacionados = todosEventos
+          .filter(e => e.status !== 'DRAFT' && e.status !== 'FINISHED' && e.status !== 'CANCELLED')
+          .filter(e => new Date(e.startsAt) > agora)
+          .filter(e => e.id !== dados.id)
+          .sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt))
+          .slice(0, 3);
+        
+        setEventosRelacionados(relacionados);
       } catch (error) {
         console.error("Erro ao carregar o evento detalhado:", error);
         setErro(true);
@@ -30,6 +43,7 @@ function EventoDetalhe() {
   if (carregando) {
     return (
       <div className="eventos-page">
+        <Helmet><title>Carregando Evento... | ACIC</title></Helmet>
         <div className="eventos-vazio">
           <p>Carregando informações do evento...</p>
         </div>
@@ -40,9 +54,7 @@ function EventoDetalhe() {
   if (erro || !evento) {
     return (
       <>
-      <Helmet>
-        <title>Evento Não Encontrado | ACIC</title>
-      </Helmet>
+      <Helmet><title>Evento Não Encontrado | ACIC</title></Helmet>
       <div className="eventos-page">
         <div className="eventos-vazio">
           <p>Evento não encontrado.</p>
@@ -64,9 +76,7 @@ function EventoDetalhe() {
 
   return (
     <>
-    <Helmet>
-      <title>{evento.title} | ACIC</title>
-    </Helmet>
+    <Helmet><title>{`${evento.title} | ACIC`}</title></Helmet>
     <div className="eventos-page">
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
         <Breadcrumb items={[{ label: 'Eventos', path: '/eventos' }, { label: evento.title }]} />
@@ -92,6 +102,18 @@ function EventoDetalhe() {
         <div className="evento-detalhe-conteudo-limpo">
           <BlockRenderer blocks={contentBlocks} />
         </div>
+
+        {/* Eventos Relacionados */}
+        {eventosRelacionados.length > 0 && (
+          <div style={{ marginTop: '64px' }}>
+            <h2 className="eventos-section-titulo" style={{ margin: '0 0 24px 0' }}>Próximos Eventos</h2>
+            <div className="eventos-grid-moderno" style={{ padding: 0 }}>
+              {eventosRelacionados.map(evento => (
+                <EventCard key={evento.id} event={evento} />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
     </>

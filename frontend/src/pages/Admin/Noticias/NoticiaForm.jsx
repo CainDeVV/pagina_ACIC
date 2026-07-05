@@ -4,6 +4,7 @@ import { noticiasService } from '../../../services/noticiasService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
+import { Helmet } from 'react-helmet-async';
 
 function NoticiaForm() {
   const { id } = useParams();
