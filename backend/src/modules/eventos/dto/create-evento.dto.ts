@@ -1,5 +1,5 @@
 import { EventStatus } from '@prisma/client';
-import { IsEnum, IsInt, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, IsDateString } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, IsDateString, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateEventoDto {
@@ -34,9 +34,24 @@ export class CreateEventoDto {
   capacity?: number;
 
   @ApiProperty({ example: 'https://imagens.acic.com/evento.jpg', required: false })
-  @IsUrl({}, { message: 'A imagem de capa deve ser uma URL válida.' })
+  @IsUrl({ require_tld: false }, { message: 'A imagem de capa deve ser uma URL válida.' })
   @IsOptional()
   coverImage?: string;
+
+  @ApiProperty({ example: 'Foto do Evento Anterior', required: false })
+  @IsString()
+  @IsOptional()
+  coverImageCaption?: string;
+
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  showCoverImage?: boolean;
+
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  destaque?: boolean;
 
   @ApiProperty({ enum: EventStatus, default: EventStatus.DRAFT, required: false })
   @IsEnum(EventStatus)

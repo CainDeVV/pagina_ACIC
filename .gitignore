@@ -28,8 +28,12 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .idea/
+.agent
 
-# Documentação
+# Documentação e Mocks
 docs/
+Mock/
+CONTEXTO_GERAL.md
+auditoria-completa.md
 
 .agent.zip

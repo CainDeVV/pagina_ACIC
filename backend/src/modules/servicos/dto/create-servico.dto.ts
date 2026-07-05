@@ -24,7 +24,7 @@ export class CreateServicoDto {
   icon?: string;
 
   @ApiProperty({ example: 'https://imagens.acic.com/certificado.png', required: false })
-  @IsUrl({}, { message: 'A imagem deve ser uma URL válida.' })
+  @IsUrl({ require_tld: false }, { message: 'A imagem deve ser uma URL válida.' })
   @IsOptional()
   imageUrl?: string;
 

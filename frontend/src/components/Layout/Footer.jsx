@@ -1,5 +1,13 @@
+import { Link } from 'react-router-dom';
 import './Footer.css';
 import logo from "../../assets/ACIC.png";
+
+const QUICK_LINKS = [
+  { label: 'Quem Somos', path: '/quem-somos' },
+  { label: 'Galeria de Presidentes', path: '/galeria-presidentes' },
+  { label: 'Serviços', path: '/servicos' },
+  { label: 'Agenda de Eventos', path: '/eventos' }
+];
 
 function Footer() {
   return (
@@ -16,10 +24,13 @@ function Footer() {
         <div className="footer-col">
           <h3>Acesso Rápido</h3>
           <ul>
-            <li>Institucional</li>
-            <li>Galeria de Presidentes</li>
-            <li>Serviços</li>
-            <li>Agenda de Eventos</li>
+            {QUICK_LINKS.map((link, idx) => (
+              <li key={idx}>
+                <Link to={link.path} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
 

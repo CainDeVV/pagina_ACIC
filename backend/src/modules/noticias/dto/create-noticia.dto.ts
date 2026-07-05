@@ -37,9 +37,26 @@ export class CreateNoticiaDto {
     example: 'https://imagens.acic.com/noticia.jpg',
     required: false,
   })
-  @IsUrl({}, { message: 'A imagem de capa deve ser uma URL válida.' })
+  @IsUrl({ require_tld: false }, { message: 'A imagem de capa deve ser uma URL válida.' })
   @IsOptional()
   coverImage?: string;
+
+  @ApiProperty({
+    example: 'Foto: Marcos Oliveira',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  coverImageCaption?: string;
+
+  @ApiProperty({
+    example: true,
+    description: 'Define se a imagem de capa será exibida na página de detalhes',
+    required: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  showCoverImage?: boolean;
 
   @ApiProperty({
     example: true,

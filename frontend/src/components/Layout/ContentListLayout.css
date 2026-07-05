@@ -1,0 +1,53 @@
+/* ===== CONTENT LIST LAYOUT ===== */
+.content-list-page {
+  max-width: 100vw;
+  overflow-x: hidden;
+  font-family: sans-serif;
+  padding-bottom: 80px; /* espaço para navbar mobile */
+  background-color: var(--color-gray-light);
+  min-height: 100vh;
+}
+
+.content-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Títulos de seção */
+.content-section-titulo {
+  color: var(--color-primary-hover);
+  font-size: 1.2rem;
+  border-bottom: 2px solid var(--color-gray-border);
+  padding-bottom: 8px;
+  margin: 40px 0 24px 0;
+}
+
+/* ===== GRID MODERNO ===== */
+.content-grid-moderno {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding-bottom: 40px;
+}
+
+@media (max-width: 992px) {
+  .content-grid-moderno {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .content-grid-moderno {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Vazio */
+.content-list-vazio {
+  text-align: center;
+  padding: 80px 16px;
+  color: var(--color-gray-medium);
+  font-size: 1.2rem;
+}

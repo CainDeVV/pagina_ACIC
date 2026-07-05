@@ -17,7 +17,7 @@ function GaleriaPresidentes() {
         // Promise.all executa as requisições em paralelo.
         const [dadosPresidentes, dadosIntro] = await Promise.all([
           institucionalService.buscarPresidentes().catch(() => []),
-          institucionalService.buscarPagina('galeria-presidentes').catch(() => null)
+          institucionalService.buscarPagina('presidentes').catch(() => null)
         ]);
         
         // Garante a ordenação cronológica decrescente (do ano mais recente para o mais antigo)
@@ -53,15 +53,11 @@ function GaleriaPresidentes() {
       {/* Cabeçalho Editável: Se houver dados no banco, usa o BlockRenderer. Se não, usa o texto padrão. */}
       {paginaIntro ? (
         <div style={{ marginBottom: '40px' }}>
-          <h1 className="institutional-title">{paginaIntro.title}</h1>
           <BlockRenderer blocks={paginaIntro.content?.blocks || []} />
         </div>
       ) : (
         <div style={{ marginBottom: '40px' }}>
-          <h1 className="institutional-title">Nossa História em Lideranças</h1>
-          <p className="institucional-intro">
-            Conteúdo introdutório ainda não publicado no painel administrativo.
-          </p>
+          <p style={{ padding: '20px' }}>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
         </div>
       )}
 

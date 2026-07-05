@@ -14,12 +14,12 @@ export class CreateSlideDto {
   subtitle?: string;
 
   @ApiProperty({ example: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab' })
-  @IsUrl()
+  @IsUrl({ require_tld: false })
   @IsNotEmpty()
   imageUrl!: string;
 
   @ApiProperty({ example: 'https://acic.com.br/contatos', required: false })
-  @IsUrl()
+  @IsUrl({ require_tld: false })
   @IsOptional()
   linkUrl?: string;
 

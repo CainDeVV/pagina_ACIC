@@ -5,9 +5,9 @@ import { Helmet } from 'react-helmet-async';
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import NewsCard from '../../../components/NewsCard/NewsCard';
-import EventRow from '../../../components/EventRow/EventRow';
+import ContentCard from '../../../components/ContentCard/ContentCard';
 import DirectorCard from '../../../components/DirectorCard/DirectorCard';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 /* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
 import { servicosService } from '../../../services/servicosService';
@@ -48,8 +48,8 @@ export default function Home() {
           noticiasService.buscarTodos().catch(() => [])
         ]);
 
-        setSlides(dadosSlides || []);
-        setServicos(dadosServicos || []);
+        setSlides((dadosSlides || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED));
+        setServicos((dadosServicos || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED));
         setEventos(dadosEventos || []);
         setNoticias(dadosNoticias || []);
 
@@ -102,8 +102,21 @@ export default function Home() {
     };
   });
 
-  const homeEventos = eventos.slice(0, 3);
-  const homeNoticias = noticias.slice(0, 3);
+  // Lógica de Eventos na Home: Mostrar próximos, se não tiver mostrar os últimos realizados
+  const agora = new Date();
+  const eventosPublicos = eventos.filter(e => e.status !== CONTENT_STATUS.DRAFT);
+  
+  let proximosHome = eventosPublicos.filter(e => new Date(e.startsAt) > agora && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED);
+  if (proximosHome.length > 0) {
+    proximosHome.sort((a,b) => new Date(a.startsAt) - new Date(b.startsAt));
+  } else {
+    proximosHome = eventosPublicos.sort((a,b) => new Date(b.startsAt) - new Date(a.startsAt));
+  }
+  const homeEventos = proximosHome.slice(0, 3);
+
+  // Lógica de Notícias na Home
+  const noticiasPublicas = noticias.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
+  const homeNoticias = noticiasPublicas.slice(0, 3);
 
   return (
     <>
@@ -122,7 +135,7 @@ export default function Home() {
           indicatorStyle="gold"
         />
       ) : (
-        <div style={{ height: '520px', background: 'var(--home-blue-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
+        <div style={{ height: '520px', background: 'var(--home-blue-dark)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-white)' }}>
           <h1>Bem-vindo à ACIC Crateús</h1>
         </div>
       )}
@@ -201,14 +214,13 @@ export default function Home() {
           {homeEventos.length > 0 ? (
             <div className="lista-eventos">
               {homeEventos.map(e => (
-                <EventRow key={e.id} event={e} />
+                <ContentCard type="event" variant="compact" key={e.id} data={e} />
               ))}
             </div>
           ) : (
             <p style={{ color: 'var(--home-text-muted)' }}>Nenhum evento programado.</p>
           )}
           
-          <br />
           <Link to="/eventos" className="btn-link">Ver todos os eventos →</Link>
         </div>
 
@@ -219,14 +231,13 @@ export default function Home() {
           {homeNoticias.length > 0 ? (
             <div className="lista-noticias">
               {homeNoticias.map(n => (
-                <NewsCard key={n.id} news={n} />
+                <ContentCard type="news" variant="compact" key={n.id} data={n} />
               ))}
             </div>
           ) : (
             <p style={{ color: 'var(--home-text-muted)' }}>Nenhuma notícia publicada recentemente.</p>
           )}
           
-          <br />
           <Link to="/noticias" className="btn-link">Ver todas as notícias →</Link>
         </div>
 

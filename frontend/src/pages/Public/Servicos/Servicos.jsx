@@ -1,19 +1,38 @@
 import { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
-import HeroSlider from '../../../components/HeroSlider/HeroSlider';
-import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import { servicosService } from '../../../services/servicosService';
-import './Servicos.css';
+import { CONTENT_STATUS } from '../../../constants/status';
+import ContentListLayout from '../../../components/Layout/ContentListLayout';
+import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 
 function Servicos() {
-  const [servicos, setServicos] = useState([]);
+  const [sections, setSections] = useState([]);
+  const [sliderData, setSliderData] = useState([]);
   const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     async function carregarServicos() {
       try {
         const dados = await servicosService.buscarTodos();
-        setServicos(dados || []);
+        const servicosPublicos = (dados || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED);
+
+        // Slider prioriza destaques
+        const servicosDestaque = servicosPublicos.filter(s => s.destaque);
+        const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicosPublicos;
+
+        setSliderData(servicosParaSlider.map((servico) => ({
+          id: servico.id,
+          image: servico.imageUrl || 'https://placehold.co/1200x400?text=Banner',
+          badge: "Serviços",
+          badgeStyle: "white",
+          title: servico.title,
+          description: servico.summary,
+          link: `/servicos/${servico.slug}` 
+        })));
+
+        setSections([
+          { title: "Nossos Serviços", items: servicosPublicos, type: "service" }
+        ]);
+
       } catch (error) {
         console.error("Erro ao carregar serviços:", error);
       } finally {
@@ -23,51 +42,15 @@ function Servicos() {
     carregarServicos();
   }, []);
 
-  if (carregando) {
-    return (
-      <div className="servicos-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
-        <p>Carregando serviços...</p>
-      </div>
-    );
-  }
-
-  // Filtra os serviços para o Slider e prepara o objeto
-  const servicosDestaque = servicos.filter(s => s.destaque);
-  const servicosParaSlider = servicosDestaque.length > 0 ? servicosDestaque : servicos;
-
-  const sliderData = servicosParaSlider.map((servico) => ({
-    id: servico.id,
-    image: servico.imageUrl || 'https://placehold.co/1200x400?text=Banner',
-    badge: "Serviços",
-    badgeStyle: "white",
-    title: servico.title,
-    description: servico.summary,
-    link: `/servicos/${servico.slug}` 
-  }));
-
   return (
-    <>
-    <Helmet>
-      <title>Serviços | ACIC</title>
-    </Helmet>
-    <div className="servicos-page">
-      {sliderData.length > 0 && <HeroSlider slides={sliderData} autoPlayTime={5000} />}
-
-      <div className="servicos-container">
-        <div className="servicos-grid">
-          {servicos.length > 0 ? (
-            servicos.map(servico => (
-              <ServiceCard key={servico.id} service={servico} />
-            ))
-          ) : (
-            <p style={{ gridColumn: '1 / -1', textAlign: 'center', color: '#666' }}>
-              Nenhum serviço cadastrado no banco de dados no momento.
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-    </>
+    <ContentListLayout 
+      pageTitle="Serviços"
+      loading={carregando}
+      sliderData={sliderData}
+      sections={sections}
+      emptyMessage="Nenhum serviço disponível no momento."
+      renderItem={(item) => <ServiceCard key={item.id} service={item} />}
+    />
   );
 }
 

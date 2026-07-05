@@ -1,8 +1,11 @@
 import api from '../../../services/api';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './Login.css';
 
 function Login() {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [erro, setErro] = useState('');
@@ -28,14 +31,18 @@ function Login() {
                 password,
             });
 
-            localStorage.setItem(
-                'acic_access_token',
-                response.data.access_token
-            );
-            window.location.href = '/admin';
+            const { access_token, user } = response.data;
 
-            console.log('Login realizado com sucesso!');
-            console.log(response.data);
+            localStorage.setItem('acic_access_token', access_token);
+            localStorage.setItem('acic_user', JSON.stringify(user));
+
+            if (user.role === 'ADMIN' || user.role === 'EDITOR') {
+                navigate('/admin');
+            } else if (user.role === 'ASSOCIADO') {
+                navigate('/associado');
+            } else {
+                navigate('/');
+            }
 
         } catch (error) {
             setErro('Email ou senha inválidos.');
@@ -45,6 +52,9 @@ function Login() {
 
     return (
         <div className="login-container">
+            <Helmet>
+                <title>Login Administrativo | ACIC</title>
+            </Helmet>
             <div className="login-card">
                 <h1>Login Administrativo</h1>
 

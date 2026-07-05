@@ -1,140 +1,203 @@
-/**
- * Componente BlockRenderer
- * * Este componente recebe um array de objetos (blocks) e converte cada objeto
- * na sua respectiva tag HTML. Ele funciona como um "tradutor" entre o formato
- * JSON salvo no banco de dados/mock e o visual final na tela.
- */
-function BlockRenderer({ blocks }) {
-  // Trava de segurança: se a página não tiver blocos ou a variável vier vazia,
-  // não renderiza nada (evita que o React quebre mostrando erro de "map of undefined").
-  if (!blocks || blocks.length === 0) return null;
+import React, { useState } from 'react';
+import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { parseCaption } from '../../utils/captionUtils';
+import './BlockRenderer.css';
+
+const GalleryViewer = ({ images }) => {
+  const [selectedIndex, setSelectedIndex] = useState(null);
+
+  if (!images || images.length === 0) return null;
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    setSelectedIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
 
   return (
-    // O Fragmento vazio <> </> é usado para retornar múltiplos elementos 
-    // sem precisar criar uma <div> desnecessária em volta de tudo.
     <>
-      {blocks.map((block, index) => {
-        
-        // O switch analisa a propriedade 'type' de cada bloco para decidir o que desenhar
-        switch (block.type) {
+      <div className="institutional-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginTop: '24px' }}>
+        {images.map((img, i) => (
+          <figure key={i} style={{ margin: 0, cursor: 'pointer', position: 'relative', overflow: 'hidden', borderRadius: '8px' }} onClick={() => setSelectedIndex(i)} className="gallery-thumbnail">
+            <img 
+              src={img.url} 
+              alt={img.alt || 'Imagem da galeria'} 
+              style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+            />
+            <div className="gallery-overlay">
+              <ZoomIn color="white" size={32} />
+            </div>
+          </figure>
+        ))}
+      </div>
+
+      {selectedIndex !== null && (
+        <div 
+          style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.92)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          onClick={() => setSelectedIndex(null)}
+        >
+          <button style={{ position: 'absolute', top: '24px', right: '24px', background: 'none', border: 'none', color: 'white', cursor: 'pointer', zIndex: 10000 }} onClick={() => setSelectedIndex(null)}>
+            <X size={36} />
+          </button>
           
-          case 'heading':
-            // Cria a tag de título dinamicamente. Se o mock não informar o 'level',
-            // ele assume que é um <h2> por padrão. Ex: Tag = 'h1', 'h2', etc.
-            const Tag = `h${block.level || 2}`;
+          {images.length > 1 && (
+            <button className="gallery-lightbox-btn" style={{ left: '24px' }} onClick={prevImage}>
+              <ChevronLeft size={36} />
+            </button>
+          )}
+
+          <img 
+            src={images[selectedIndex].url} 
+            alt={images[selectedIndex].alt} 
+            style={{ maxWidth: '85vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '8px' }} 
+            onClick={(e) => e.stopPropagation()} 
+          />
+
+          {images.length > 1 && (
+            <button className="gallery-lightbox-btn" style={{ right: '24px' }} onClick={nextImage}>
+              <ChevronRight size={36} />
+            </button>
+          )}
+        </div>
+      )}
+    </>
+  );
+};
+
+function BlockRenderer({ blocks }) {
+  // Trava de segurança
+  if (!blocks || !Array.isArray(blocks) || blocks.length === 0) return null;
+
+  return (
+    <div className="rich-text-content">
+      {blocks.map((block, index) => {
+        // No Editor.js, todo o payload (texto, url, nível) fica dentro de 'data'
+        const { type, data } = block;
+
+        // Se o bloco não tiver a propriedade data por algum erro de salvamento, ignoramos
+        if (!data) return null;
+
+        switch (type) {
+          case 'header':
+            const Tag = `h${data.level || 2}`;
             return (
-              // A prop 'key' é obrigatória no React quando fazemos um map.
-              <Tag key={index} className={block.className} id={block.id}>
-                {block.content}
-              </Tag>
+              <Tag 
+                key={index} 
+                dangerouslySetInnerHTML={{ __html: data.text }} 
+              />
             );
 
           case 'paragraph':
             return (
               <p 
                 key={index} 
-                style={block.style} 
-                // O dangerouslySetInnerHTML diz ao React: "Confie em mim, tem HTML dentro desse texto".
-                // Isso é necessário para que tags como <strong> ou <a> enviadas no texto 
-                // do mock funcionem de verdade, em vez de serem impressas como texto puro na tela.
-                dangerouslySetInnerHTML={{ __html: block.content }} 
+                dangerouslySetInnerHTML={{ __html: data.text }} 
               />
             );
 
-          case 'section':
+          case 'list':
+            // O Editor.js suporta listas ordenadas (ol) e não ordenadas (ul)
+            const ListTag = data.style === 'ordered' ? 'ol' : 'ul';
+            
+            // Função recursiva para lidar com o formato novo do Editor.js (que envia objetos aninhados)
+            const renderListItems = (items) => {
+              if (!items || !Array.isArray(items)) return null;
+              
+              return items.map((item, i) => {
+                // Formato antigo (apenas string)
+                if (typeof item === 'string') {
+                  return <li key={i} dangerouslySetInnerHTML={{ __html: item }} />;
+                }
+                // Formato novo (objeto com content e items aninhados)
+                return (
+                  <li key={i}>
+                    <span dangerouslySetInnerHTML={{ __html: item.content }} />
+                    {item.items && item.items.length > 0 && (
+                      <ListTag style={{ marginTop: '8px' }}>
+                        {renderListItems(item.items)}
+                      </ListTag>
+                    )}
+                  </li>
+                );
+              });
+            };
+
             return (
-              <section key={index}>
-                {/* RECURSIVIDADE: Se a seção tiver blocos dentro dela, 
-                    o componente chama a si mesmo para desenhar os "filhos". */}
-                <BlockRenderer blocks={block.blocks} />
-              </section>
+              <ListTag key={index}>
+                {renderListItems(data.items)}
+              </ListTag>
             );
 
           case 'image':
-            return (
-              // Renderiza uma imagem simples isolada
-              <img 
-                key={index} 
-                src={block.url} 
-                alt={block.alt} 
-                className={block.className} 
-              />
-            );
+            // Padrão do plugin oficial @editorjs/image
+            const { cleanAlt, showCaption, cleanCaption } = parseCaption(data.caption, 'Imagem do conteúdo');
 
-          case 'figure':
+            
             return (
-              // Renderiza uma imagem com uma estrutura semântica avançada (<figure>),
-              // permitindo acoplar uma legenda (<figcaption>) logo abaixo dela.
               <figure key={index} className="institutional-figure">
-                <img src={block.url} alt={block.alt} />
-                {/* Se existir uma legenda no mock, renderiza o figcaption. Se não, ignora. */}
-                {block.caption && (
-                  <figcaption className="institutional-caption">
-                    {block.caption}
-                  </figcaption>
+                <img 
+                  src={data.file?.url} 
+                  alt={cleanAlt} 
+                  style={{ maxWidth: '100%', borderRadius: '8px' }} 
+                />
+                {(showCaption && cleanCaption) && (
+                  <figcaption 
+                    className="institutional-caption" 
+                    dangerouslySetInnerHTML={{ __html: cleanCaption }} 
+                  />
                 )}
               </figure>
             );
 
-          case 'gallery':
-            return (
-              // Renderiza uma "caixa" (div) contendo várias imagens dentro.
-              <div key={index} className={block.className}>
-                {/* Faz um sub-map para percorrer o array de imagens exclusivo desta galeria */}
-                {block.images.map((img, i) => (
-                  <img key={i} src={img.url} alt={img.alt} />
-                ))}
-              </div>
-            );
-
+          /* * BLOCOS CUSTOMIZADOS
+           * Mantidos aqui caso você crie plugins customizados para o Editor.js
+           * no futuro. Eles também seguirão a regra de ler de "block.data".
+           */
           case 'pdfLink':
             return (
-              // Cria um link especial configurado para abrir documentos (como PDFs)
-              <a 
-                key={index} 
-                href={block.url} 
-                target="_blank" // Abre em uma nova aba para o usuário não sair do seu site
-                rel="noopener noreferrer" // Trava de segurança essencial quando usamos target="_blank"
-                className={block.className}
-              >
-                {block.text}
+              <a key={index} href={data.url} target="_blank" rel="noopener noreferrer" className={data.className || 'institutional-pdf-link'}>
+                {data.text}
               </a>
             );
 
           case 'pdfEmbed':
-            // Renderiza um visualizador de PDF (iframe) diretamente na página
             return (
-              <iframe
-                key={index}
-                src={block.url}
-                width="100%"
-                height="800px" // Altura generosa para leitura do documento
-                style={{ border: '1px solid #ddd', borderRadius: '8px', marginTop: '24px' }}
-                title="Visualizador de PDF do Estatuto"
+              <iframe 
+                key={index} 
+                src={data.url} 
+                width="100%" 
+                height="800px" 
+                style={{ border: '1px solid var(--color-gray-border)', borderRadius: '8px', marginTop: '24px' }} 
+                title="Visualizador de PDF" 
               />
             );
-          
+
           case 'imageTextHighlight':
             return (
               <div key={index} className="image-text-highlight">
                 <div className="ith-image-container">
-                  <img src={block.imageUrl} alt={block.title} />
+                  <img src={data.imageUrl} alt={data.title} />
                 </div>
                 <div className="ith-text-container">
-                  <h3>{block.title}</h3>
-                  <p>{block.text}</p>
+                  <h3>{data.title}</h3>
+                  <p dangerouslySetInnerHTML={{ __html: data.text }} />
                 </div>
               </div>
             );
 
+          case 'gallery':
+            return <GalleryViewer key={index} images={data.images} />;
+
           default:
-            // Se alguém tentar enviar um tipo de bloco que não existe (ex: type: 'video'),
-            // o componente não quebra. Ele apenas avisa no console do navegador e pula o bloco.
-            console.warn(`Unknown block type: ${block.type}`);
+            console.warn(`Tipo de bloco desconhecido ignorado: ${type}`);
             return null;
         }
       })}
-    </>
+    </div>
   );
 }
 

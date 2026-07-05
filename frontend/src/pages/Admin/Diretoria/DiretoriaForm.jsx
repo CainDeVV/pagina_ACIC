@@ -1,0 +1,160 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { institucionalService } from '../../../services/institucionalService';
+import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import ImageUploader from '../../../components/Admin/ImageUploader';
+import { Helmet } from 'react-helmet-async';
+
+function DiretoriaForm() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const isEditing = !!id;
+
+  const [formData, setFormData] = useState({
+    name: '',
+    role: '',
+    category: '',
+    photoUrl: '',
+    bio: '',
+    sortOrder: ''
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(isEditing);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (isEditing) {
+      const fetchDiretor = async () => {
+        try {
+          const data = await institucionalService.buscarDiretorPorId(id);
+          setFormData({
+            name: data.name || '',
+            role: data.role || '',
+            category: data.category || '',
+            photoUrl: data.photoUrl || '',
+            bio: data.bio || '',
+            sortOrder: data.sortOrder ?? ''
+          });
+        } catch (err) {
+          console.error(err);
+          setError('Erro ao carregar dados do diretor.');
+        } finally {
+          setFetching(false);
+        }
+      };
+      fetchDiretor();
+    }
+  }, [id, isEditing]);
+
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'number' ? (value === '' ? '' : Number(value)) : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const dataToSubmit = {
+      ...formData,
+      photoUrl: formData.photoUrl === '' ? null : formData.photoUrl,
+      bio: formData.bio === '' ? null : formData.bio,
+      sortOrder: formData.sortOrder === '' ? undefined : Number(formData.sortOrder)
+    };
+
+    try {
+      if (isEditing) {
+        await institucionalService.atualizarDiretoria(id, dataToSubmit);
+      } else {
+        await institucionalService.criarDiretoria(dataToSubmit);
+      }
+      navigate('/admin/diretoria');
+    } catch (err) {
+      console.error(err);
+      setError('Erro ao salvar diretor. Verifique os dados e tente novamente.');
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AdminFormLayout
+      title="Membro da Diretoria"
+      backPath="/admin/diretoria"
+      isEditing={isEditing}
+      fetching={fetching}
+      loading={loading}
+      error={error}
+      onSubmit={handleSubmit}
+    >
+      <div className="form-group">
+        <label>Nome *</label>
+        <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+      </div>
+
+      <div className="form-group">
+        <label>Empresa Representada (Role) *</label>
+        <input type="text" name="role" value={formData.role} onChange={handleChange} placeholder="Ex: Gráfica Crateús" required />
+      </div>
+
+      <div className="form-group">
+        <label>Cargo na ACIC (Categoria) *</label>
+        <input 
+          type="text" 
+          name="category" 
+          value={formData.category} 
+          onChange={handleChange} 
+          list="category-suggestions"
+          placeholder="Selecione ou digite o cargo..."
+          required 
+        />
+        <datalist id="category-suggestions">
+          <option value="PRESIDENTE" />
+          <option value="I VICE-PRESIDENTE" />
+          <option value="II VICE-PRESIDENTE" />
+          <option value="I SECRETÁRIO" />
+          <option value="II SECRETÁRIO" />
+          <option value="I TESOUREIRO" />
+          <option value="II TESOUREIRO" />
+          <option value="DIRETOR SOCIAL" />
+          <option value="RELAÇÕES PÚBLICAS" />
+          <option value="CONSELHO FISCAL" />
+          <option value="CONSELHO CONSULTIVO" />
+        </datalist>
+      </div>
+
+      <div className="form-group">
+        <label>Foto do Membro da Diretoria</label>
+        <ImageUploader 
+          folder="diretoria" 
+          currentUrl={formData.photoUrl} 
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, photoUrl: url }))} 
+        />
+        <input 
+          type="text" 
+          name="photoUrl" 
+          value={formData.photoUrl} 
+          onChange={handleChange} 
+          placeholder="Ou cole uma URL direta da imagem aqui..."
+          style={{ marginTop: '10px' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Biografia (bio)</label>
+        <textarea name="bio" value={formData.bio} onChange={handleChange} rows="4" />
+      </div>
+
+      <div className="form-group">
+        <label>Ordem de Exibição (sortOrder)</label>
+        <input type="number" name="sortOrder" value={formData.sortOrder} onChange={handleChange} />
+      </div>
+    </AdminFormLayout>
+  );
+}
+
+export default DiretoriaForm;

@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('acic_access_token');
@@ -7,7 +7,7 @@ function PrivateRoute({ children }) {
     return <Navigate to="/login" />;
   }
 
-  return children;
+  return children ? children : <Outlet />;
 }
 
 export default PrivateRoute;

@@ -1,5 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
+import { INSTITUCIONAL_MENU } from '../../constants/menu';
 import './SaibaMaisLayout.css';
 
 // O 'children' é o conteúdo específico de cada página que vai ser renderizado aqui dentro
@@ -8,6 +10,7 @@ function SaibaMaisLayout({ titulo, children }) {
 
   return (
     <div className="institucional-page">
+      <Helmet><title>{`${titulo} | ACIC`}</title></Helmet>
       
       {/* Breadcrumb */}
       <Breadcrumb 
@@ -24,13 +27,16 @@ function SaibaMaisLayout({ titulo, children }) {
           <h3>Saiba Mais <span>&#709;</span></h3>
           <ul>
             {/* O link fica 'ativo' se a URL bater com o destino do Link */}
-            <li><Link to="/quem-somos" className={location.pathname === "/quem-somos" ? "ativo" : ""}>Quem Somos</Link></li>
-            <li><Link to="/diretoria" className={location.pathname === "/diretoria" ? "ativo" : ""}>Diretoria</Link></li>
-            <li><Link to="/estatuto" className={location.pathname === "/estatuto" ? "ativo" : ""}>Estatuto</Link></li>
-            <li><Link to="/estrutura-organizacional" className={location.pathname === "/estrutura-organizacional" ? "ativo" : ""}>Estrutura Organizacional</Link></li>
-            <li><Link to="/cmec" className={location.pathname === "/cmec" ? "ativo" : ""}>CMEC</Link></li>
-            <li><Link to="/contatos" className={location.pathname === "/contatos" ? "ativo" : ""}>Contatos</Link></li>
-            <li><Link to="/galeria-presidentes" className={location.pathname === "/galeria-presidentes" ? "ativo" : ""}>Galeria de Presidentes</Link></li>
+            {INSTITUCIONAL_MENU.map((item, idx) => (
+              <li key={idx}>
+                <Link 
+                  to={item.path} 
+                  className={location.pathname === item.path ? "ativo" : ""}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </aside>
 
