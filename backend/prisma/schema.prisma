@@ -78,6 +78,8 @@ model Noticia {
   summary     String?
   content     Json
   coverImage  String?
+  coverImageCaption String?
+  showCoverImage    Boolean @default(true)
   status      PublishStatus @default(DRAFT)
   publishedAt DateTime?
   authorId    String?
@@ -96,6 +98,8 @@ model Evento {
   endsAt       DateTime?
   capacity     Int?
   coverImage   String?
+  coverImageCaption String?
+  showCoverImage    Boolean @default(true)
   destaque     Boolean                  @default(false)
   status       EventStatus        @default(DRAFT)
   authorId     String?

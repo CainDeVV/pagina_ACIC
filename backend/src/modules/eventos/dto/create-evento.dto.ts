@@ -38,6 +38,16 @@ export class CreateEventoDto {
   @IsOptional()
   coverImage?: string;
 
+  @ApiProperty({ example: 'Foto do Evento Anterior', required: false })
+  @IsString()
+  @IsOptional()
+  coverImageCaption?: string;
+
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  showCoverImage?: boolean;
+
   @ApiProperty({ example: true, required: false })
   @IsBoolean()
   @IsOptional()

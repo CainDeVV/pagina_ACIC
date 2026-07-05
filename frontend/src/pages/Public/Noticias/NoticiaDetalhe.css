@@ -70,6 +70,15 @@
   display: block;
 }
 
+.noticia-detalhe-cover-caption {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+  font-style: italic;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
 .noticia-detalhe-conteudo-limpo {
   width: 100%;
   margin: 0 auto;

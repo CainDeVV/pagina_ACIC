@@ -74,6 +74,21 @@ function EventoDetalhe() {
     return new Date(evento.startsAt) > new Date() ? 'Em Breve' : 'Realizado';
   };
 
+  // Lógica de legenda e texto alternativo (Alt Text)
+  let finalCoverAlt = evento.title;
+  let showCoverCaption = false;
+  let cleanCoverCaption = evento.coverImageCaption ? evento.coverImageCaption.trim() : '';
+
+  if (cleanCoverCaption) {
+    if (cleanCoverCaption.startsWith('[') && cleanCoverCaption.endsWith(']')) {
+      finalCoverAlt = cleanCoverCaption.slice(1, -1);
+      showCoverCaption = false;
+    } else {
+      finalCoverAlt = cleanCoverCaption;
+      showCoverCaption = true;
+    }
+  }
+
   return (
     <>
     <Helmet><title>{`${evento.title} | ACIC`}</title></Helmet>
@@ -94,9 +109,19 @@ function EventoDetalhe() {
         </div>
 
         {/* Imagem de Capa Arredondada */}
-        <div className="evento-detalhe-cover">
-          <img src={evento.coverImage || 'https://placehold.co/1200x500?text=Capa+do+Evento'} alt={evento.title} />
-        </div>
+        {evento.showCoverImage !== false && (
+          <div className="evento-detalhe-cover">
+            <img 
+              src={evento.coverImage || 'https://placehold.co/1200x500?text=Capa+do+Evento'} 
+              alt={finalCoverAlt} 
+            />
+            {showCoverCaption && (
+              <div className="noticia-detalhe-cover-caption">
+                {cleanCoverCaption}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Conteúdo Rico */}
         <div className="evento-detalhe-conteudo-limpo">

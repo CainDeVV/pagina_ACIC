@@ -64,6 +64,21 @@ function NoticiaDetalhe() {
     ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR', { dateStyle: 'long' })
     : new Date(noticia.createdAt).toLocaleDateString('pt-BR', { dateStyle: 'long' });
 
+  // Lógica de legenda e texto alternativo (Alt Text)
+  let finalCoverAlt = noticia.title;
+  let showCoverCaption = false;
+  let cleanCoverCaption = noticia.coverImageCaption ? noticia.coverImageCaption.trim() : '';
+
+  if (cleanCoverCaption) {
+    if (cleanCoverCaption.startsWith('[') && cleanCoverCaption.endsWith(']')) {
+      finalCoverAlt = cleanCoverCaption.slice(1, -1);
+      showCoverCaption = false;
+    } else {
+      finalCoverAlt = cleanCoverCaption;
+      showCoverCaption = true;
+    }
+  }
+
   return (
     <div className="noticia-detalhe-page">
       <Helmet>
@@ -86,12 +101,19 @@ function NoticiaDetalhe() {
         </div>
 
         {/* Imagem de Capa Arredondada */}
-        <div className="noticia-detalhe-cover-novo">
-          <img 
-            src={noticia.coverImage || 'https://placehold.co/1200x500?text=Capa+da+Noticia'} 
-            alt={noticia.title} 
-          />
-        </div>
+        {noticia.showCoverImage !== false && (
+          <div className="noticia-detalhe-cover-novo">
+            <img 
+              src={noticia.coverImage || 'https://placehold.co/1200x500?text=Capa+da+Noticia'} 
+              alt={finalCoverAlt} 
+            />
+            {showCoverCaption && (
+              <div className="noticia-detalhe-cover-caption">
+                {cleanCoverCaption}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Área de Leitura */}
         <div className="noticia-detalhe-conteudo-limpo">

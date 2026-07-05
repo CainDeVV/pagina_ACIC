@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { 
-  Monitor, 
-  Users, 
-  Briefcase, 
-  CalendarDays, 
-  Newspaper, 
-  FileText, 
+import {
+  Monitor,
+  Users,
+  Briefcase,
+  CalendarDays,
+  Newspaper,
+  FileText,
   Settings,
   LogOut,
   Image as ImageIcon
@@ -39,12 +39,12 @@ function Dashboard() {
 
   const adminModules = [
     { name: 'Slides', path: '/admin/slides', icon: <ImageIcon size={32} strokeWidth={1.5} /> },
+    { name: 'Páginas Institucionais', path: '/admin/quemsomos', icon: <FileText size={32} strokeWidth={1.5} /> },
     { name: 'Presidentes', path: '/admin/presidentes', icon: <Users size={32} strokeWidth={1.5} /> },
     { name: 'Diretoria', path: '/admin/diretoria', icon: <Briefcase size={32} strokeWidth={1.5} /> },
     { name: 'Serviços', path: '/admin/servicos', icon: <Settings size={32} strokeWidth={1.5} /> },
     { name: 'Eventos', path: '/admin/eventos', icon: <CalendarDays size={32} strokeWidth={1.5} /> },
     { name: 'Notícias', path: '/admin/noticias', icon: <Newspaper size={32} strokeWidth={1.5} /> },
-    { name: 'Páginas Institucionais', path: '/admin/quemsomos', icon: <FileText size={32} strokeWidth={1.5} /> },
   ];
 
   return (

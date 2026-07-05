@@ -20,6 +20,8 @@ function EventoForm() {
     endsAt: '',
     capacity: '',
     coverImage: '',
+    coverImageCaption: '',
+    showCoverImage: true,
     destaque: false,
     status: 'DRAFT'
   });
@@ -50,6 +52,8 @@ function EventoForm() {
             endsAt: toDatetimeLocal(data.endsAt),
             capacity: data.capacity || '',
             coverImage: data.coverImage || '',
+            coverImageCaption: data.coverImageCaption || '',
+            showCoverImage: data.showCoverImage !== false,
             destaque: !!data.destaque,
             status: data.status || 'DRAFT'
           });
@@ -129,6 +133,8 @@ function EventoForm() {
       endsAt: parsedEndsAt,
       capacity: formData.capacity === '' ? null : Number(formData.capacity),
       coverImage: formData.coverImage === '' ? null : formData.coverImage,
+      coverImageCaption: formData.coverImageCaption === '' ? null : formData.coverImageCaption,
+      showCoverImage: formData.showCoverImage,
       location: formData.location === '' ? null : formData.location,
     };
 
@@ -236,6 +242,28 @@ function EventoForm() {
           placeholder="Ou cole uma URL direta da imagem aqui..."
           style={{ marginTop: '10px' }}
         />
+      </div>
+
+      <div className="form-group">
+        <label>Legenda da Imagem de Capa</label>
+        <input 
+          type="text" 
+          name="coverImageCaption" 
+          value={formData.coverImageCaption} 
+          onChange={handleChange} 
+          placeholder="Ex: Foto: Autor / Agência" 
+        />
+      </div>
+
+      <div className="form-group form-group-checkbox">
+        <input 
+          type="checkbox" 
+          name="showCoverImage" 
+          id="showCoverImage_evento" 
+          checked={formData.showCoverImage} 
+          onChange={handleChange} 
+        />
+        <label htmlFor="showCoverImage_evento">Exibir a imagem de capa dentro do evento?</label>
       </div>
 
       <div className="form-group">

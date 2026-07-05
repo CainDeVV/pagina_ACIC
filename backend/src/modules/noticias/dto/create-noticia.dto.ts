@@ -42,6 +42,23 @@ export class CreateNoticiaDto {
   coverImage?: string;
 
   @ApiProperty({
+    example: 'Foto: Marcos Oliveira',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  coverImageCaption?: string;
+
+  @ApiProperty({
+    example: true,
+    description: 'Define se a imagem de capa será exibida na página de detalhes',
+    required: false,
+  })
+  @IsBoolean()
+  @IsOptional()
+  showCoverImage?: boolean;
+
+  @ApiProperty({
     example: true,
     description: 'Define se a notícia será exibida em destaque na Home',
     required: false,

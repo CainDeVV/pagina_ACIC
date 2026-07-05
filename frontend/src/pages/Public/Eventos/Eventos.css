@@ -108,6 +108,15 @@
   display: block;
 }
 
+.noticia-detalhe-cover-caption {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+  font-style: italic;
+  text-align: center;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
 .evento-detalhe-conteudo-limpo {
   font-size: 1.1rem;
   color: var(--color-gray-dark);

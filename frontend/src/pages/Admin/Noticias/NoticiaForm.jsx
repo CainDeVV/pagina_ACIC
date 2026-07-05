@@ -17,6 +17,8 @@ function NoticiaForm() {
     summary: '',
     content: null,
     coverImage: '',
+    coverImageCaption: '',
+    showCoverImage: true,
     destaque: false, // <-- ADICIONADO AQUI
     status: 'DRAFT',
     publishedAt: ''
@@ -44,6 +46,8 @@ function NoticiaForm() {
             summary: data.summary || '',
             content: data.content || null,
             coverImage: data.coverImage || '',
+            coverImageCaption: data.coverImageCaption || '',
+            showCoverImage: data.showCoverImage !== false,
             destaque: !!data.destaque, // <-- ADICIONADO AQUI
             status: data.status || 'DRAFT',
             publishedAt: toDatetimeLocal(data.publishedAt)
@@ -107,6 +111,8 @@ function NoticiaForm() {
       content: finalContent,
       summary: formData.summary === '' ? null : formData.summary,
       coverImage: formData.coverImage === '' ? null : formData.coverImage,
+      coverImageCaption: formData.coverImageCaption === '' ? null : formData.coverImageCaption,
+      showCoverImage: formData.showCoverImage,
       publishedAt: parsedPublishedAt
     };
 
@@ -170,6 +176,28 @@ function NoticiaForm() {
           placeholder="Ou cole uma URL direta da imagem aqui..."
           style={{ marginTop: '10px' }}
         />
+      </div>
+
+      <div className="form-group">
+        <label>Legenda da Imagem de Capa</label>
+        <input 
+          type="text" 
+          name="coverImageCaption" 
+          value={formData.coverImageCaption} 
+          onChange={handleChange} 
+          placeholder="Ex: Foto: Autor / Agência" 
+        />
+      </div>
+
+      <div className="form-group form-group-checkbox">
+        <input 
+          type="checkbox" 
+          name="showCoverImage" 
+          id="showCoverImage_noticia" 
+          checked={formData.showCoverImage} 
+          onChange={handleChange} 
+        />
+        <label htmlFor="showCoverImage_noticia">Exibir a imagem de capa dentro do artigo?</label>
       </div>
 
       <div className="form-group">
