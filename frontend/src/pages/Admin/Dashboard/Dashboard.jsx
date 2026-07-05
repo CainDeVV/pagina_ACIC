@@ -10,7 +10,8 @@ import {
   FileText,
   Settings,
   LogOut,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Award
 } from 'lucide-react';
 import '../../../components/Admin/AdminGlobal.css';
 import './Dashboard.css';
@@ -43,6 +44,7 @@ function Dashboard() {
     { name: 'Presidentes', path: '/admin/presidentes', icon: <Users size={32} strokeWidth={1.5} /> },
     { name: 'Diretoria', path: '/admin/diretoria', icon: <Briefcase size={32} strokeWidth={1.5} /> },
     { name: 'Serviços', path: '/admin/servicos', icon: <Settings size={32} strokeWidth={1.5} /> },
+    { name: 'Patrocinadores', path: '/admin/patrocinadores', icon: <Award size={32} strokeWidth={1.5} /> },
     { name: 'Eventos', path: '/admin/eventos', icon: <CalendarDays size={32} strokeWidth={1.5} /> },
     { name: 'Notícias', path: '/admin/noticias', icon: <Newspaper size={32} strokeWidth={1.5} /> },
   ];

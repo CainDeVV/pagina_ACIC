@@ -7,6 +7,7 @@ import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import ContentCard from '../../../components/ContentCard/ContentCard';
 import DirectorCard from '../../../components/DirectorCard/DirectorCard';
+import Sponsors from '../../../components/Sponsors/Sponsors';
 import { CONTENT_STATUS } from '../../../constants/status';
 
 /* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
@@ -251,6 +252,9 @@ export default function Home() {
         </div>
         <Link to="/contatos" className="btn-cta">Quero me associar →</Link>
       </section>
+
+      {/* ── PATROCINADORES ── */}
+      <Sponsors />
 
     </main>
     </>
