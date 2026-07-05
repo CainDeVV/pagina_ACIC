@@ -32,8 +32,8 @@ Thumbs.db
 
 # Documentação e Mocks
 docs/
-Mock/
 CONTEXTO_GERAL.md
 auditoria-completa.md
-
 .agent.zip
+.context-frontend.md
+.context-backend.md

@@ -32,12 +32,12 @@ function QuemSomosList() {
     <AdminListLayout
       title="Páginas 'Quem Somos'"
       createButtonLabel="Nova Página"
-      createPath="/admin/quem-somos/nova"
+      createPath="/admin/quemsomos/nova"
       loading={loading}
       error={error}
       data={data}
       columns={columns}
-      onEdit={(row) => navigate(`/admin/quem-somos/${row.id}/editar`)}
+      onEdit={(row) => navigate(`/admin/quemsomos/${row.id}/editar`)}
       onDelete={handleDelete}
       onReorder={handleReorder}
     />

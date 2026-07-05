@@ -67,7 +67,7 @@ function App() {
             <Route index element={<Dashboard />} />
 
             <Route path="quemsomos" element={<QuemSomosList />} />
-            <Route path="quemsomos/novo" element={<QuemSomosForm />} />
+            <Route path="quemsomos/nova" element={<QuemSomosForm />} />
             <Route path="quemsomos/:id/editar" element={<QuemSomosForm />} />
 
             <Route path="slides" element={<SlidesList />} />
@@ -84,17 +84,17 @@ function App() {
 
             <Route path="servicos" element={<ServicosList />} />
             <Route path="servicos/novo" element={<ServicosForm />} />
-            <Route path="servicos/editar/:id" element={<ServicosForm />} />
+            <Route path="servicos/:id/editar" element={<ServicosForm />} />
             <Route path="patrocinadores" element={<PatrocinadoresList />} />
             <Route path="patrocinadores/novo" element={<PatrocinadorForm />} />
-            <Route path="patrocinadores/editar/:id" element={<PatrocinadorForm />} />
+            <Route path="patrocinadores/:id/editar" element={<PatrocinadorForm />} />
 
             <Route path="eventos" element={<EventosList />} />
             <Route path="eventos/novo" element={<EventoForm />} />
             <Route path="eventos/:id/editar" element={<EventoForm />} />
 
             <Route path="noticias" element={<NoticiasList />} />
-            <Route path="noticias/novo" element={<NoticiaForm />} />
+            <Route path="noticias/nova" element={<NoticiaForm />} />
             <Route path="noticias/:id/editar" element={<NoticiaForm />} />
           </Route>
 

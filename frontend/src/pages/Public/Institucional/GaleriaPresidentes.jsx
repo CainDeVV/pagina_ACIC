@@ -20,10 +20,9 @@ function GaleriaPresidentes() {
           institucionalService.buscarPagina('presidentes').catch(() => null)
         ]);
         
-        // Garante a ordenação cronológica decrescente (do ano mais recente para o mais antigo)
-        const ordenados = (dadosPresidentes || []).sort((a, b) => b.termStart - a.termStart);
-
-        setPresidentes(ordenados);
+        // Inverte a ordem do painel (sortOrder), para exibir o mais recente (Maior Ordem) primeiro.
+        const invertidos = (dadosPresidentes || []).reverse();
+        setPresidentes(invertidos);
         setPaginaIntro(dadosIntro);
       } catch (error) {
         console.error("Erro geral ao buscar dados da Galeria de Presidentes:", error);
