@@ -5,7 +5,7 @@ import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import { servicosService } from '../../../services/servicosService';
-import './Servicos.css';
+import './ServicoDetalhe.css';
 import '../../../components/Layout/SaibaMaisLayout.css';
 
 function ServicoDetalhe() {
