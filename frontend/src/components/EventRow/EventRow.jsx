@@ -12,14 +12,17 @@ const EventRow = ({ event }) => {
 
   return (
     <Link to={linkDestino} className="event-row">
-      <div className="event-date-box">
-        <span className="event-day">{day}</span>
-        <span className="event-month">{month}</span>
-      </div>
+      <img
+        className="event-img"
+        src={event.coverImage || 'https://placehold.co/96x72?text=Evento'}
+        alt={event.title}
+        loading="lazy"
+      />
       
       <div className="event-info">
         <h3>{event.title}</h3>
         <div className="event-meta">
+          <span>📅 {day} {month}</span>
           <span>🕐 {horaFormatada}</span>
           {event.location && <span>📍 {event.location}</span>}
         </div>

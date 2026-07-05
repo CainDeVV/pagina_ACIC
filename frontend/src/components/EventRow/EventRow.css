@@ -19,33 +19,12 @@
   border-bottom: none;
 }
 
-.event-date-box {
+.event-img {
+  width: 96px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
   flex-shrink: 0;
-  width: 52px;
-  height: 58px;
-  background: #EBF3FB; /* Azul clarinho baseado na paleta da Home */
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-top: 3px solid #1A5FA8; /* Azul corporativo da marca */
-}
-
-.event-day {
-  font-family: 'Sora', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: #1A5FA8;
-  line-height: 1;
-}
-
-.event-month {
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #1A5FA8;
-  letter-spacing: 0.5px;
 }
 
 .event-info {
