@@ -1,67 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { useState, useEffect } from 'react';
 import { noticiasService } from '../../../services/noticiasService';
 import { CONTENT_STATUS } from '../../../constants/status';
-import HeroSlider from '../../../components/HeroSlider/HeroSlider';
-import NewsCard from '../../../components/NewsCard/NewsCard';
-import './Noticias.css';
+import ContentListLayout from '../../../components/Layout/ContentListLayout';
 
 function Noticias() {
-  const [noticias, setNoticias] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [sections, setSections] = useState([]);
+  const [sliderData, setSliderData] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
-    const fetchNoticias = async () => {
+    async function carregarNoticias() {
       try {
-        const data = await noticiasService.buscarTodos();
-        const noticiasPublicas = data.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
-        setNoticias(noticiasPublicas);
-      } catch (err) {
-        console.error(err);
-        setError('Erro ao carregar notícias.');
+        const dados = await noticiasService.buscarTodos();
+        const noticiasPublicas = dados.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
+
+        // Separar Destaques
+        const destaques = noticiasPublicas.filter(n => n.destaque === true);
+        const ultimas = noticiasPublicas.filter(n => n.destaque !== true);
+
+        // Slider prioriza destaques
+        const noticiasParaSlider = destaques.length > 0 ? destaques : ultimas;
+
+        setSliderData(noticiasParaSlider.slice(0, 4).map((noticia) => ({
+          id: noticia.id,
+          image: noticia.coverImage || 'https://placehold.co/1200x400?text=Notícia+ACIC',
+          badge: "Notícias",
+          badgeStyle: "white",
+          title: noticia.title,
+          description: noticia.summary || 'Leia as principais informações do nosso portal',
+          link: `/noticias/${noticia.slug}`
+        })));
+
+        setSections([
+          { title: "Em Destaque", items: destaques, type: "news" },
+          { title: "Últimas Notícias", items: ultimas, type: "news" }
+        ]);
+
+      } catch (error) {
+        console.error("Erro ao carregar notícias:", error);
       } finally {
-        setLoading(false);
+        setCarregando(false);
       }
-    };
-    fetchNoticias();
+    }
+    carregarNoticias();
   }, []);
 
-  const sliderData = noticias.slice(0, 4).map((noticia) => ({
-    id: noticia.id,
-    image: noticia.coverImage || 'https://placehold.co/1200x400?text=Notícia+ACIC',
-    badge: "Notícias",
-    badgeStyle: "white",
-    title: noticia.title,
-    description: noticia.summary || 'Leia as principais informações do nosso portal',
-    link: `/noticias/${noticia.slug}`
-  }));
-
   return (
-    <div className="noticias-page">
-      <Helmet>
-        <title>Notícias | ACIC</title>
-        <meta name="description" content="Fique por dentro das últimas notícias da ACIC." />
-      </Helmet>
-
-      {sliderData.length > 0 && <HeroSlider slides={sliderData} autoPlayTime={5000} />}
-
-      <div className="noticias-content">
-        {loading ? (
-          <div className="noticias-vazio"><p>Carregando notícias...</p></div>
-        ) : error ? (
-          <div className="noticias-vazio"><p className="error">{error}</p></div>
-        ) : noticias.length === 0 ? (
-          <div className="noticias-vazio"><p>Nenhuma notícia publicada no momento.</p></div>
-        ) : (
-          <div className="noticias-grid">
-            {noticias.map(noticia => (
-              <NewsCard key={noticia.id} news={noticia} variant="premium" />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+    <ContentListLayout 
+      pageTitle="Notícias"
+      loading={carregando}
+      sliderData={sliderData}
+      sections={sections}
+      emptyMessage="Nenhuma notícia publicada no momento."
+    />
   );
 }
 

@@ -5,8 +5,7 @@ import { Helmet } from 'react-helmet-async';
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import NewsCard from '../../../components/NewsCard/NewsCard';
-import EventRow from '../../../components/EventRow/EventRow';
+import ContentCard from '../../../components/ContentCard/ContentCard';
 import DirectorCard from '../../../components/DirectorCard/DirectorCard';
 import { CONTENT_STATUS } from '../../../constants/status';
 
@@ -215,7 +214,7 @@ export default function Home() {
           {homeEventos.length > 0 ? (
             <div className="lista-eventos">
               {homeEventos.map(e => (
-                <EventRow key={e.id} event={e} />
+                <ContentCard type="event" variant="compact" key={e.id} data={e} />
               ))}
             </div>
           ) : (
@@ -233,7 +232,7 @@ export default function Home() {
           {homeNoticias.length > 0 ? (
             <div className="lista-noticias">
               {homeNoticias.map(n => (
-                <NewsCard key={n.id} news={n} />
+                <ContentCard type="news" variant="compact" key={n.id} data={n} />
               ))}
             </div>
           ) : (

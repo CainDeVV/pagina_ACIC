@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import { noticiasService } from '../../../services/noticiasService';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
-import NewsCard from '../../../components/NewsCard/NewsCard';
+import ContentCard from '../../../components/ContentCard/ContentCard';
 import CoverImage from '../../../components/CoverImage/CoverImage';
 import { formatDateLong } from '../../../utils/dateUtils';
 import { CONTENT_STATUS } from '../../../constants/status';
@@ -115,8 +115,8 @@ function NoticiaDetalhe() {
               Últimas Notícias
             </h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
-              {noticiasRelacionadas.map(noticiaRel => (
-                <NewsCard key={noticiaRel.id} news={noticiaRel} variant="premium" />
+              {noticiasRelacionadas.map(relacionada => (
+                <ContentCard type="news" variant="grid" key={relacionada.id} data={relacionada} />
               ))}
             </div>
           </div>

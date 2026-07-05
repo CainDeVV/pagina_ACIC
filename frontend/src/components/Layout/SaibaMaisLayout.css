@@ -7,14 +7,16 @@
 /* --- BREADCRUMB --- */
 .breadcrumb {
   font-size: 1.1rem;
-  margin-bottom: 40px; /* Mais respiro abaixo dele */
+  margin-bottom: 40px;
+  /* Mais respiro abaixo dele */
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .breadcrumb a {
-  color: var(--color-gray-dark); /* Azul vibrante da imagem */
+  color: var(--color-gray-dark);
+  /* Azul vibrante da imagem */
   text-decoration: none;
   font-weight: 400;
 }
@@ -27,35 +29,44 @@
 
 .breadcrumb .atual {
   color: var(--color-gray-dark);
-  font-weight: 700; /* Negrito na página atual */
+  font-weight: 700;
+  /* Negrito na página atual */
 }
 
 /* Layout principal com Flexbox */
 .institucional-container {
   display: flex;
-  flex-direction: row; /* Desktop: lado a lado */
+  flex-direction: row;
+  /* Desktop: lado a lado */
   gap: 80px;
 }
 
 /* Sidebar "Saiba Mais" */
 .sidebar {
-  flex: 0 0 250px; /* Largura fixa de 250px */
+  flex: 0 0 250px;
+  /* Largura fixa de 250px */
   position: sticky;
-  top: 100px; /* A distância que ela vai ficar do topo da tela quando grudar. Compensa o tamanho do seu Header que também é fixo! */
-  align-self: flex-start; /* Essencial no Flexbox: impede que a sidebar estique até o final da página, permitindo que ela "grude" */
-  height: fit-content; /* Garante que a caixa tenha apenas o tamanho dos links */
+  top: 120px;
+  /* A distância que ela vai ficar do topo da tela quando grudar. Compensa o tamanho do seu Header que também é fixo! */
+  align-self: flex-start;
+  /* Essencial no Flexbox: impede que a sidebar estique até o final da página, permitindo que ela "grude" */
+  height: fit-content;
+  /* Garante que a caixa tenha apenas o tamanho dos links */
   min-height: 600px;
 }
 
 .sidebar h3 {
-  display: flex; /* Para jogar a setinha pro canto direito */
+  display: flex;
+  /* Para jogar a setinha pro canto direito */
   justify-content: space-between;
   align-items: center;
   color: var(--color-gray-dark);
-  font-size: 1.1rem; /* Um pouco menor para ficar mais discreto */
+  font-size: 1.1rem;
+  /* Um pouco menor para ficar mais discreto */
   margin-top: 0;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--color-gray-border); /* Linha um pouco mais fina/clara */
+  border-bottom: 1px solid var(--color-gray-border);
+  /* Linha um pouco mais fina/clara */
   padding-bottom: 15px;
   line-height: 1;
 }
@@ -72,26 +83,30 @@
 
 .sidebar a {
   text-decoration: none;
-  color: var(--color-gray-medium); /* Cinza um pouco mais claro */
-  font-weight: 400; /* Sem negrito por padrão */
+  color: var(--color-gray-medium);
+  /* Cinza um pouco mais claro */
+  font-weight: 400;
+  /* Sem negrito por padrão */
   display: block;
   padding: 10px 0;
   transition: color 0.2s;
 }
 
-.sidebar a:hover, .sidebar a.ativo {
+.sidebar a:hover,
+.sidebar a.ativo {
   color: var(--color-gray-dark);
   font-weight: bold;
 }
 
 /* Conteúdo Principal */
 .institucional-content {
-  flex: 1; /* Ocupa o restante do espaço */
+  flex: 1;
+  /* Ocupa o restante do espaço */
   max-width: 1000px;
 }
 
 /* Garante que o primeiro elemento do conteúdo rico fique perfeitamente alinhado com o topo do "Saiba Mais" */
-.institucional-content .rich-text-content > :first-child {
+.institucional-content .rich-text-content> :first-child {
   margin-top: 0;
 }
 
@@ -111,9 +126,9 @@
 @media (max-width: 768px) {
   .institucional-container {
     /* column-reverse faz o sidebar (que vem primeiro no HTML) ir pro fundo */
-    flex-direction: column-reverse; 
+    flex-direction: column-reverse;
   }
-  
+
   .sidebar {
     margin-top: 40px;
     border-top: 2px solid #eee;

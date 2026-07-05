@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
-import EventCard from '../../../components/EventCard/EventCard';
+import ContentCard from '../../../components/ContentCard/ContentCard';
 import CoverImage from '../../../components/CoverImage/CoverImage';
 import { eventosService } from '../../../services/eventosService';
 import { formatDateTime } from '../../../utils/dateUtils';
@@ -115,9 +115,9 @@ function EventoDetalhe() {
           {eventosRelacionados.length > 0 && (
             <div style={{ marginTop: '64px' }}>
               <h2 className="eventos-section-titulo" style={{ margin: '0 0 24px 0' }}>Próximos Eventos</h2>
-              <div className="eventos-grid-moderno" style={{ padding: 0 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
                 {eventosRelacionados.map(evento => (
-                  <EventCard key={evento.id} event={evento} />
+                  <ContentCard type="event" variant="grid" key={evento.id} data={evento} />
                 ))}
               </div>
             </div>
