@@ -3,9 +3,9 @@ import { PatrocinadoresService } from './patrocinadores.service';
 import { CreatePatrocinadorDto } from './dto/create-patrocinador.dto';
 import { UpdatePatrocinadorDto } from './dto/update-patrocinador.dto';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from '../auth/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
+import { RolesGuard } from '../../common/guards/roles.guard';
+import { Roles } from '../../common/decorators/roles.decorator';
 
 @ApiTags('Patrocinadores')
 @Controller('patrocinadores')

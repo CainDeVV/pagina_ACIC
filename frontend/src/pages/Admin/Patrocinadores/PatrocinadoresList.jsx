@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import AdminTable from '../../../components/Admin/AdminTable';
 import { patrocinadoresService } from '../../../services/patrocinadoresService';
 import { CONTENT_STATUS } from '../../../constants/status';
-import { toast } from 'react-toastify';
 
 function PatrocinadoresList() {
   const [patrocinadores, setPatrocinadores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,11 +15,13 @@ function PatrocinadoresList() {
   }, []);
 
   const fetchPatrocinadores = async () => {
+    setLoading(true);
     try {
       const data = await patrocinadoresService.buscarTodosAdmin();
       setPatrocinadores(data);
     } catch (err) {
-      toast.error('Erro ao carregar patrocinadores');
+      console.error(err);
+      setError('Erro ao carregar patrocinadores.');
     } finally {
       setLoading(false);
     }
@@ -30,10 +31,10 @@ function PatrocinadoresList() {
     if (window.confirm('Tem certeza que deseja excluir este patrocinador?')) {
       try {
         await patrocinadoresService.excluir(id);
-        toast.success('Patrocinador excluído com sucesso');
         fetchPatrocinadores();
       } catch (err) {
-        toast.error('Erro ao excluir patrocinador');
+        console.error(err);
+        alert('Erro ao excluir patrocinador.');
       }
     }
   };
@@ -44,28 +45,26 @@ function PatrocinadoresList() {
     {
       key: 'status',
       label: 'Status',
-      render: (item) => (
-        <span className={`status-badge ${item.status === CONTENT_STATUS.PUBLISHED ? 'published' : 'draft'}`}>
-          {item.status === CONTENT_STATUS.PUBLISHED ? 'Público' : 'Rascunho'}
+      render: (row) => (
+        <span className={`status-badge ${row.status === CONTENT_STATUS.PUBLISHED ? 'published' : 'draft'}`}>
+          {row.status === CONTENT_STATUS.PUBLISHED ? 'Público' : 'Rascunho'}
         </span>
       )
-    }
+    },
+    { key: 'sortOrder', label: 'Ordem' }
   ];
 
   return (
     <AdminListLayout
       title="Patrocinadores"
-      onAddClick={() => navigate('/admin/patrocinadores/novo')}
-      addButtonText="Novo Patrocinador"
-    >
-      <AdminTable
-        columns={columns}
-        data={patrocinadores}
-        loading={loading}
-        onEdit={(item) => navigate(`/admin/patrocinadores/editar/${item.id}`)}
-        onDelete={(item) => handleDelete(item.id)}
-      />
-    </AdminListLayout>
+      createPath="/admin/patrocinadores/novo"
+      loading={loading}
+      error={error}
+      data={patrocinadores}
+      columns={columns}
+      onEdit={(row) => navigate(`/admin/patrocinadores/editar/${row.id}`)}
+      onDelete={(id) => handleDelete(id)}
+    />
   );
 }
 
