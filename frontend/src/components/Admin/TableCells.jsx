@@ -56,8 +56,15 @@ const getStatusColor = (status) => {
   }
 };
 
-export function InlineStatusSelect({ row, onUpdate }) {
+export function InlineStatusSelect({ row, onUpdate, options }) {
   const bg = getStatusColor(row.status);
+  
+  const statusOptions = options || [
+    CONTENT_STATUS.PUBLISHED,
+    CONTENT_STATUS.DRAFT,
+    CONTENT_STATUS.FINISHED,
+    CONTENT_STATUS.CANCELLED
+  ];
   
   return (
     <select 
@@ -84,10 +91,9 @@ export function InlineStatusSelect({ row, onUpdate }) {
       }}
       title="Clique para alterar o status instantaneamente"
     >
-      <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
-      <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
-      <option value={CONTENT_STATUS.FINISHED}>{STATUS_LABELS[CONTENT_STATUS.FINISHED]}</option>
-      <option value={CONTENT_STATUS.CANCELLED}>{STATUS_LABELS[CONTENT_STATUS.CANCELLED]}</option>
+      {statusOptions.map(status => (
+        <option key={status} value={status}>{STATUS_LABELS[status]}</option>
+      ))}
     </select>
   );
 }

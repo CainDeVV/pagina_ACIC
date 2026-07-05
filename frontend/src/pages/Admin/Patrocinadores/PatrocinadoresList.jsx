@@ -3,6 +3,7 @@ import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { patrocinadoresService } from '../../../services/patrocinadoresService';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function PatrocinadoresList() {
   const navigate = useNavigate();
@@ -19,7 +20,13 @@ function PatrocinadoresList() {
     {
       key: 'status',
       label: 'Status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField}
+          options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
+        />
+      )
     },
     { 
       key: 'sortOrder', 

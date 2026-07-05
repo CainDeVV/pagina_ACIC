@@ -4,6 +4,7 @@ import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '../../../utils/dateUtils';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineStatusSelect, InlineFeaturedToggle, InlineOrderInput } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function EventosList() {
   const navigate = useNavigate();
@@ -19,7 +20,18 @@ function EventosList() {
     { 
       label: 'Status', 
       key: 'status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField}
+          options={[
+            CONTENT_STATUS.PUBLISHED, 
+            CONTENT_STATUS.DRAFT, 
+            CONTENT_STATUS.FINISHED, 
+            CONTENT_STATUS.CANCELLED
+          ]}
+        />
+      )
     },
     { label: 'Início', render: (row) => formatNumericDateTime(row.startsAt) },
     { 

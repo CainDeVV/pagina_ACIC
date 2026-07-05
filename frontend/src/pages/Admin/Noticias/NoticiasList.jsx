@@ -4,6 +4,7 @@ import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '../../../utils/dateUtils';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineStatusSelect } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function NoticiasList() {
   const navigate = useNavigate();
@@ -19,7 +20,13 @@ function NoticiasList() {
     { 
       label: 'Status', 
       key: 'status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField} 
+          options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
+        />
+      )
     },
     { 
       label: 'Publicado em', 

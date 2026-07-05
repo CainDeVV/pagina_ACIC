@@ -3,6 +3,7 @@ import { institucionalService } from '../../../services/institucionalService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function QuemSomosList() {
   const navigate = useNavigate();
@@ -19,7 +20,13 @@ function QuemSomosList() {
     { 
       label: 'Status', 
       key: 'status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField}
+          options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
+        />
+      )
     },
     { 
       label: 'Ordem', 

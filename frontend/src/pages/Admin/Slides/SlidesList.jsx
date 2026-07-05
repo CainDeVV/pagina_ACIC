@@ -3,6 +3,7 @@ import { slidesService } from '../../../services/slidesService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function SlidesList() {
   const navigate = useNavigate();
@@ -18,7 +19,13 @@ function SlidesList() {
     { 
       label: 'Status', 
       key: 'status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField}
+          options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
+        />
+      )
     },
     { 
       label: 'Ordem', 

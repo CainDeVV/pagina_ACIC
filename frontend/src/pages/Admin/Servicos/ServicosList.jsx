@@ -3,6 +3,7 @@ import { servicosService } from '../../../services/servicosService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { useAdminList } from '../../../hooks/useAdminList';
 import { InlineStatusSelect, InlineOrderInput } from '../../../components/Admin/TableCells';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 function ServicosList() {
   const navigate = useNavigate();
@@ -18,7 +19,13 @@ function ServicosList() {
     { 
       label: 'Status', 
       key: 'status',
-      render: (row) => <InlineStatusSelect row={row} onUpdate={handleUpdateField} />
+      render: (row) => (
+        <InlineStatusSelect 
+          row={row} 
+          onUpdate={handleUpdateField}
+          options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
+        />
+      )
     },
     { label: 'Destaque', render: (row) => row.destaque ? 'Sim' : 'Não' },
     { 
