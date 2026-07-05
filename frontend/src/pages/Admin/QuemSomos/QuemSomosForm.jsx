@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { institucionalService } from '../../../services/institucionalService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
+import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
 import { Helmet } from 'react-helmet-async';
 
 function QuemSomosForm() {
@@ -15,7 +16,7 @@ function QuemSomosForm() {
     key: '',
     title: '',
     content: null,
-    status: 'PUBLISHED',
+    status: CONTENT_STATUS.PUBLISHED,
     sortOrder: ''
   });
 
@@ -32,7 +33,7 @@ function QuemSomosForm() {
             key: data.key || '',
             title: data.title || '',
             content: data.content || null,
-            status: data.status || 'PUBLISHED',
+            status: data.status || CONTENT_STATUS.PUBLISHED,
             sortOrder: data.sortOrder ?? ''
           });
         } catch (err) {
@@ -127,9 +128,8 @@ function QuemSomosForm() {
       <div className="form-group">
         <label>Status *</label>
         <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="DRAFT">Rascunho (DRAFT)</option>
-          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+          <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
+          <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
         </select>
       </div>
 

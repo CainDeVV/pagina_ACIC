@@ -3,7 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { noticiasService } from '../../../services/noticiasService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
-import ImageUploader from '../../../components/Admin/ImageUploader';
+import CoverImageFields from '../../../components/Admin/CoverImageFields';
+import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
+import { toDatetimeLocal } from '../../../utils/dateUtils';
 import { Helmet } from 'react-helmet-async';
 
 function NoticiaForm() {
@@ -20,7 +22,7 @@ function NoticiaForm() {
     coverImageCaption: '',
     showCoverImage: true,
     destaque: false, // <-- ADICIONADO AQUI
-    status: 'DRAFT',
+    status: CONTENT_STATUS.DRAFT,
     publishedAt: ''
   });
 
@@ -29,12 +31,7 @@ function NoticiaForm() {
   const [error, setError] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
 
-  const toDatetimeLocal = (isoString) => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    const offset = date.getTimezoneOffset() * 60000;
-    return new Date(date.getTime() - offset).toISOString().slice(0, 16);
-  };
+
 
   useEffect(() => {
     if (isEditing) {
@@ -49,7 +46,7 @@ function NoticiaForm() {
             coverImageCaption: data.coverImageCaption || '',
             showCoverImage: data.showCoverImage !== false,
             destaque: !!data.destaque, // <-- ADICIONADO AQUI
-            status: data.status || 'DRAFT',
+            status: data.status || CONTENT_STATUS.DRAFT,
             publishedAt: toDatetimeLocal(data.publishedAt)
           });
         } catch (err) {
@@ -161,51 +158,19 @@ function NoticiaForm() {
         {fieldErrors.content && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.content}</span>}
       </div>
 
-      <div className="form-group">
-        <label>Imagem de Capa da Notícia</label>
-        <ImageUploader 
-          folder="noticias" 
-          currentUrl={formData.coverImage} 
-          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, coverImage: url }))} 
-        />
-        <input 
-          type="text" 
-          name="coverImage" 
-          value={formData.coverImage} 
-          onChange={handleChange} 
-          placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Legenda da Imagem de Capa</label>
-        <input 
-          type="text" 
-          name="coverImageCaption" 
-          value={formData.coverImageCaption} 
-          onChange={handleChange} 
-          placeholder="Ex: Foto: Autor / Agência" 
-        />
-      </div>
-
-      <div className="form-group form-group-checkbox">
-        <input 
-          type="checkbox" 
-          name="showCoverImage" 
-          id="showCoverImage_noticia" 
-          checked={formData.showCoverImage} 
-          onChange={handleChange} 
-        />
-        <label htmlFor="showCoverImage_noticia">Exibir a imagem de capa dentro do artigo?</label>
-      </div>
+      <CoverImageFields 
+        folder="noticias" 
+        formData={formData} 
+        setFormData={setFormData} 
+        handleChange={handleChange} 
+        checkboxLabel="Exibir a imagem de capa dentro do artigo?" 
+      />
 
       <div className="form-group">
         <label>Status *</label>
         <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="DRAFT">Rascunho (DRAFT)</option>
-          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+          <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
+          <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
         </select>
       </div>
 

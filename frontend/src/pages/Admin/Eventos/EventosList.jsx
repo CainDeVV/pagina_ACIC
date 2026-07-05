@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { eventosService } from '../../../services/eventosService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { Helmet } from 'react-helmet-async';
+import { CONTENT_STATUS } from '../../../constants/status';
+import { formatNumericDateTime } from '../../../utils/dateUtils';
 
 function EventosList() {
   const navigate = useNavigate();
@@ -41,8 +43,16 @@ function EventosList() {
 
   const columns = [
     { label: 'Título', key: 'title' },
-    { label: 'Status', key: 'status' },
-    { label: 'Início', render: (row) => new Date(row.startsAt).toLocaleString('pt-BR') },
+    { 
+      label: 'Status', 
+      render: (row) => {
+        if (row.status === CONTENT_STATUS.CANCELLED) return 'Cancelado';
+        if (row.status === CONTENT_STATUS.FINISHED) return 'Realizado';
+        if (row.status === CONTENT_STATUS.DRAFT) return 'Rascunho';
+        return 'Publicado';
+      }
+    },
+    { label: 'Início', render: (row) => formatNumericDateTime(row.startsAt) },
     { label: 'Destaque', render: (row) => row.destaque ? 'Sim' : 'Não' }
   ];
 

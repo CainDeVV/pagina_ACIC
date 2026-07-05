@@ -2,31 +2,7 @@ import { Link } from 'react-router-dom';
 import './Header.css';
 import logo from '../../assets/ACIC.png'; 
 
-const MENU_ITEMS = [
-  {
-    title: 'Institucional',
-    dropdown: [
-      { label: 'Quem Somos', path: '/quem-somos' },
-      { label: 'Diretoria', path: '/diretoria' },
-      { label: 'Estatuto', path: '/estatuto' },
-      { label: 'Estrutura Organizacional', path: '/estrutura-organizacional' },
-      { label: 'CMEC', path: '/cmec' },
-      { label: 'Contatos', path: '/contatos' },
-      { label: 'Galeria de Presidentes', path: '/galeria-presidentes' },
-    ]
-  },
-  {
-    title: 'Serviços',
-    path: '/servicos',
-    dropdown: [
-      { label: 'Registro de Marcas e Patentes', path: '/servicos/registro-de-marcas-softwares-e-patentes' },
-      { label: 'Certificado de Origem', path: '/servicos/certificado-de-origem' },
-      { label: 'Certificado Digital', path: '/servicos/certificado-digital' },
-    ]
-  },
-  { title: 'Eventos', path: '/eventos' },
-  { title: 'Notícias', path: '/noticias' }
-];
+import { MAIN_MENU } from '../../constants/menu';
 
 function Header() {
   return (
@@ -36,7 +12,7 @@ function Header() {
         
         <nav className="nav-menu">
           <ul>
-            {MENU_ITEMS.map((item, idx) => (
+            {MAIN_MENU.map((item, idx) => (
               <li key={idx} className={item.dropdown ? 'dropdown' : ''}>
                 {item.path ? (
                   <Link to={item.path} className="nav-btn">{item.title}</Link>

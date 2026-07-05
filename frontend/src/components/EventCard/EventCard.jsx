@@ -1,31 +1,18 @@
 import { Link } from 'react-router-dom';
+import { FaCalendarAlt, FaMapMarkerAlt, FaClock } from 'react-icons/fa';
+import { formatDateLong, formatTimeOnly } from '../../utils/dateUtils';
+import { getEventBadge, getEventBadgeClass } from '../../utils/eventUtils';
 import './EventCard.css';
 
 const EventCard = ({ event, variant = 'normal' }) => {
   const dataOficial = new Date(event.startsAt);
   
-  const dataFormatada = dataOficial.toLocaleDateString('pt-BR', { 
-    day: '2-digit', 
-    month: 'long', 
-    year: 'numeric' 
-  });
+  const dataFormatada = formatDateLong(dataOficial);
 
-  const horaFormatada = dataOficial.toLocaleTimeString('pt-BR', { 
-    hour: '2-digit', 
-    minute: '2-digit' 
-  });
+  const horaFormatada = formatTimeOnly(dataOficial);
 
-  const getBadgeText = () => {
-    if (event.status === 'CANCELLED') return 'Cancelado';
-    if (event.status === 'FINISHED') return 'Realizado';
-    return dataOficial > new Date() ? 'Em Breve' : 'Realizado';
-  };
-
-  const getBadgeClass = () => {
-    if (event.status === 'CANCELLED') return 'badge-cancelled';
-    if (event.status === 'FINISHED' || dataOficial <= new Date()) return 'badge-finished';
-    return 'badge-upcoming';
-  };
+  const getBadgeText = () => getEventBadge(event);
+  const getBadgeClass = () => getEventBadgeClass(event);
 
   const linkDestino = event.slug ? `/eventos/${event.slug}` : '#';
 

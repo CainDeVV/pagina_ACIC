@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { noticiasService } from '../../../services/noticiasService';
+import { CONTENT_STATUS } from '../../../constants/status';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import NewsCard from '../../../components/NewsCard/NewsCard';
 import './Noticias.css';
@@ -14,7 +15,7 @@ function Noticias() {
     const fetchNoticias = async () => {
       try {
         const data = await noticiasService.buscarTodos();
-        const noticiasPublicas = data.filter(n => n.status === 'PUBLISHED');
+        const noticiasPublicas = data.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
         setNoticias(noticiasPublicas);
       } catch (err) {
         console.error(err);

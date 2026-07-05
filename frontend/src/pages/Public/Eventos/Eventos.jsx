@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import EventCard from '../../../components/EventCard/EventCard';
 import { eventosService } from '../../../services/eventosService';
+import { CONTENT_STATUS } from '../../../constants/status';
 import './Eventos.css';
 
 function Eventos() {
@@ -18,7 +19,7 @@ function Eventos() {
         const dados = await eventosService.buscarTodos();
         
         // 1. Filtrar Rascunhos (Privacidade)
-        const eventosPublicos = dados.filter(e => e.status !== 'DRAFT');
+        const eventosPublicos = dados.filter(e => e.status !== CONTENT_STATUS.DRAFT);
         
         // 2. Separar Destaques
         const destaques = eventosPublicos.filter(e => e.destaque === true);
@@ -27,8 +28,8 @@ function Eventos() {
         const agora = new Date();
         const naoDestaques = eventosPublicos.filter(e => e.destaque !== true);
         
-        const futuros = naoDestaques.filter(e => new Date(e.startsAt) > agora && e.status !== 'FINISHED' && e.status !== 'CANCELLED');
-        const passados = naoDestaques.filter(e => new Date(e.startsAt) <= agora || e.status === 'FINISHED' || e.status === 'CANCELLED');
+        const futuros = naoDestaques.filter(e => new Date(e.startsAt) > agora && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED);
+        const passados = naoDestaques.filter(e => new Date(e.startsAt) <= agora || e.status === CONTENT_STATUS.FINISHED || e.status === CONTENT_STATUS.CANCELLED);
 
         // Ordenar futuros (mais próximos primeiro) e passados (mais recentes primeiro)
         futuros.sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt));

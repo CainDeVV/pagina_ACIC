@@ -1,3 +1,5 @@
+import { createUploader, createInput } from './uploadHelper';
+
 class PdfLinkTool {
   static get toolbox() {
     return {
@@ -34,10 +36,7 @@ class PdfLinkTool {
     textLabel.style.fontSize = '13px';
     textLabel.style.color = '#475569';
     
-    const textInput = document.createElement('input');
-    textInput.classList.add('cdx-input');
-    textInput.value = this.data.text || '';
-    textInput.placeholder = 'Ex: 📄 Baixar Apresentação CACB';
+    const textInput = createInput('Ex: 📄 Baixar Apresentação CACB', this.data.text);
 
     // URL do botão
     const urlLabel = document.createElement('label');
@@ -49,71 +48,21 @@ class PdfLinkTool {
     urlContainer.style.display = 'flex';
     urlContainer.style.gap = '10px';
 
-    const urlInput = document.createElement('input');
-    urlInput.classList.add('cdx-input');
-    urlInput.value = this.data.url || '';
-    urlInput.placeholder = 'https://...';
+    const urlInput = createInput('https://...', this.data.url);
     urlInput.style.flex = '1';
 
     // Botão de Upload
-    const uploadBtn = document.createElement('button');
-    uploadBtn.type = 'button';
-    uploadBtn.innerHTML = '📤 Enviar Computador';
-    uploadBtn.style.padding = '8px 12px';
-    uploadBtn.style.border = '1px solid #0266b0';
-    uploadBtn.style.backgroundColor = 'white';
-    uploadBtn.style.color = '#0266b0';
-    uploadBtn.style.borderRadius = '4px';
-    uploadBtn.style.cursor = 'pointer';
-    uploadBtn.style.fontWeight = 'bold';
-    uploadBtn.style.whiteSpace = 'nowrap';
-    
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'application/pdf';
-    fileInput.style.display = 'none';
-
-    uploadBtn.addEventListener('click', () => fileInput.click());
-
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      uploadBtn.innerHTML = '⏳ Enviando...';
-      uploadBtn.disabled = true;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const token = localStorage.getItem('acic_access_token');
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        
-        const response = await fetch(`${apiUrl}/api/upload?folder=geral`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${token}` },
-          body: formData
-        });
-
-        const result = await response.json();
-        if (result.success && result.file && result.file.url) {
-          urlInput.value = result.file.url;
-        } else {
-          alert('Erro ao fazer upload.');
-        }
-      } catch (error) {
-        console.error('Erro de upload:', error);
-        alert('Falha na conexão de upload.');
-      } finally {
-        uploadBtn.innerHTML = '📤 Enviar Computador';
-        uploadBtn.disabled = false;
-        fileInput.value = '';
+    const uploaderContainer = createUploader({
+      buttonText: '📤 Enviar Computador',
+      accept: 'application/pdf',
+      multiple: false,
+      onUploadSuccess: ({ url }) => {
+        urlInput.value = url;
       }
     });
 
     urlContainer.appendChild(urlInput);
-    urlContainer.appendChild(uploadBtn);
-    urlContainer.appendChild(fileInput);
+    urlContainer.appendChild(uploaderContainer);
 
     this.wrapper.appendChild(title);
     this.wrapper.appendChild(textLabel);

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes, FaChevronDown, FaHome, FaCalendarAlt, FaNewspaper } from 'react-icons/fa';
+import { INSTITUCIONAL_MENU, SERVICOS_MENU } from '../../constants/menu';
 import './Navbar.css';
 
 function Navbar() {
@@ -31,13 +32,9 @@ function Navbar() {
 
         {openSection === 'institucional' && (
           <div className="submenu">
-            <Link to="/quem-somos" onClick={closeMenu}>Quem Somos</Link>
-            <Link to="/diretoria" onClick={closeMenu}>Diretoria</Link>
-            <Link to="/estatuto" onClick={closeMenu}>Estatuto</Link>
-            <Link to="/estrutura-organizacional" onClick={closeMenu}>Estrutura Organizacional</Link>
-            <Link to="/cmec" onClick={closeMenu}>CMEC</Link>
-            <Link to="/contatos" onClick={closeMenu}>Contatos</Link>
-            <Link to="/galeria-presidentes" onClick={closeMenu}>Galeria de Presidentes</Link>
+            {INSTITUCIONAL_MENU.map((item, idx) => (
+              <Link key={idx} to={item.path} onClick={closeMenu}>{item.label}</Link>
+            ))}
           </div>
         )}
 
@@ -49,9 +46,9 @@ function Navbar() {
 
         {openSection === 'servicos' && (
           <div className="submenu">
-            <Link to="/servicos/registro-de-marcas" onClick={closeMenu}>Registro de Marcas</Link>
-            <Link to="/servicos/certificado-de-origem" onClick={closeMenu}>Certificado de Origem</Link>
-            <Link to="/servicos/certificado-digital" onClick={closeMenu}>Certificado Digital</Link>
+            {SERVICOS_MENU.map((item, idx) => (
+              <Link key={idx} to={item.path} onClick={closeMenu}>{item.label}</Link>
+            ))}
             <Link to="/servicos" onClick={closeMenu} style={{ fontWeight: 'bold' }}>Ver todos</Link>
           </div>
         )}

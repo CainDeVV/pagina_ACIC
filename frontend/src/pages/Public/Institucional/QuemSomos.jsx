@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import SaibaMaisLayout from '../../../components/Layout/SaibaMaisLayout';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import { institucionalService } from '../../../services/institucionalService';
+import { CONTENT_STATUS } from '../../../constants/status';
 import './Institucional.css';
 
 function QuemSomos() {
@@ -14,7 +15,7 @@ function QuemSomos() {
       try {
         // Usa o serviço passando a chave específica desta página no banco
         const dados = await institucionalService.buscarPagina('quem-somos');
-        if (dados && dados.status === 'PUBLISHED') {
+        if (dados && dados.status === CONTENT_STATUS.PUBLISHED) {
           setPagina(dados);
         } else {
           setPagina(null);

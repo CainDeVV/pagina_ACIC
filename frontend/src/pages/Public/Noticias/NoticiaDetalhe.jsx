@@ -5,6 +5,9 @@ import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
 import { noticiasService } from '../../../services/noticiasService';
 import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
 import NewsCard from '../../../components/NewsCard/NewsCard';
+import CoverImage from '../../../components/CoverImage/CoverImage';
+import { formatDateLong } from '../../../utils/dateUtils';
+import { CONTENT_STATUS } from '../../../constants/status';
 import './NoticiaDetalhe.css';
 
 function NoticiaDetalhe() {
@@ -22,11 +25,11 @@ function NoticiaDetalhe() {
 
         const todasNoticias = await noticiasService.buscarTodos();
         const relacionadas = todasNoticias
-          .filter(n => n.status === 'PUBLISHED')
+          .filter(n => n.status === CONTENT_STATUS.PUBLISHED)
           .filter(n => n.id !== data.id)
           .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt))
           .slice(0, 3);
-        
+
         setNoticiasRelacionadas(relacionadas);
       } catch (err) {
         console.error(err);
@@ -60,24 +63,8 @@ function NoticiaDetalhe() {
   }
 
   const parsedContent = noticia.content || { blocks: [] };
-  const formattedDate = noticia.publishedAt 
-    ? new Date(noticia.publishedAt).toLocaleDateString('pt-BR', { dateStyle: 'long' })
-    : new Date(noticia.createdAt).toLocaleDateString('pt-BR', { dateStyle: 'long' });
-
-  // Lógica de legenda e texto alternativo (Alt Text)
-  let finalCoverAlt = noticia.title;
-  let showCoverCaption = false;
-  let cleanCoverCaption = noticia.coverImageCaption ? noticia.coverImageCaption.trim() : '';
-
-  if (cleanCoverCaption) {
-    if (cleanCoverCaption.startsWith('[') && cleanCoverCaption.endsWith(']')) {
-      finalCoverAlt = cleanCoverCaption.slice(1, -1);
-      showCoverCaption = false;
-    } else {
-      finalCoverAlt = cleanCoverCaption;
-      showCoverCaption = true;
-    }
-  }
+  const dataPublicacao = noticia.publishedAt || noticia.createdAt;
+  const formattedDate = formatDateLong(dataPublicacao);
 
   return (
     <div className="noticia-detalhe-page">
@@ -87,7 +74,7 @@ function NoticiaDetalhe() {
       </Helmet>
 
       <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
-        
+
         <Breadcrumb items={[{ label: 'Notícias', path: '/noticias' }, { label: noticia.title }]} />
 
         {/* Cabeçalho Limpo (Novo Design) */}
@@ -102,17 +89,12 @@ function NoticiaDetalhe() {
 
         {/* Imagem de Capa Arredondada */}
         {noticia.showCoverImage !== false && (
-          <div className="noticia-detalhe-cover-novo">
-            <img 
-              src={noticia.coverImage || 'https://placehold.co/1200x500?text=Capa+da+Noticia'} 
-              alt={finalCoverAlt} 
-            />
-            {showCoverCaption && (
-              <div className="noticia-detalhe-cover-caption">
-                {cleanCoverCaption}
-              </div>
-            )}
-          </div>
+          <CoverImage 
+            src={noticia.coverImage} 
+            fallbackSrc="https://placehold.co/1200x500?text=Capa+da+Noticia"
+            title={noticia.title}
+            rawCaption={noticia.coverImageCaption}
+          />
         )}
 
         {/* Área de Leitura */}

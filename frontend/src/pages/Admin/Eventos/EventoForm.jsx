@@ -3,7 +3,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { eventosService } from '../../../services/eventosService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
-import ImageUploader from '../../../components/Admin/ImageUploader';
+import CoverImageFields from '../../../components/Admin/CoverImageFields';
+import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
+import { toDatetimeLocal } from '../../../utils/dateUtils';
 import { Helmet } from 'react-helmet-async';
 
 function EventoForm() {
@@ -23,7 +25,7 @@ function EventoForm() {
     coverImageCaption: '',
     showCoverImage: true,
     destaque: false,
-    status: 'DRAFT'
+    status: CONTENT_STATUS.DRAFT
   });
 
   const [loading, setLoading] = useState(false);
@@ -31,13 +33,7 @@ function EventoForm() {
   const [error, setError] = useState(null);
   const [fieldErrors, setFieldErrors] = useState({});
 
-  // Tratamento limpo de fuso horário para exibição no input datetime-local
-  const toDatetimeLocal = (isoString) => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    const offset = date.getTimezoneOffset() * 60000;
-    return new Date(date.getTime() - offset).toISOString().slice(0, 16);
-  };
+
 
   useEffect(() => {
     if (isEditing) {
@@ -55,7 +51,7 @@ function EventoForm() {
             coverImageCaption: data.coverImageCaption || '',
             showCoverImage: data.showCoverImage !== false,
             destaque: !!data.destaque,
-            status: data.status || 'DRAFT'
+            status: data.status || CONTENT_STATUS.DRAFT
           });
         } catch (err) {
           console.error(err);
@@ -227,52 +223,21 @@ function EventoForm() {
         />
       </div>
 
-      <div className="form-group">
-        <label>Imagem de Capa do Evento</label>
-        <ImageUploader 
-          folder="eventos" 
-          currentUrl={formData.coverImage} 
-          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, coverImage: url }))} 
-        />
-        <input
-          type="text"
-          name="coverImage"
-          value={formData.coverImage}
-          onChange={handleChange}
-          placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Legenda da Imagem de Capa</label>
-        <input 
-          type="text" 
-          name="coverImageCaption" 
-          value={formData.coverImageCaption} 
-          onChange={handleChange} 
-          placeholder="Ex: Foto: Autor / Agência" 
-        />
-      </div>
-
-      <div className="form-group form-group-checkbox">
-        <input 
-          type="checkbox" 
-          name="showCoverImage" 
-          id="showCoverImage_evento" 
-          checked={formData.showCoverImage} 
-          onChange={handleChange} 
-        />
-        <label htmlFor="showCoverImage_evento">Exibir a imagem de capa dentro do evento?</label>
-      </div>
+      <CoverImageFields 
+        folder="eventos" 
+        formData={formData} 
+        setFormData={setFormData} 
+        handleChange={handleChange} 
+        checkboxLabel="Exibir a imagem de capa dentro do evento?" 
+      />
 
       <div className="form-group">
         <label>Status *</label>
         <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="DRAFT">Rascunho (DRAFT)</option>
-          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-          <option value="CANCELLED">Cancelado (CANCELLED)</option>
-          <option value="FINISHED">Finalizado (FINISHED)</option>
+          <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
+          <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
+          <option value={CONTENT_STATUS.CANCELLED}>{STATUS_LABELS[CONTENT_STATUS.CANCELLED]}</option>
+          <option value={CONTENT_STATUS.FINISHED}>{STATUS_LABELS[CONTENT_STATUS.FINISHED]}</option>
         </select>
       </div>
 

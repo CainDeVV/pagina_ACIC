@@ -50,3 +50,24 @@
 .institutional-pdf-link:hover {
   background-color: #014d86;
 }
+
+/* Formatação Padrão de Imagens no Texto (EditorJS) */
+.institutional-figure {
+  margin: 32px 0;
+  width: 100%;
+}
+
+.institutional-figure img {
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  display: block;
+}
+
+.institutional-caption {
+  font-size: 0.9rem;
+  color: var(--color-gray-medium);
+  font-style: italic;
+  text-align: center;
+  margin-top: 12px;
+}

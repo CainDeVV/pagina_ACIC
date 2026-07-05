@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { parseCaption } from '../../utils/captionUtils';
 import './BlockRenderer.css';
 
 const GalleryViewer = ({ images }) => {
@@ -133,15 +134,8 @@ function BlockRenderer({ blocks }) {
 
           case 'image':
             // Padrão do plugin oficial @editorjs/image
-            let cleanAlt = data.caption ? data.caption.replace(/<[^>]*>?/gm, '') : 'Imagem do conteúdo';
-            let showCaption = true;
-            
-            // Truque mágico: se a legenda estiver entre colchetes [Texto], 
-            // usamos apenas como Alt Text e NÃO mostramos na tela.
-            if (cleanAlt.trim().startsWith('[') && cleanAlt.trim().endsWith(']')) {
-              cleanAlt = cleanAlt.trim().slice(1, -1);
-              showCaption = false;
-            }
+            const { cleanAlt, showCaption, cleanCaption } = parseCaption(data.caption, 'Imagem do conteúdo');
+
             
             return (
               <figure key={index} className="institutional-figure">
@@ -150,10 +144,10 @@ function BlockRenderer({ blocks }) {
                   alt={cleanAlt} 
                   style={{ maxWidth: '100%', borderRadius: '8px' }} 
                 />
-                {(data.caption && showCaption) && (
+                {(showCaption && cleanCaption) && (
                   <figcaption 
                     className="institutional-caption" 
-                    dangerouslySetInnerHTML={{ __html: data.caption }} 
+                    dangerouslySetInnerHTML={{ __html: cleanCaption }} 
                   />
                 )}
               </figure>

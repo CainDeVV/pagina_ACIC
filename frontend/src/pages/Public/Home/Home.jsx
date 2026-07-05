@@ -8,6 +8,7 @@ import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 import NewsCard from '../../../components/NewsCard/NewsCard';
 import EventRow from '../../../components/EventRow/EventRow';
 import DirectorCard from '../../../components/DirectorCard/DirectorCard';
+import { CONTENT_STATUS } from '../../../constants/status';
 
 /* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
 import { servicosService } from '../../../services/servicosService';
@@ -48,8 +49,8 @@ export default function Home() {
           noticiasService.buscarTodos().catch(() => [])
         ]);
 
-        setSlides((dadosSlides || []).filter(s => s.status === 'PUBLISHED'));
-        setServicos((dadosServicos || []).filter(s => s.status === 'PUBLISHED'));
+        setSlides((dadosSlides || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED));
+        setServicos((dadosServicos || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED));
         setEventos(dadosEventos || []);
         setNoticias(dadosNoticias || []);
 
@@ -104,9 +105,9 @@ export default function Home() {
 
   // Lógica de Eventos na Home: Mostrar próximos, se não tiver mostrar os últimos realizados
   const agora = new Date();
-  const eventosPublicos = eventos.filter(e => e.status !== 'DRAFT');
+  const eventosPublicos = eventos.filter(e => e.status !== CONTENT_STATUS.DRAFT);
   
-  let proximosHome = eventosPublicos.filter(e => new Date(e.startsAt) > agora && e.status !== 'FINISHED' && e.status !== 'CANCELLED');
+  let proximosHome = eventosPublicos.filter(e => new Date(e.startsAt) > agora && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED);
   if (proximosHome.length > 0) {
     proximosHome.sort((a,b) => new Date(a.startsAt) - new Date(b.startsAt));
   } else {
@@ -115,7 +116,7 @@ export default function Home() {
   const homeEventos = proximosHome.slice(0, 3);
 
   // Lógica de Notícias na Home
-  const noticiasPublicas = noticias.filter(n => n.status === 'PUBLISHED');
+  const noticiasPublicas = noticias.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
   const homeNoticias = noticiasPublicas.slice(0, 3);
 
   return (

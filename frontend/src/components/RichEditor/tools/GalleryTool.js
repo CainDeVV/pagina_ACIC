@@ -1,3 +1,5 @@
+import { createUploader, createInput } from './uploadHelper';
+
 class GalleryTool {
   static get toolbox() {
     return {
@@ -47,15 +49,11 @@ class GalleryTool {
     inputContainer.style.flexWrap = 'wrap';
     inputContainer.style.alignItems = 'center';
 
-    const urlInput = document.createElement('input');
-    urlInput.placeholder = 'Ou cole URL da imagem...';
-    urlInput.classList.add('cdx-input');
+    const urlInput = createInput('Ou cole URL da imagem...');
     urlInput.style.flex = '1';
     urlInput.style.minWidth = '200px';
     
-    const altInput = document.createElement('input');
-    altInput.placeholder = 'Texto Alternativo (opcional)...';
-    altInput.classList.add('cdx-input');
+    const altInput = createInput('Texto Alternativo (opcional)...');
     altInput.style.flex = '1';
     altInput.style.minWidth = '200px';
 
@@ -79,72 +77,16 @@ class GalleryTool {
       }
     });
 
-    const uploadBtn = document.createElement('button');
-    uploadBtn.type = 'button';
-    uploadBtn.innerHTML = '📁 Enviar do Computador';
-    uploadBtn.style.padding = '8px 12px';
-    uploadBtn.style.border = '1px solid #0266b0';
-    uploadBtn.style.backgroundColor = 'white';
-    uploadBtn.style.color = '#0266b0';
-    uploadBtn.style.borderRadius = '4px';
-    uploadBtn.style.cursor = 'pointer';
-    
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'image/*';
-    fileInput.multiple = true; // Permite várias imagens
-    fileInput.style.display = 'none';
-
-    uploadBtn.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', async (e) => {
-      const files = e.target.files;
-      if (!files || files.length === 0) return;
-
-      uploadBtn.innerHTML = '⏳ Enviando...';
-      uploadBtn.disabled = true;
-
-      try {
-        const token = localStorage.getItem('acic_access_token');
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const formData = new FormData();
-          formData.append('file', file);
-
-          const response = await fetch(`${apiUrl}/api/upload?folder=geral`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            body: formData
-          });
-
-          const result = await response.json();
-          if (result.success && result.file && result.file.url) {
-            if (!this.data.images) this.data.images = [];
-            // Usa o nome original do arquivo como alt
-            this.data.images.push({ url: result.file.url, alt: file.name });
-            this._addImageToDOM(result.file.url, file.name);
-          } else {
-            console.error('Erro ao fazer upload da imagem', file.name);
-          }
-        }
-      } catch (error) {
-        console.error('Erro de upload:', error);
-        alert('Falha na conexão de upload.');
-      } finally {
-        uploadBtn.innerHTML = '📁 Enviar do Computador';
-        uploadBtn.disabled = false;
-        fileInput.value = '';
+    const uploaderContainer = createUploader({
+      multiple: true,
+      onUploadSuccess: ({ url, name }) => {
+        if (!this.data.images) this.data.images = [];
+        this.data.images.push({ url, alt: name });
+        this._addImageToDOM(url, name);
       }
     });
 
-    inputContainer.appendChild(uploadBtn);
-    inputContainer.appendChild(fileInput);
+    inputContainer.appendChild(uploaderContainer);
     inputContainer.appendChild(urlInput);
     inputContainer.appendChild(altInput);
     inputContainer.appendChild(addButton);

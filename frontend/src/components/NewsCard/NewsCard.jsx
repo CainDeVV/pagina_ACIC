@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { formatDateCompact, formatDateLong } from '../../utils/dateUtils';
 import './NewsCard.css';
 
 const NewsCard = ({ news, variant = 'compact' }) => {
@@ -6,17 +7,8 @@ const NewsCard = ({ news, variant = 'compact' }) => {
   const dataOficial = news.publishedAt ? new Date(news.publishedAt) : new Date(news.createdAt);
   
   // A formatação de data muda ligeiramente dependendo do formato
-  const dataFormatadaCompact = dataOficial.toLocaleDateString('pt-BR', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }).replace(/de /g, '');
-
-  const dataFormatadaPremium = dataOficial.toLocaleDateString('pt-BR', { 
-    day: '2-digit', 
-    month: 'long', 
-    year: 'numeric' 
-  });
+  const dataFormatadaCompact = formatDateCompact(dataOficial);
+  const dataFormatadaPremium = formatDateLong(dataOficial);
 
   const linkDestino = news.slug ? `/noticias/${news.slug}` : '#';
 

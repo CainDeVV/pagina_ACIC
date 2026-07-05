@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
+import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
+import { servicosService } from '../../../services/servicosService';
+import { CONTENT_STATUS } from '../../../constants/status';
 import HeroSlider from '../../../components/HeroSlider/HeroSlider';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import { servicosService } from '../../../services/servicosService';
 import './Servicos.css';
 
 function Servicos() {
@@ -13,7 +16,7 @@ function Servicos() {
     async function carregarServicos() {
       try {
         const dados = await servicosService.buscarTodos();
-        const servicosPublicos = (dados || []).filter(s => s.status === 'PUBLISHED');
+        const servicosPublicos = (dados || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED);
         setServicos(servicosPublicos);
       } catch (error) {
         console.error("Erro ao carregar serviços:", error);

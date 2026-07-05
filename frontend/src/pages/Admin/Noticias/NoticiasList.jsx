@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { noticiasService } from '../../../services/noticiasService';
 import AdminListLayout from '../../../components/Admin/AdminListLayout';
 import { Helmet } from 'react-helmet-async';
+import { CONTENT_STATUS } from '../../../constants/status';
+import { formatNumericDateTime } from '../../../utils/dateUtils';
 
 function NoticiasList() {
   const navigate = useNavigate();
@@ -41,10 +43,13 @@ function NoticiasList() {
 
   const columns = [
     { label: 'Título', key: 'title' },
-    { label: 'Status', key: 'status' },
+    { 
+      label: 'Status', 
+      render: (row) => row.status === CONTENT_STATUS.PUBLISHED ? 'Publicado' : 'Rascunho' 
+    },
     { 
       label: 'Publicado em', 
-      render: (row) => row.publishedAt ? new Date(row.publishedAt).toLocaleString('pt-BR') : '—' 
+      render: (row) => row.publishedAt ? formatNumericDateTime(row.publishedAt) : '—' 
     }
   ];
 

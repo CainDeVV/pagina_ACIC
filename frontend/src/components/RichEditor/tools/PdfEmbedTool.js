@@ -1,3 +1,5 @@
+import { createUploader, createInput } from './uploadHelper';
+
 class PdfEmbedTool {
   static get toolbox() {
     return {
@@ -32,12 +34,9 @@ class PdfEmbedTool {
     inputContainer.style.alignItems = 'center';
     inputContainer.style.flexWrap = 'wrap';
 
-    const input = document.createElement('input');
-    input.placeholder = 'Ou cole a URL do PDF aqui e pressione Enter...';
-    input.classList.add('cdx-input');
+    const input = createInput('Ou cole a URL do PDF aqui e pressione Enter...', this.data && this.data.url ? this.data.url : '');
     input.style.flex = '1';
     input.style.minWidth = '250px';
-    input.value = this.data && this.data.url ? this.data.url : '';
 
     input.addEventListener('paste', (event) => {
       setTimeout(() => {
@@ -54,65 +53,16 @@ class PdfEmbedTool {
       }
     });
 
-    const uploadBtn = document.createElement('button');
-    uploadBtn.type = 'button';
-    uploadBtn.innerHTML = '📄 Enviar PDF do Computador';
-    uploadBtn.style.padding = '8px 12px';
-    uploadBtn.style.border = '1px solid #0266b0';
-    uploadBtn.style.backgroundColor = 'white';
-    uploadBtn.style.color = '#0266b0';
-    uploadBtn.style.borderRadius = '4px';
-    uploadBtn.style.cursor = 'pointer';
-    
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.accept = 'application/pdf';
-    fileInput.style.display = 'none';
-
-    uploadBtn.addEventListener('click', () => {
-      fileInput.click();
-    });
-
-    fileInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      uploadBtn.innerHTML = '⏳ Enviando...';
-      uploadBtn.disabled = true;
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      try {
-        const token = localStorage.getItem('acic_access_token');
-        const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-        
-        const response = await fetch(`${apiUrl}/api/upload?folder=geral`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData
-        });
-
-        const result = await response.json();
-        if (result.success && result.file && result.file.url) {
-          this._createIframe(result.file.url);
-        } else {
-          alert('Erro ao fazer upload do PDF.');
-        }
-      } catch (error) {
-        console.error('Erro de upload:', error);
-        alert('Falha na conexão de upload.');
-      } finally {
-        uploadBtn.innerHTML = '📄 Enviar PDF do Computador';
-        uploadBtn.disabled = false;
-        fileInput.value = '';
+    const uploaderContainer = createUploader({
+      buttonText: '📄 Enviar PDF do Computador',
+      accept: 'application/pdf',
+      multiple: false,
+      onUploadSuccess: ({ url }) => {
+        this._createIframe(url);
       }
     });
 
-    inputContainer.appendChild(uploadBtn);
-    inputContainer.appendChild(fileInput);
+    inputContainer.appendChild(uploaderContainer);
     inputContainer.appendChild(input);
 
     this.wrapper.appendChild(inputContainer);
@@ -147,9 +97,7 @@ class PdfEmbedTool {
       inputContainer.style.alignItems = 'center';
       inputContainer.style.flexWrap = 'wrap';
 
-      const input = document.createElement('input');
-      input.placeholder = 'Ou cole a URL do PDF aqui e pressione Enter...';
-      input.classList.add('cdx-input');
+      const input = createInput('Ou cole a URL do PDF aqui e pressione Enter...');
       input.style.flex = '1';
       input.style.minWidth = '250px';
       input.addEventListener('keydown', (event) => {
@@ -159,65 +107,16 @@ class PdfEmbedTool {
         }
       });
       
-      const uploadBtn = document.createElement('button');
-      uploadBtn.type = 'button';
-      uploadBtn.innerHTML = '📄 Enviar Novo PDF';
-      uploadBtn.style.padding = '8px 12px';
-      uploadBtn.style.border = '1px solid #0266b0';
-      uploadBtn.style.backgroundColor = 'white';
-      uploadBtn.style.color = '#0266b0';
-      uploadBtn.style.borderRadius = '4px';
-      uploadBtn.style.cursor = 'pointer';
-      
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.accept = 'application/pdf';
-      fileInput.style.display = 'none';
-
-      uploadBtn.addEventListener('click', () => {
-        fileInput.click();
-      });
-
-      fileInput.addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        uploadBtn.innerHTML = '⏳ Enviando...';
-        uploadBtn.disabled = true;
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-          const token = localStorage.getItem('acic_access_token');
-          const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
-          
-          const response = await fetch(`${apiUrl}/api/upload?folder=geral`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            },
-            body: formData
-          });
-
-          const result = await response.json();
-          if (result.success && result.file && result.file.url) {
-            this._createIframe(result.file.url);
-          } else {
-            alert('Erro ao fazer upload do PDF.');
-          }
-        } catch (error) {
-          console.error('Erro de upload:', error);
-          alert('Falha na conexão de upload.');
-        } finally {
-          uploadBtn.innerHTML = '📄 Enviar Novo PDF';
-          uploadBtn.disabled = false;
-          fileInput.value = '';
+      const uploaderContainer = createUploader({
+        buttonText: '📄 Enviar Novo PDF',
+        accept: 'application/pdf',
+        multiple: false,
+        onUploadSuccess: ({ url }) => {
+          this._createIframe(url);
         }
       });
 
-      inputContainer.appendChild(uploadBtn);
-      inputContainer.appendChild(fileInput);
+      inputContainer.appendChild(uploaderContainer);
       inputContainer.appendChild(input);
 
       this.wrapper.appendChild(inputContainer);

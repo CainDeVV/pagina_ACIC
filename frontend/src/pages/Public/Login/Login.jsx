@@ -44,9 +44,6 @@ function Login() {
                 navigate('/');
             }
 
-            console.log('Login realizado com sucesso!');
-            console.log(response.data);
-
         } catch (error) {
             setErro('Email ou senha inválidos.');
             console.error(error);

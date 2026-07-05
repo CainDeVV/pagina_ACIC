@@ -4,6 +4,7 @@ import { servicosService } from '../../../services/servicosService';
 import RichEditor from '../../../components/RichEditor';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
+import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
 import { Helmet } from 'react-helmet-async';
 
 function ServicosForm() {
@@ -19,7 +20,7 @@ function ServicosForm() {
     icon: '',
     imageUrl: '',
     destaque: false,
-    status: 'DRAFT'
+    status: CONTENT_STATUS.DRAFT
   });
 
   const [loading, setLoading] = useState(false);
@@ -38,7 +39,7 @@ function ServicosForm() {
             icon: data.icon || '',
             imageUrl: data.imageUrl || '',
             destaque: !!data.destaque,
-            status: data.status || 'DRAFT'
+            status: data.status || CONTENT_STATUS.DRAFT
           });
         } catch (err) {
           console.error(err);
@@ -165,9 +166,8 @@ function ServicosForm() {
       <div className="form-group">
         <label>Status *</label>
         <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="DRAFT">Rascunho (DRAFT)</option>
-          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+          <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
+          <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
         </select>
       </div>
 

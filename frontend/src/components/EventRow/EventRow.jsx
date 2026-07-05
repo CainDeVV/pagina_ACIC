@@ -1,12 +1,12 @@
 import { Link } from 'react-router-dom';
+import { FaClock, FaMapMarkerAlt } from 'react-icons/fa';
+import { getDayAndMonthShort, formatTimeOnly } from '../../utils/dateUtils';
 import './EventRow.css';
 
 const EventRow = ({ event }) => {
   // Lendo a data oficial do banco de dados (startsAt em formato ISO)
-  const dateObj = new Date(event.startsAt);
-  const day = dateObj.toLocaleDateString('pt-BR', { day: '2-digit' });
-  const month = dateObj.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '');
-  const horaFormatada = dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  const { day, month } = getDayAndMonthShort(event.startsAt);
+  const horaFormatada = formatTimeOnly(event.startsAt);
 
   const linkDestino = event.slug ? `/eventos/${event.slug}` : '/eventos';
 

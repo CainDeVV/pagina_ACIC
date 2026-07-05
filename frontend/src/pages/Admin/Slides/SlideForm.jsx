@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { slidesService } from '../../../services/slidesService';
 import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
 import ImageUploader from '../../../components/Admin/ImageUploader';
+import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
 import { Helmet } from 'react-helmet-async';
 
 function SlideForm() {
@@ -15,7 +16,7 @@ function SlideForm() {
     subtitle: '',
     imageUrl: '',
     linkUrl: '',
-    status: 'DRAFT',
+    status: CONTENT_STATUS.DRAFT,
     sortOrder: 0
   });
 
@@ -33,7 +34,7 @@ function SlideForm() {
             subtitle: data.subtitle || '',
             imageUrl: data.imageUrl || '',
             linkUrl: data.linkUrl || '',
-            status: data.status || 'DRAFT',
+            status: data.status || CONTENT_STATUS.DRAFT,
             sortOrder: data.sortOrder || 0
           });
         } catch (err) {
@@ -144,9 +145,8 @@ function SlideForm() {
       <div className="form-group">
         <label>Status *</label>
         <select name="status" value={formData.status} onChange={handleChange} required>
-          <option value="DRAFT">Rascunho (DRAFT)</option>
-          <option value="PUBLISHED">Publicado (PUBLISHED)</option>
-          <option value="ARCHIVED">Arquivado (ARCHIVED)</option>
+          <option value={CONTENT_STATUS.DRAFT}>{STATUS_LABELS[CONTENT_STATUS.DRAFT]}</option>
+          <option value={CONTENT_STATUS.PUBLISHED}>{STATUS_LABELS[CONTENT_STATUS.PUBLISHED]}</option>
         </select>
       </div>
 
