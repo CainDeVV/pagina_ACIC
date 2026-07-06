@@ -6,6 +6,12 @@ import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { useAdminForm } from '@/hooks/useAdminForm';
 
+const quemSomosServiceAdapter = { 
+  buscarPorId: institucionalService.buscarPaginaPorIdAdmin, 
+  criar: institucionalService.criarPagina, 
+  atualizar: institucionalService.atualizarPagina 
+};
+
 function QuemSomosForm() {
   const { id } = useParams();
   const editorRef = useRef(null);
@@ -19,11 +25,7 @@ function QuemSomosForm() {
     handleSubmit
   } = useAdminForm({
     id,
-    service: { 
-      buscarPorId: institucionalService.buscarPaginaPorIdAdmin, 
-      criar: institucionalService.criarPagina, 
-      atualizar: institucionalService.atualizarPagina 
-    },
+    service: quemSomosServiceAdapter,
     redirectPath: '/admin/quemsomos',
     initialData: {
       key: '',

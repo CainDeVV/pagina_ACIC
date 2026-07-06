@@ -4,6 +4,12 @@ import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import ImageUploader from '@/components/Admin/ImageUploader';
 import { useAdminForm } from '@/hooks/useAdminForm';
 
+const presidenteServiceAdapter = { 
+  buscarPorId: institucionalService.buscarPresidentePorId, 
+  criar: institucionalService.criarPresidente, 
+  atualizar: institucionalService.atualizarPresidente 
+};
+
 function PresidenteForm() {
   const { id } = useParams();
 
@@ -17,11 +23,7 @@ function PresidenteForm() {
     handleSubmit
   } = useAdminForm({
     id,
-    service: { 
-      buscarPorId: institucionalService.buscarPresidentePorId, 
-      criar: institucionalService.criarPresidente, 
-      atualizar: institucionalService.atualizarPresidente 
-    },
+    service: presidenteServiceAdapter,
     redirectPath: '/admin/presidentes',
     initialData: {
       name: '',

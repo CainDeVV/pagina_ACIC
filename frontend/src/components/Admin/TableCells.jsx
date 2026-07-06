@@ -123,14 +123,7 @@ export function InlineFeaturedToggle({ row, field = 'destaque', onUpdate }) {
 }
 
 export function InlineCategorySelect({ row, field = 'category', onUpdate }) {
-  const [val, setVal] = React.useState(row[field] || '');
-  const listId = `categories-${row.id}`;
-
-  React.useEffect(() => {
-    setVal(row[field] || '');
-  }, [row[field]]);
-
-  const categories = [
+  const presetCategories = [
     "PRESIDENTE",
     "I VICE-PRESIDENTE",
     "II VICE-PRESIDENTE",
@@ -144,46 +137,51 @@ export function InlineCategorySelect({ row, field = 'category', onUpdate }) {
     "CONSELHO CONSULTIVO"
   ];
 
+  const currentVal = row[field] || '';
+  const optionsToShow = [...presetCategories];
+  if (currentVal && !presetCategories.includes(currentVal)) {
+    optionsToShow.push(currentVal);
+  }
+
+  const commonStyle = {
+    padding: '6px 14px',
+    borderRadius: '8px',
+    fontSize: '0.85rem',
+    backgroundColor: 'var(--color-gray-light, #f8f9fa)',
+    color: 'var(--color-gray-dark, #343a40)',
+    border: '1px solid var(--color-gray-border, #e9ecef)',
+    outline: 'none',
+    width: '180px',
+    transition: 'all 0.2s ease',
+    fontWeight: '500'
+  };
+
+  const focusStyle = (e) => {
+    e.target.style.borderColor = 'var(--color-primary)';
+    e.target.style.backgroundColor = 'var(--color-white)';
+  };
+
+  const blurStyle = (e) => {
+    e.target.style.borderColor = 'var(--color-gray-border, #e9ecef)';
+    e.target.style.backgroundColor = 'var(--color-gray-light, #f8f9fa)';
+  };
+
   return (
-    <>
-      <input
-        list={listId}
-        value={val}
-        onChange={(e) => setVal(e.target.value)}
-        onBlur={() => {
-          const newVal = val.trim().toUpperCase();
-          if (newVal && newVal !== row[field]) {
-            onUpdate(row, field, newVal);
-          } else {
-            setVal(row[field] || ''); // Reverte se deixar em branco
-          }
-        }}
-        style={{
-          padding: '6px 14px',
-          borderRadius: '8px',
-          fontSize: '0.85rem',
-          backgroundColor: 'var(--color-gray-light, #f8f9fa)',
-          color: 'var(--color-gray-dark, #343a40)',
-          border: '1px solid var(--color-gray-border, #e9ecef)',
-          outline: 'none',
-          width: '180px',
-          transition: 'all 0.2s ease',
-          fontWeight: '500'
-        }}
-        onFocus={(e) => {
-          e.target.style.borderColor = 'var(--color-primary)';
-          e.target.style.backgroundColor = 'var(--color-white)';
-        }}
-        onBlurCapture={(e) => {
-          e.target.style.borderColor = 'var(--color-gray-border, #e9ecef)';
-          e.target.style.backgroundColor = 'var(--color-gray-light, #f8f9fa)';
-        }}
-        title="Selecione ou digite uma nova categoria"
-        placeholder="Digite a categoria..."
-      />
-      <datalist id={listId}>
-        {categories.map(c => <option key={c} value={c} />)}
-      </datalist>
-    </>
+    <select
+      value={currentVal}
+      onChange={(e) => {
+        const val = e.target.value;
+        if (val !== currentVal) {
+          onUpdate(row, field, val);
+        }
+      }}
+      style={commonStyle}
+      onFocus={focusStyle}
+      onBlurCapture={blurStyle}
+      title="Selecione uma categoria"
+    >
+      <option value="" disabled>Selecione...</option>
+      {optionsToShow.map(c => <option key={c} value={c}>{c}</option>)}
+    </select>
   );
 }

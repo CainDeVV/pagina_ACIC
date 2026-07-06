@@ -18,7 +18,7 @@ export class EventosService {
 
   async findAll(pagination: PaginationDto) {
     const { page, limit } = pagination;
-    const where = { status: 'PUBLISHED' as const };
+    const where = { status: { not: 'DRAFT' as const } };
     const [data, total] = await Promise.all([
       this.prisma.evento.findMany({
         where,
@@ -41,7 +41,7 @@ export class EventosService {
       this.prisma.evento.findMany({
         skip: (page - 1) * limit,
         take: limit,
-        orderBy: { startsAt: 'asc' },
+        orderBy: { startsAt: 'desc' },
         include: { author: { select: { name: true, email: true } } },
       }),
       this.prisma.evento.count(),
@@ -57,7 +57,7 @@ export class EventosService {
       where: { slug },
       include: { author: { select: { name: true, email: true } } },
     });
-    if (!evento || evento.status !== 'PUBLISHED') {
+    if (!evento || evento.status === 'DRAFT') {
       throw new NotFoundException('Evento não encontrado.');
     }
     return evento;

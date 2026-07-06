@@ -4,6 +4,25 @@ import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import ImageUploader from '@/components/Admin/ImageUploader';
 import { useAdminForm } from '@/hooks/useAdminForm';
 
+const PRESET_CATEGORIES = [
+  "PRESIDENTE",
+  "I VICE-PRESIDENTE",
+  "II VICE-PRESIDENTE",
+  "I SECRETÁRIO",
+  "II SECRETÁRIO",
+  "I TESOUREIRO",
+  "II TESOUREIRO",
+  "DIRETOR SOCIAL",
+  "RELAÇÕES PÚBLICAS",
+  "CONSELHO FISCAL",
+  "CONSELHO CONSULTIVO"
+];
+const diretoriaServiceAdapter = { 
+  buscarPorId: institucionalService.buscarDiretorPorId, 
+  criar: institucionalService.criarDiretoria, 
+  atualizar: institucionalService.atualizarDiretoria 
+};
+
 function DiretoriaForm() {
   const { id } = useParams();
 
@@ -17,11 +36,7 @@ function DiretoriaForm() {
     handleSubmit
   } = useAdminForm({
     id,
-    service: { 
-      buscarPorId: institucionalService.buscarDiretorPorId, 
-      criar: institucionalService.criarDiretoria, 
-      atualizar: institucionalService.atualizarDiretoria 
-    },
+    service: diretoriaServiceAdapter,
     redirectPath: '/admin/diretoria',
     initialData: {
       name: '',
@@ -64,28 +79,17 @@ function DiretoriaForm() {
 
       <div className="form-group">
         <label>Cargo na ACIC (Categoria) *</label>
-        <input 
-          type="text" 
-          name="category" 
+        <select 
+          name="category"
           value={formData.category || ''} 
           onChange={handleChange} 
-          list="category-suggestions"
-          placeholder="Selecione ou digite o cargo..."
-          required 
-        />
-        <datalist id="category-suggestions">
-          <option value="PRESIDENTE" />
-          <option value="I VICE-PRESIDENTE" />
-          <option value="II VICE-PRESIDENTE" />
-          <option value="I SECRETÁRIO" />
-          <option value="II SECRETÁRIO" />
-          <option value="I TESOUREIRO" />
-          <option value="II TESOUREIRO" />
-          <option value="DIRETOR SOCIAL" />
-          <option value="RELAÇÕES PÚBLICAS" />
-          <option value="CONSELHO FISCAL" />
-          <option value="CONSELHO CONSULTIVO" />
-        </datalist>
+          required
+        >
+          <option value="" disabled>Selecione um cargo...</option>
+          {PRESET_CATEGORIES.map(cat => (
+            <option key={cat} value={cat}>{cat}</option>
+          ))}
+        </select>
       </div>
 
       <div className="form-group">
