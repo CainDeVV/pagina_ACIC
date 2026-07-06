@@ -20,13 +20,13 @@ function ServicoDetalhe() {
       try {
         // Busca o serviço atual e a lista de todos (para a vitrine inferior)
         const [servico, todos] = await Promise.all([
-          servicosService.buscarPorId(slug),
-          servicosService.buscarTodos()
+          servicosService.buscarPorSlugPublico(slug),
+          servicosService.buscarTodosPublico()
         ]);
 
         setServicoAtual(servico);
         // Filtra para remover o serviço atual da lista de "Outros Serviços"
-        setOutrosServicos((todos || []).filter(s => s.slug !== slug));
+        setOutrosServicos((todos?.data || []).filter(s => s.slug !== slug));
       } catch (error) {
         console.error("Erro ao buscar detalhes do serviço:", error);
       } finally {

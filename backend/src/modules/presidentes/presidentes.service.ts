@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
 import { UpdatePresidenteDto } from './dto/update-presidente.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class PresidentesService {
@@ -13,12 +14,52 @@ export class PresidentesService {
     });
   }
 
-  findAll() {
-    return this.prisma.presidente.findMany({
-      orderBy: {
-        sortOrder: 'asc',
+  async findAllPublic(paginationDto: PaginationDto) {
+    const { page = 1, limit = 100 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.presidente.findMany({
+        skip,
+        take: limit,
+        orderBy: { sortOrder: 'asc' },
+      }),
+      this.prisma.presidente.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-    });
+    };
+  }
+
+  async findAllAdmin(paginationDto: PaginationDto) {
+    const { page = 1, limit = 100 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.presidente.findMany({
+        skip,
+        take: limit,
+        orderBy: { sortOrder: 'asc' },
+      }),
+      this.prisma.presidente.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: string) {

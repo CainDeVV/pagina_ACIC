@@ -1,15 +1,18 @@
 import { PublishStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsNotEmpty, IsObject, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateQuemSomosDto {
   @ApiProperty({ example: 'estatuto', description: 'Chave única de identificação da página (ex: estatuto, cmec, quem-somos)' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty()
   key!: string;
 
   @ApiProperty({ example: 'Estatuto da ACIC' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty()
   title!: string;
 

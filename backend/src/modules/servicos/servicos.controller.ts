@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ServicosService } from './servicos.service';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Servicos')
@@ -14,39 +13,44 @@ import { UserRole } from '@prisma/client';
 export class ServicosController {
   constructor(private readonly servicosService: ServicosService) {}
 
-  // ROTA PÚBLICA: O Frontend React consome aqui livremente
+  // === ROTAS PÚBLICAS ===
   @Get('servicos')
-  findAll() {
-    return this.servicosService.findAll();
+  findAllPublic(@Query() paginationDto: PaginationDto) {
+    return this.servicosService.findAllPublic(paginationDto);
   }
 
-  // ROTA PÚBLICA: Busca por ID ou por Slug (Ex: /api/servicos/registro-de-marcas)
-  @Get('servicos/:idOrSlug')
-  findOne(@Param('idOrSlug') idOrSlug: string) {
-    return this.servicosService.findOne(idOrSlug);
+  @Get('servicos/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.servicosService.findBySlug(slug);
   }
 
-  // ROTAS ADMINISTRATIVAS PROTEGIDAS
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
+  // === ROTAS ADMINISTRATIVAS PROTEGIDAS ===
+  @Get('admin/servicos')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAllAdmin(@Query() paginationDto: PaginationDto) {
+    return this.servicosService.findAllAdmin(paginationDto);
+  }
+
+  @Get('admin/servicos/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findOneAdmin(@Param('id') id: string) {
+    return this.servicosService.findOne(id);
+  }
+
   @Post('admin/servicos')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createServicoDto: CreateServicoDto, @CurrentUser() user: any) {
     return this.servicosService.create(createServicoDto, user.id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/servicos/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateServicoDto: UpdateServicoDto) {
     return this.servicosService.update(id, updateServicoDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/servicos/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   remove(@Param('id') id: string) {
     return this.servicosService.remove(id);
   }

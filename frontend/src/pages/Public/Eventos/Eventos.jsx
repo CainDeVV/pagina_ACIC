@@ -11,9 +11,9 @@ function Eventos() {
   useEffect(() => {
     async function carregarEventos() {
       try {
-        const dados = await eventosService.buscarTodos();
+        const payload = await eventosService.buscarTodosPublico();
+        const eventosPublicos = payload.data || [];
         
-        const eventosPublicos = dados.filter(e => e.status !== CONTENT_STATUS.DRAFT);
         const destaques = eventosPublicos.filter(e => e.destaque === true);
         
         const agora = new Date();

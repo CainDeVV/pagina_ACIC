@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePatrocinadorDto } from './dto/create-patrocinador.dto';
 import { UpdatePatrocinadorDto } from './dto/update-patrocinador.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class PatrocinadoresService {
@@ -13,12 +15,55 @@ export class PatrocinadoresService {
     });
   }
 
-  async findAll(activeOnly = false) {
-    const where = activeOnly ? { status: 'PUBLISHED' as const } : {};
-    return this.prisma.patrocinador.findMany({
-      where,
-      orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
-    });
+  async findAllPublic(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.patrocinador.findMany({
+        where: { status: PublishStatus.PUBLISHED },
+        skip,
+        take: limit,
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+      }),
+      this.prisma.patrocinador.count({
+        where: { status: PublishStatus.PUBLISHED },
+      }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async findAllAdmin(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.patrocinador.findMany({
+        skip,
+        take: limit,
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+      }),
+      this.prisma.patrocinador.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: string) {

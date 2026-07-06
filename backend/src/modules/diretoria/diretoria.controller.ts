@@ -1,11 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { DiretoriaService } from './diretoria.service';
 import { CreateDiretoriaDto } from './dto/create-diretoria.dto';
 import { UpdateDiretoriaDto } from './dto/update-diretoria.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Diretoria')
@@ -15,36 +14,37 @@ export class DiretoriaController {
 
   // ROTAS PÚBLICAS
   @Get('diretoria')
-  findAll() {
-    return this.diretoriaService.findAll();
+  findAllPublic(@Query() paginationDto: PaginationDto) {
+    return this.diretoriaService.findAllPublic(paginationDto);
   }
 
-  @Get('diretoria/:id')
+  // ROTAS ADMINISTRATIVAS
+  @Get('admin/diretoria')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAllAdmin(@Query() paginationDto: PaginationDto) {
+    return this.diretoriaService.findAllAdmin(paginationDto);
+  }
+
+  @Get('admin/diretoria/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   findOne(@Param('id') id: string) {
     return this.diretoriaService.findOne(id);
   }
 
-  // ROTAS ADMINISTRATIVAS
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Post('admin/diretoria')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createDiretoriaDto: CreateDiretoriaDto) {
     return this.diretoriaService.create(createDiretoriaDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/diretoria/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateDiretoriaDto: UpdateDiretoriaDto) {
     return this.diretoriaService.update(id, updateDiretoriaDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/diretoria/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   remove(@Param('id') id: string) {
     return this.diretoriaService.remove(id);
   }

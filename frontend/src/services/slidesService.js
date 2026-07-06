@@ -1,13 +1,18 @@
 import api from './api';
 
 export const slidesService = {
-  buscarTodos: async () => {
+  buscarTodosPublico: async () => {
     const resposta = await api.get('/slides');
     return resposta.data;
   },
 
+  buscarTodosAdmin: async () => {
+    const resposta = await api.get('/admin/slides');
+    return resposta.data;
+  },
+
   buscarPorId: async (id) => {
-    const resposta = await api.get(`/slides/${id}`);
+    const resposta = await api.get(`/admin/slides/${id}`);
     return resposta.data;
   },
 

@@ -20,7 +20,7 @@ function QuemSomosForm() {
   } = useAdminForm({
     id,
     service: { 
-      buscarPorId: institucionalService.buscarPaginaPorId, 
+      buscarPorId: institucionalService.buscarPaginaPorIdAdmin, 
       criar: institucionalService.criarPagina, 
       atualizar: institucionalService.atualizarPagina 
     },
@@ -69,6 +69,7 @@ function QuemSomosForm() {
           <option value="quem-somos">Quem Somos (Histórico)</option>
           <option value="cmec">CMEC</option>
           <option value="estatuto">Estatuto da CACB</option>
+          <option value="estrutura-organizacional">Estrutura Organizacional</option>
           <option value="diretoria">Diretoria (Introdução)</option>
           <option value="presidentes">Presidentes (Introdução)</option>
           <option value="contatos">Contatos</option>

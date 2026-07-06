@@ -9,7 +9,7 @@ import { CONTENT_STATUS } from '../../../constants/status';
 function NoticiasList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: noticiasService.buscarTodos,
+    fetchMethod: noticiasService.buscarTodosAdmin,
     deleteMethod: noticiasService.deletar,
     updateMethod: noticiasService.atualizar,
     itemName: 'notícia'

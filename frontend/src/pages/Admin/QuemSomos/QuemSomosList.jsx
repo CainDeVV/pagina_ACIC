@@ -8,7 +8,7 @@ import { CONTENT_STATUS } from '../../../constants/status';
 function QuemSomosList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: institucionalService.buscarTodasPaginas,
+    fetchMethod: institucionalService.buscarTodasPaginasAdmin,
     deleteMethod: institucionalService.deletarPagina,
     updateMethod: institucionalService.atualizarPagina,
     itemName: 'página institucional'

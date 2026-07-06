@@ -2,10 +2,12 @@ import api from '../../../services/api';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { useAuth } from '../../../contexts/AuthContext';
 import './Login.css';
 
 function Login() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [erro, setErro] = useState('');
@@ -33,8 +35,8 @@ function Login() {
 
             const { access_token, user } = response.data;
 
-            localStorage.setItem('acic_access_token', access_token);
-            localStorage.setItem('acic_user', JSON.stringify(user));
+            // Injeta dados no Cérebro (Context) que cuidará do localStorage de forma segura
+            login(user, access_token);
 
             if (user.role === 'ADMIN' || user.role === 'EDITOR') {
                 navigate('/admin');

@@ -2,6 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class SlidesService {
@@ -16,17 +18,61 @@ export class SlidesService {
     });
   }
 
-  findAll() {
-    return this.prisma.homeSlide.findMany({
-      orderBy: {
-        sortOrder: 'asc',
-      },
-      include: {
-        author: {
-          select: { name: true, email: true },
+  async findAllPublic(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.homeSlide.findMany({
+        where: { status: PublishStatus.PUBLISHED },
+        skip,
+        take: limit,
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          author: { select: { name: true, email: true } },
         },
+      }),
+      this.prisma.homeSlide.count({
+        where: { status: PublishStatus.PUBLISHED },
+      }),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
       },
-    });
+    };
+  }
+
+  async findAllAdmin(paginationDto: PaginationDto) {
+    const { page = 1, limit = 10 } = paginationDto || {};
+    const skip = (page - 1) * limit;
+
+    const [data, total] = await Promise.all([
+      this.prisma.homeSlide.findMany({
+        skip,
+        take: limit,
+        orderBy: { sortOrder: 'asc' },
+        include: {
+          author: { select: { name: true, email: true } },
+        },
+      }),
+      this.prisma.homeSlide.count(),
+    ]);
+
+    return {
+      data,
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findOne(id: string) {

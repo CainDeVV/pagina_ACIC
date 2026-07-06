@@ -1,13 +1,23 @@
 import api from './api';
 
 export const servicosService = {
-  buscarTodos: async () => {
+  buscarTodosPublico: async () => {
     const resposta = await api.get('/servicos');
     return resposta.data;
   },
 
+  buscarPorSlugPublico: async (slug) => {
+    const resposta = await api.get(`/servicos/${slug}`);
+    return resposta.data;
+  },
+
+  buscarTodosAdmin: async () => {
+    const resposta = await api.get('/admin/servicos');
+    return resposta.data;
+  },
+
   buscarPorId: async (id) => {
-    const resposta = await api.get(`/servicos/${id}`);
+    const resposta = await api.get(`/admin/servicos/${id}`);
     return resposta.data;
   },
 

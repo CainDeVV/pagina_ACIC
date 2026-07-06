@@ -31,6 +31,8 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-acic_db}
       JWT_SECRET: ${JWT_SECRET:-sua_chave_secreta_aqui}
       NODE_ENV: ${NODE_ENV:-development}
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
     ports:
       - "3000:3000"
     networks:
@@ -59,6 +61,8 @@ services:
     restart: always
     environment:
       VITE_API_URL: http://localhost:3000
+      CHOKIDAR_USEPOLLING: "true"
+      WATCHPACK_POLLING: "true"
     ports:
       - "5173:5173"
     networks:

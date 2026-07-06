@@ -1,10 +1,12 @@
 import { IsString, IsNotEmpty, IsOptional, IsEnum, IsInt } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { PublishStatus } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePatrocinadorDto {
   @ApiProperty({ description: 'Nome do patrocinador' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty()
   name: string;
 

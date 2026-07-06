@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { noticiasService } from '../../../services/noticiasService';
-import { CONTENT_STATUS } from '../../../constants/status';
 import ContentListLayout from '../../../components/Layout/ContentListLayout';
 
 function Noticias() {
@@ -11,8 +10,8 @@ function Noticias() {
   useEffect(() => {
     async function carregarNoticias() {
       try {
-        const dados = await noticiasService.buscarTodos();
-        const noticiasPublicas = dados.filter(n => n.status === CONTENT_STATUS.PUBLISHED);
+        const payload = await noticiasService.buscarTodosPublico();
+        const noticiasPublicas = payload.data || [];
 
         // Separar Destaques
         const destaques = noticiasPublicas.filter(n => n.destaque === true);

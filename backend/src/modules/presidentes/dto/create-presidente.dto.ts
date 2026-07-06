@@ -1,9 +1,11 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePresidenteDto {
   @ApiProperty({ example: 'Francisco Roberto Lima e Silva' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty()
   name!: string;
 

@@ -1,17 +1,22 @@
 import api from './api';
 
 export const noticiasService = {
-  buscarTodos: async () => {
+  buscarTodosPublico: async () => {
     const resposta = await api.get('/noticias');
     return resposta.data;
   },
 
-  buscarPorId: async (id) => {
-    const resposta = await api.get(`/noticias/${id}`);
+  buscarTodosAdmin: async () => {
+    const resposta = await api.get('/admin/noticias');
     return resposta.data;
   },
 
-  buscarPorSlug: async (slug) => {
+  buscarPorId: async (id) => {
+    const resposta = await api.get(`/admin/noticias/${id}`);
+    return resposta.data;
+  },
+
+  buscarPorSlugPublico: async (slug) => {
     const resposta = await api.get(`/noticias/${slug}`);
     return resposta.data;
   },

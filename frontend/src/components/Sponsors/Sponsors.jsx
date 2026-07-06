@@ -8,8 +8,8 @@ function Sponsors() {
   useEffect(() => {
     async function carregarPatrocinadores() {
       try {
-        const data = await patrocinadoresService.buscarTodosAtivos();
-        setPatrocinadores(data);
+        const payload = await patrocinadoresService.buscarTodosAtivos();
+        setPatrocinadores(payload.data || []);
       } catch (error) {
         console.error('Erro ao carregar patrocinadores:', error);
       }

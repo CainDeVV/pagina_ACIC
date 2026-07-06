@@ -16,12 +16,12 @@ function GaleriaPresidentes() {
       try {
         // Promise.all executa as requisições em paralelo.
         const [dadosPresidentes, dadosIntro] = await Promise.all([
-          institucionalService.buscarPresidentes().catch(() => []),
+          institucionalService.buscarPresidentesPublico().catch(() => ({ data: [] })),
           institucionalService.buscarPagina('presidentes').catch(() => null)
         ]);
         
         // Inverte a ordem do painel (sortOrder), para exibir o mais recente (Maior Ordem) primeiro.
-        const invertidos = (dadosPresidentes || []).reverse();
+        const invertidos = [...(dadosPresidentes?.data || [])].reverse();
         setPresidentes(invertidos);
         setPaginaIntro(dadosIntro);
       } catch (error) {

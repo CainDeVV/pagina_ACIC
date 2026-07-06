@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { servicosService } from '../../../services/servicosService';
-import { CONTENT_STATUS } from '../../../constants/status';
 import ContentListLayout from '../../../components/Layout/ContentListLayout';
 import ServiceCard from '../../../components/ServiceCard/ServiceCard';
 
@@ -12,8 +11,8 @@ function Servicos() {
   useEffect(() => {
     async function carregarServicos() {
       try {
-        const dados = await servicosService.buscarTodos();
-        const servicosPublicos = (dados || []).filter(s => s.status === CONTENT_STATUS.PUBLISHED);
+        const payload = await servicosService.buscarTodosPublico();
+        const servicosPublicos = payload.data || [];
 
         // Slider prioriza destaques
         const servicosDestaque = servicosPublicos.filter(s => s.destaque);

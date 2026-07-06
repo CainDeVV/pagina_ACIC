@@ -1,9 +1,11 @@
 import { EventStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsNotEmpty, IsObject, IsOptional, IsString, IsUrl, IsDateString, IsBoolean } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { Transform } from 'class-transformer';
 
 export class CreateEventoDto {
   @ApiProperty({ example: '150 Anos da ACIC Crateús' })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsString()
   @IsNotEmpty({ message: 'O título é obrigatório.' })
   title!: string;
@@ -14,6 +16,7 @@ export class CreateEventoDto {
   description: any;
 
   @ApiProperty({ example: 'Sede da ACIC - Crateús, CE', required: false })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsString()
   @IsOptional()
   location?: string;
@@ -34,11 +37,13 @@ export class CreateEventoDto {
   capacity?: number;
 
   @ApiProperty({ example: 'https://imagens.acic.com/evento.jpg', required: false })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsUrl({ require_tld: false }, { message: 'A imagem de capa deve ser uma URL válida.' })
   @IsOptional()
   coverImage?: string;
 
   @ApiProperty({ example: 'Foto do Evento Anterior', required: false })
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsString()
   @IsOptional()
   coverImageCaption?: string;

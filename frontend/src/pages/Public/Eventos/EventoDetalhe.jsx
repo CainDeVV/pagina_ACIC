@@ -22,12 +22,12 @@ function EventoDetalhe() {
   useEffect(() => {
     async function carregarEvento() {
       try {
-        const dados = await eventosService.buscarPorId(slug);
+        const dados = await eventosService.buscarPorSlugPublico(slug);
         setEvento(dados);
 
-        const todosEventos = await eventosService.buscarTodos();
+        const todosEventos = await eventosService.buscarTodosPublico();
         const agora = new Date();
-        const relacionados = todosEventos
+        const relacionados = (todosEventos?.data || [])
           .filter(e => e.status !== CONTENT_STATUS.DRAFT && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED)
           .filter(e => new Date(e.startsAt) > agora)
           .filter(e => e.id !== dados.id)

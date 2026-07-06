@@ -1,14 +1,17 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDiretoriaDto {
   @ApiProperty({ example: 'João Silva' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty({ message: 'O nome é obrigatório.' })
   name!: string;
 
   @ApiProperty({ example: 'Presidente' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty({ message: 'O cargo é obrigatório.' })
   role!: string;
 

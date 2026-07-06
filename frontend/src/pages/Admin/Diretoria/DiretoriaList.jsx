@@ -9,10 +9,10 @@ function DiretoriaList() {
   const navigate = useNavigate();
 
   const fetchDiretoriaFlat = useCallback(async () => {
-    const result = await institucionalService.buscarDiretoria();
+    const result = await institucionalService.buscarDiretoriaAdmin();
     const flatList = [];
-    if (Array.isArray(result)) {
-      result.forEach(group => {
+    if (result && Array.isArray(result.data)) {
+      result.data.forEach(group => {
         if (group.members && Array.isArray(group.members)) {
           flatList.push(...group.members);
         }

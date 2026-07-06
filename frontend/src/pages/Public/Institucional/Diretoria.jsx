@@ -29,12 +29,12 @@ function Diretoria() {
         // Promise.allSettled é o padrão da indústria para requisições concorrentes independentes.
         // Ele aguarda todas finalizarem e não "quebra" se uma delas falhar (como o 404 da intro).
         const [resultadoDiretores, resultadoIntro] = await Promise.allSettled([
-          institucionalService.buscarDiretoria(),
+          institucionalService.buscarDiretoriaPublico(),
           institucionalService.buscarPagina('diretoria')
         ]);
         
         // Tratamento elegante dos resultados individuais
-        const dadosDiretores = resultadoDiretores.status === 'fulfilled' ? resultadoDiretores.value : [];
+        const dadosDiretores = resultadoDiretores.status === 'fulfilled' ? resultadoDiretores.value : { data: [] };
         if (resultadoDiretores.status === 'rejected') {
           console.error("Erro ao carregar diretores:", resultadoDiretores.reason);
         }
@@ -44,7 +44,7 @@ function Diretoria() {
           console.warn("Introdução não publicada no CMS (Ignorado).");
         }
         
-        setDiretoriaCategorias(dadosDiretores || []);
+        setDiretoriaCategorias(dadosDiretores?.data || []);
         setPaginaIntro(dadosIntro);
       } catch (error) {
         console.error("Erro fatal inesperado ao buscar dados da Diretoria:", error);

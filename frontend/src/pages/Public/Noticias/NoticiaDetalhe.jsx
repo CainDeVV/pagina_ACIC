@@ -20,11 +20,11 @@ function NoticiaDetalhe() {
   useEffect(() => {
     const fetchNoticia = async () => {
       try {
-        const data = await noticiasService.buscarPorSlug(slug);
+        const data = await noticiasService.buscarPorSlugPublico(slug);
         setNoticia(data);
 
-        const todasNoticias = await noticiasService.buscarTodos();
-        const relacionadas = todasNoticias
+        const todasNoticias = await noticiasService.buscarTodosPublico();
+        const relacionadas = (todasNoticias?.data || [])
           .filter(n => n.status === CONTENT_STATUS.PUBLISHED)
           .filter(n => n.id !== data.id)
           .sort((a, b) => new Date(b.publishedAt || b.createdAt) - new Date(a.publishedAt || a.createdAt))

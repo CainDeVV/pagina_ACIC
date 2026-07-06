@@ -17,6 +17,7 @@ import { AssociadosModule } from './modules/associados/associados.module';
 import { InscricoesModule } from './modules/inscricoes/inscricoes.module';
 import { CertificadosModule } from './modules/certificados/certificados.module';
 import { PatrocinadoresModule } from './modules/patrocinadores/patrocinadores.module';
+import { HomeModule } from './modules/home/home.module';
 
 @Module({
   imports: [
@@ -38,7 +39,8 @@ import { PatrocinadoresModule } from './modules/patrocinadores/patrocinadores.mo
     AssociadosModule,
     InscricoesModule,
     CertificadosModule,
-    PatrocinadoresModule
+    PatrocinadoresModule,
+    HomeModule
   ],
   controllers: [AppController],
   providers: [AppService],

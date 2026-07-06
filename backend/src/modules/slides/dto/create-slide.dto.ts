@@ -1,10 +1,12 @@
 import { PublishStatus } from '@prisma/client';
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateSlideDto {
   @ApiProperty({ example: 'Fortalecendo o comércio de Crateús' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty()
   title!: string;
 

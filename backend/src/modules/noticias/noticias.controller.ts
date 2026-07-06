@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { NoticiasService } from './noticias.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Noticias')
@@ -14,38 +13,44 @@ import { UserRole } from '@prisma/client';
 export class NoticiasController {
   constructor(private readonly noticiasService: NoticiasService) {}
 
-  // ROTAS PÚBLICAS
+  // === ROTAS PÚBLICAS ===
   @Get('noticias')
-  findAll() {
-    return this.noticiasService.findAll();
+  findAllPublic(@Query() paginationDto: PaginationDto) {
+    return this.noticiasService.findAllPublic(paginationDto);
   }
 
-  @Get('noticias/:idOrSlug')
-  findOne(@Param('idOrSlug') idOrSlug: string) {
-    return this.noticiasService.findOne(idOrSlug);
+  @Get('noticias/:slug')
+  findBySlug(@Param('slug') slug: string) {
+    return this.noticiasService.findBySlug(slug);
   }
 
-  // ROTAS ADMINISTRATIVAS PROTEGIDAS
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
+  // === ROTAS ADMINISTRATIVAS PROTEGIDAS ===
+  @Get('admin/noticias')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAllAdmin(@Query() paginationDto: PaginationDto) {
+    return this.noticiasService.findAllAdmin(paginationDto);
+  }
+
+  @Get('admin/noticias/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findOneAdmin(@Param('id') id: string) {
+    return this.noticiasService.findOne(id);
+  }
+
   @Post('admin/noticias')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createNoticiaDto: CreateNoticiaDto, @CurrentUser() user: any) {
     return this.noticiasService.create(createNoticiaDto, user.id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/noticias/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateNoticiaDto: UpdateNoticiaDto) {
     return this.noticiasService.update(id, updateNoticiaDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/noticias/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   remove(@Param('id') id: string) {
     return this.noticiasService.remove(id);
   }

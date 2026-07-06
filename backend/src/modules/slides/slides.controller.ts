@@ -1,12 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { SlidesService } from './slides.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Slides')
@@ -14,38 +13,39 @@ import { UserRole } from '@prisma/client';
 export class SlidesController {
   constructor(private readonly slidesService: SlidesService) {}
 
-  // ROTAS PÚBLICAS (Sem cadeado no Swagger)
+  // === ROTAS PÚBLICAS ===
   @Get('slides')
-  findAll() {
-    return this.slidesService.findAll();
+  findAllPublic(@Query() paginationDto: PaginationDto) {
+    return this.slidesService.findAllPublic(paginationDto);
   }
 
-  @Get('slides/:id')
-  findOne(@Param('id') id: string) {
+  // === ROTAS ADMINISTRATIVAS PROTEGIDAS ===
+  @Get('admin/slides')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAllAdmin(@Query() paginationDto: PaginationDto) {
+    return this.slidesService.findAllAdmin(paginationDto);
+  }
+
+  @Get('admin/slides/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findOneAdmin(@Param('id') id: string) {
     return this.slidesService.findOne(id);
   }
 
-  // ROTAS ADMINISTRATIVAS PROTEGIDAS
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Post('admin/slides')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createSlideDto: CreateSlideDto, @CurrentUser() user: any) {
     return this.slidesService.create(createSlideDto, user.id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/slides/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateSlideDto: UpdateSlideDto) {
     return this.slidesService.update(id, updateSlideDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/slides/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   remove(@Param('id') id: string) {
     return this.slidesService.remove(id);
   }

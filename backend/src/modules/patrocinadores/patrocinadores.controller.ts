@@ -1,61 +1,56 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, Query } from '@nestjs/common';
 import { PatrocinadoresService } from './patrocinadores.service';
 import { CreatePatrocinadorDto } from './dto/create-patrocinador.dto';
 import { UpdatePatrocinadorDto } from './dto/update-patrocinador.dto';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
+import { UserRole } from '@prisma/client';
 
 @ApiTags('Patrocinadores')
-@Controller('patrocinadores')
+@Controller()
 export class PatrocinadoresController {
   constructor(private readonly patrocinadoresService: PatrocinadoresService) {}
 
+  // === ROTAS PÚBLICAS ===
   @ApiOperation({ summary: 'Listar todos os patrocinadores ativos (Público)' })
-  @Get()
-  findAllActive() {
-    return this.patrocinadoresService.findAll(true);
+  @Get('patrocinadores')
+  findAllActive(@Query() paginationDto: PaginationDto) {
+    return this.patrocinadoresService.findAllPublic(paginationDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN', 'EDITOR')
+  // === ROTAS ADMINISTRATIVAS PROTEGIDAS ===
   @ApiOperation({ summary: 'Listar TODOS os patrocinadores (Admin)' })
-  @Get('admin')
-  findAll() {
-    return this.patrocinadoresService.findAll(false);
+  @Get('admin/patrocinadores')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAll(@Query() paginationDto: PaginationDto) {
+    return this.patrocinadoresService.findAllAdmin(paginationDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN', 'EDITOR')
   @ApiOperation({ summary: 'Criar patrocinador' })
-  @Post()
+  @Post('admin/patrocinadores')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createDto: CreatePatrocinadorDto) {
     return this.patrocinadoresService.create(createDto);
   }
 
   @ApiOperation({ summary: 'Buscar patrocinador por ID' })
-  @Get(':id')
+  @Get('admin/patrocinadores/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   findOne(@Param('id') id: string) {
     return this.patrocinadoresService.findOne(id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN', 'EDITOR')
   @ApiOperation({ summary: 'Atualizar patrocinador' })
-  @Put(':id')
+  @Put('admin/patrocinadores/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateDto: UpdatePatrocinadorDto) {
     return this.patrocinadoresService.update(id, updateDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
   @ApiOperation({ summary: 'Deletar patrocinador (Apenas ADMIN)' })
-  @Delete(':id')
+  @Delete('admin/patrocinadores/:id')
+  @AdminAuth(UserRole.ADMIN)
   remove(@Param('id') id: string) {
     return this.patrocinadoresService.remove(id);
   }

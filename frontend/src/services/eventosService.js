@@ -1,13 +1,23 @@
 import api from './api';
 
 export const eventosService = {
-  buscarTodos: async () => {
+  buscarTodosPublico: async () => {
     const resposta = await api.get('/eventos');
-    return resposta.data;
+    return resposta.data; // Retorna { data, meta }
+  },
+
+  buscarTodosAdmin: async () => {
+    const resposta = await api.get('/admin/eventos');
+    return resposta.data; // Retorna { data, meta }
   },
 
   buscarPorId: async (id) => {
-    const resposta = await api.get(`/eventos/${id}`);
+    const resposta = await api.get(`/admin/eventos/${id}`);
+    return resposta.data;
+  },
+
+  buscarPorSlugPublico: async (slug) => {
+    const resposta = await api.get(`/eventos/${slug}`);
     return resposta.data;
   },
 

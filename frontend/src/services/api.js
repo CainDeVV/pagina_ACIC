@@ -25,4 +25,19 @@ api.interceptors.request.use(
   }
 );
 
+// Interceptador de Resposta (O "Vigia" contra expiração de token)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // 401 Unauthorized: O token expirou ou é falso/modificado.
+      // Ejetar imediatamente o usuário!
+      localStorage.removeItem('acic_access_token');
+      localStorage.removeItem('acic_user');
+      window.location.href = '/login'; 
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default api;

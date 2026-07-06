@@ -8,7 +8,7 @@ import { CONTENT_STATUS } from '../../../constants/status';
 function ServicosList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: servicosService.buscarTodos,
+    fetchMethod: servicosService.buscarTodosAdmin,
     deleteMethod: servicosService.deletar,
     updateMethod: servicosService.atualizar,
     itemName: 'serviço'

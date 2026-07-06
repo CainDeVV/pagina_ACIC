@@ -8,7 +8,7 @@ import { CONTENT_STATUS } from '../../../constants/status';
 function SlidesList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: slidesService.buscarTodos,
+    fetchMethod: slidesService.buscarTodosAdmin,
     deleteMethod: slidesService.deletar,
     updateMethod: slidesService.atualizar,
     itemName: 'slide'

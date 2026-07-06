@@ -9,7 +9,7 @@ import { CONTENT_STATUS } from '../../../constants/status';
 function EventosList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: eventosService.buscarTodos,
+    fetchMethod: eventosService.buscarTodosAdmin,
     deleteMethod: eventosService.deletar,
     updateMethod: eventosService.atualizar,
     itemName: 'evento'

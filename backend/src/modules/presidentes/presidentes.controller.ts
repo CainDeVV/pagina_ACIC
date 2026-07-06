@@ -1,11 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { PresidentesService } from './presidentes.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
 import { UpdatePresidenteDto } from './dto/update-presidente.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
+import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Presidentes')
@@ -14,35 +13,36 @@ export class PresidentesController {
   constructor(private readonly presidentesService: PresidentesService) {}
 
   @Get('presidentes')
-  findAll() {
-    return this.presidentesService.findAll();
+  findAllPublic(@Query() paginationDto: PaginationDto) {
+    return this.presidentesService.findAllPublic(paginationDto);
   }
 
-  @Get('presidentes/:id')
+  @Get('admin/presidentes')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  findAllAdmin(@Query() paginationDto: PaginationDto) {
+    return this.presidentesService.findAllAdmin(paginationDto);
+  }
+
+  @Get('admin/presidentes/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   findOne(@Param('id') id: string) {
     return this.presidentesService.findOne(id);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Post('admin/presidentes')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   create(@Body() createPresidenteDto: CreatePresidenteDto) {
     return this.presidentesService.create(createPresidenteDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Patch('admin/presidentes/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updatePresidenteDto: UpdatePresidenteDto) {
     return this.presidentesService.update(id, updatePresidenteDto);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
   @Delete('admin/presidentes/:id')
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   remove(@Param('id') id: string) {
     return this.presidentesService.remove(id);
   }

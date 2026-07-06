@@ -20,8 +20,13 @@ export function useAdminList({ fetchMethod, deleteMethod, updateMethod, itemName
     setError(null);
     try {
       const result = await fetchMethod();
+      
+      // Suporte Polimórfico Temporário (Até todos os módulos do Backend estarem refatorados)
+      const isPaginated = result && result.data && Array.isArray(result.data);
+      const items = isPaginated ? result.data : (result || []);
+      
       // Opcional: ordenar o resultado por sortOrder para garantir consistência
-      const sortedData = (result || []).sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+      const sortedData = items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
       setData(sortedData);
     } catch (err) {
       console.error(err);

@@ -26,7 +26,7 @@ function EstruturaOrganizacional() {
 
   if (carregando) {
     return (
-      <SaibaMaisLayout titulo="Carregando...">
+      <SaibaMaisLayout activeItem="estrutura-organizacional" titulo="Carregando...">
         <p style={{ padding: '20px' }}>Carregando informações...</p>
       </SaibaMaisLayout>
     );
@@ -35,7 +35,7 @@ function EstruturaOrganizacional() {
   // Fallback amigável caso a página ainda não tenha sido criada no banco
   if (!pagina) {
     return (
-      <SaibaMaisLayout titulo="Estrutura Organizacional">
+      <SaibaMaisLayout activeItem="estrutura-organizacional" titulo="Estrutura Organizacional">
         <p style={{ padding: '20px' }}>
           Conteúdo ainda não publicado. Aguarde a inserção de dados no painel administrativo.
         </p>
@@ -48,7 +48,7 @@ function EstruturaOrganizacional() {
     <Helmet>
       <title>{pagina.title} | ACIC</title>
     </Helmet>
-    <SaibaMaisLayout titulo={pagina.title}>
+    <SaibaMaisLayout activeItem="estrutura-organizacional" titulo={pagina.title}>
       {/* O backend envia o JSON do Editor.js dentro do campo 'content' */}
       <BlockRenderer blocks={pagina.content?.blocks || []} />
     </SaibaMaisLayout>

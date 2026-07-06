@@ -9,11 +9,13 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateNoticiaDto {
   @ApiProperty({ example: 'ACIC realiza evento de networking para associados' })
   @IsString()
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
   @IsNotEmpty({ message: 'O título é obrigatório.' })
   title: string;
 

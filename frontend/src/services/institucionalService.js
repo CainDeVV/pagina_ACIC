@@ -2,8 +2,8 @@ import api from './api';
 
 export const institucionalService = {
   // --- Gestão de Conteúdo (Quem Somos, Estatuto, CMEC...) ---
-  buscarTodasPaginas: async () => {
-    const resposta = await api.get('/quem-somos');
+  buscarTodasPaginasAdmin: async () => {
+    const resposta = await api.get('/admin/quem-somos');
     return resposta.data;
   },
 
@@ -12,8 +12,8 @@ export const institucionalService = {
     return resposta.data;
   },
 
-  buscarPaginaPorId: async (id) => {
-    const resposta = await api.get(`/quem-somos/${id}`);
+  buscarPaginaPorIdAdmin: async (id) => {
+    const resposta = await api.get(`/admin/quem-somos/${id}`);
     return resposta.data;
   },
 
@@ -33,13 +33,18 @@ export const institucionalService = {
   },
 
   // --- Gestão de Presidentes ---
-  buscarPresidentes: async () => {
-    const resposta = await api.get('/presidentes');
+  buscarPresidentesPublico: async () => {
+    const resposta = await api.get('/presidentes?limit=100');
+    return resposta.data;
+  },
+
+  buscarPresidentesAdmin: async () => {
+    const resposta = await api.get('/admin/presidentes?limit=100');
     return resposta.data;
   },
 
   buscarPresidentePorId: async (id) => {
-    const resposta = await api.get(`/presidentes/${id}`);
+    const resposta = await api.get(`/admin/presidentes/${id}`);
     return resposta.data;
   },
 
@@ -59,13 +64,18 @@ export const institucionalService = {
   },
 
   // --- Gestão de Diretoria ---
-  buscarDiretoria: async () => {
-    const resposta = await api.get('/diretoria');
+  buscarDiretoriaPublico: async () => {
+    const resposta = await api.get('/diretoria?limit=100');
+    return resposta.data;
+  },
+
+  buscarDiretoriaAdmin: async () => {
+    const resposta = await api.get('/admin/diretoria?limit=100');
     return resposta.data;
   },
 
   buscarDiretorPorId: async (id) => {
-    const resposta = await api.get(`/diretoria/${id}`);
+    const resposta = await api.get(`/admin/diretoria/${id}`);
     return resposta.data;
   },
 

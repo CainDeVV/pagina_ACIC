@@ -7,7 +7,7 @@ import { InlineOrderInput } from '../../../components/Admin/TableCells';
 function PresidentesList() {
   const navigate = useNavigate();
   const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
-    fetchMethod: institucionalService.buscarPresidentes,
+    fetchMethod: institucionalService.buscarPresidentesAdmin,
     deleteMethod: institucionalService.deletarPresidente,
     updateMethod: institucionalService.atualizarPresidente,
     itemName: 'presidente'
