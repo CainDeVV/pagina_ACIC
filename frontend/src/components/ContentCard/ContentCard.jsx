@@ -4,8 +4,8 @@ import {
   formatDateCompact, 
   formatTimeOnly, 
   getDayAndMonthShort 
-} from '../../utils/dateUtils';
-import { getEventBadge, getEventBadgeClass } from '../../utils/eventUtils';
+} from '@/utils/dateUtils';
+import { getEventBadge, getEventBadgeClass } from '@/utils/eventUtils';
 import './ContentCard.css';
 
 const ContentCard = ({ data, type = 'news', variant = 'compact' }) => {

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import SaibaMaisLayout from '../../../components/Layout/SaibaMaisLayout';
-import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
-import { institucionalService } from '../../../services/institucionalService';
-import { CONTENT_STATUS } from '../../../constants/status';
+import SaibaMaisLayout from '@/components/Layout/SaibaMaisLayout';
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer';
+import { institucionalService } from '@/services/institucionalService';
+import { CONTENT_STATUS } from '@/constants/status';
 import './Institucional.css';
 
 function QuemSomos() {
@@ -50,7 +50,10 @@ function QuemSomos() {
 
   return (
     <>
-    <Helmet><title>{`${pagina.title} | ACIC`}</title></Helmet>
+    <Helmet>
+      <title>{`${pagina.title} | ACIC`}</title>
+      <meta name="description" content="Conheça a história e a missão da ACIC Crateús, trabalhando há mais de 40 anos pelo empresariado do Sertão Central." />
+    </Helmet>
     <SaibaMaisLayout titulo={pagina.title}>
       {/* O backend envia o JSON do Editor.js dentro do campo 'content' */}
       <BlockRenderer blocks={pagina.content?.blocks || []} />

@@ -13,7 +13,7 @@ import {
   Image as ImageIcon,
   Award
 } from 'lucide-react';
-import '../../../components/Admin/AdminGlobal.css';
+import '@/components/Admin/AdminGlobal.css';
 import './Dashboard.css';
 
 function Dashboard() {

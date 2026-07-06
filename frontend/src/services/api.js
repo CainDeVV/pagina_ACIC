@@ -29,13 +29,24 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+    // 1. Tratamento para Token Expirado (401)
     if (error.response?.status === 401) {
-      // 401 Unauthorized: O token expirou ou é falso/modificado.
-      // Ejetar imediatamente o usuário!
       localStorage.removeItem('acic_access_token');
       localStorage.removeItem('acic_user');
       window.location.href = '/login'; 
     }
+    
+    // 2. Tratamento para Servidor Offline ou Internet Caiu
+    if (!error.response) {
+      console.error("Erro de Conexão: Servidor fora do ar ou sem internet.");
+      // Aqui você poderia disparar um Toast Global (ex: react-toastify) alertando o usuário.
+    }
+    
+    // 3. Tratamento para Erro 500
+    if (error.response?.status >= 500) {
+      console.error("Erro Crítico no Servidor:", error.response.data);
+    }
+
     return Promise.reject(error);
   }
 );

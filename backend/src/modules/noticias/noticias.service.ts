@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
@@ -12,21 +12,13 @@ export class NoticiasService {
 
   async create(createNoticiaDto: CreateNoticiaDto, authorId?: string) {
     const slug = slugify(createNoticiaDto.title, { lower: true, strict: true });
-
-    try {
-      return await this.prisma.noticia.create({
-        data: {
-          ...createNoticiaDto,
-          slug,
-          authorId,
-        },
-      });
-    } catch (error) {
-      if (error.code === 'P2002') {
-        throw new ConflictException('Já existe uma notícia cadastrada com este título.');
-      }
-      throw error;
-    }
+    return await this.prisma.noticia.create({
+      data: {
+        ...createNoticiaDto,
+        slug,
+        authorId,
+      },
+    });
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
@@ -117,35 +109,18 @@ export class NoticiasService {
       slug = slugify(updateNoticiaDto.title, { lower: true, strict: true });
     }
 
-    try {
-      return await this.prisma.noticia.update({
-        where: { id },
-        data: {
-          ...updateNoticiaDto,
-          ...(slug && { slug }),
-        },
-      });
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Notícia não encontrada para atualização.');
-      }
-      if (error.code === 'P2002') {
-        throw new ConflictException('A alteração de título gera um link (slug) que já está em uso.');
-      }
-      throw error;
-    }
+    return await this.prisma.noticia.update({
+      where: { id },
+      data: {
+        ...updateNoticiaDto,
+        ...(slug && { slug }),
+      },
+    });
   }
 
   async remove(id: string) {
-    try {
-      return await this.prisma.noticia.delete({
-        where: { id },
-      });
-    } catch (error) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Notícia não encontrada para exclusão.');
-      }
-      throw error;
-    }
+    return await this.prisma.noticia.delete({
+      where: { id },
+    });
   }
 }

@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { eventosService } from '../../../services/eventosService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { formatNumericDateTime } from '../../../utils/dateUtils';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineStatusSelect, InlineFeaturedToggle, InlineOrderInput } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { eventosService } from '@/services/eventosService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { formatNumericDateTime } from '@/utils/dateUtils';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineStatusSelect, InlineFeaturedToggle, InlineOrderInput } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function EventosList() {
   const navigate = useNavigate();

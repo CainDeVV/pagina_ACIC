@@ -91,29 +91,15 @@ export class SlidesService {
   }
 
   async update(id: string, updateSlideDto: UpdateSlideDto) {
-    try {
-      return await this.prisma.homeSlide.update({
-        where: { id },
-        data: updateSlideDto,
-      });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Slide não encontrado.');
-      }
-      throw error;
-    }
+    return await this.prisma.homeSlide.update({
+      where: { id },
+      data: updateSlideDto,
+    });
   }
 
   async remove(id: string) {
-    try {
-      return await this.prisma.homeSlide.delete({
-        where: { id },
-      });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Slide não encontrado.');
-      }
-      throw error;
-    }
+    return await this.prisma.homeSlide.delete({
+      where: { id },
+    });
   }
 }

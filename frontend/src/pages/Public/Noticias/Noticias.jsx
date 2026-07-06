@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { noticiasService } from '../../../services/noticiasService';
-import ContentListLayout from '../../../components/Layout/ContentListLayout';
+import { Helmet } from 'react-helmet-async';
+import { noticiasService } from '@/services/noticiasService';
+import ContentListLayout from '@/components/Layout/ContentListLayout';
 
 function Noticias() {
   const [sections, setSections] = useState([]);
@@ -45,13 +46,20 @@ function Noticias() {
   }, []);
 
   return (
-    <ContentListLayout 
-      pageTitle="Notícias"
-      loading={carregando}
-      sliderData={sliderData}
-      sections={sections}
-      emptyMessage="Nenhuma notícia publicada no momento."
-    />
+    <>
+      <Helmet>
+        <title>Notícias e Atualizações | ACIC Crateús</title>
+        <meta name="description" content="Acompanhe as últimas notícias, projetos e atualizações da Associação Comercial e Industrial de Crateús." />
+      </Helmet>
+      <ContentListLayout
+        title="Notícias ACIC"
+        description="Fique por dentro das últimas novidades e ações da nossa associação."
+        carregando={carregando}
+        sliderData={sliderData}
+        sections={sections}
+        basePath="/noticias"
+      />
+    </>
   );
 }
 

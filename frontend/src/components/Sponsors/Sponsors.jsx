@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { patrocinadoresService } from '../../services/patrocinadoresService';
+import { patrocinadoresService } from '@/services/patrocinadoresService';
 import './Sponsors.css';
 
 function Sponsors() {

@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { patrocinadoresService } from '../../../services/patrocinadoresService';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { patrocinadoresService } from '@/services/patrocinadoresService';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function PatrocinadoresList() {
   const navigate = useNavigate();

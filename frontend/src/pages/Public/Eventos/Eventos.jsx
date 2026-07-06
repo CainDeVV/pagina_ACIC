@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { eventosService } from '../../../services/eventosService';
-import { CONTENT_STATUS } from '../../../constants/status';
-import ContentListLayout from '../../../components/Layout/ContentListLayout';
+import { Helmet } from 'react-helmet-async';
+import { eventosService } from '@/services/eventosService';
+import { CONTENT_STATUS } from '@/constants/status';
+import ContentListLayout from '@/components/Layout/ContentListLayout';
 
 function Eventos() {
   const [sections, setSections] = useState([]);
@@ -53,13 +54,19 @@ function Eventos() {
   }, []);
 
   return (
-    <ContentListLayout 
-      pageTitle="Eventos"
-      loading={carregando}
-      sliderData={sliderData}
-      sections={sections}
-      emptyMessage="Nenhum evento disponível no momento."
-    />
+    <>
+      <Helmet>
+        <title>Eventos ACIC | Feiras, Cursos e Networking</title>
+        <meta name="description" content="Participe dos eventos promovidos pela ACIC Crateús. Feiras de negócios, cursos, capacitações e muito networking para você e sua empresa." />
+      </Helmet>
+      <ContentListLayout 
+        pageTitle="Eventos"
+        loading={carregando}
+        sliderData={sliderData}
+        sections={sections}
+        emptyMessage="Nenhum evento disponível no momento."
+      />
+    </>
   );
 }
 

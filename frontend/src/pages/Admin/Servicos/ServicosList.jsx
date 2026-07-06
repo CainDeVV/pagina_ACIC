@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { servicosService } from '../../../services/servicosService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineStatusSelect, InlineOrderInput, InlineFeaturedToggle } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { servicosService } from '@/services/servicosService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineStatusSelect, InlineOrderInput, InlineFeaturedToggle } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function ServicosList() {
   const navigate = useNavigate();

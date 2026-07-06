@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
-import { parseCaption } from '../../utils/captionUtils';
+import { parseCaption } from '@/utils/captionUtils';
+import DOMPurify from 'dompurify';
 import './BlockRenderer.css';
 
 const GalleryViewer = ({ images }) => {
@@ -27,6 +28,7 @@ const GalleryViewer = ({ images }) => {
               src={img.url} 
               alt={img.alt || 'Imagem da galeria'} 
               style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+              loading="lazy"
             />
             <div className="gallery-overlay">
               <ZoomIn color="white" size={32} />
@@ -55,6 +57,7 @@ const GalleryViewer = ({ images }) => {
             alt={images[selectedIndex].alt} 
             style={{ maxWidth: '85vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '8px' }} 
             onClick={(e) => e.stopPropagation()} 
+            loading="lazy"
           />
 
           {images.length > 1 && (
@@ -87,7 +90,7 @@ function BlockRenderer({ blocks }) {
             return (
               <Tag 
                 key={index} 
-                dangerouslySetInnerHTML={{ __html: data.text }} 
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.text) }} 
               />
             );
 
@@ -95,7 +98,7 @@ function BlockRenderer({ blocks }) {
             return (
               <p 
                 key={index} 
-                dangerouslySetInnerHTML={{ __html: data.text }} 
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.text) }} 
               />
             );
 
@@ -110,12 +113,12 @@ function BlockRenderer({ blocks }) {
               return items.map((item, i) => {
                 // Formato antigo (apenas string)
                 if (typeof item === 'string') {
-                  return <li key={i} dangerouslySetInnerHTML={{ __html: item }} />;
+                  return <li key={i} dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item) }} />;
                 }
                 // Formato novo (objeto com content e items aninhados)
                 return (
                   <li key={i}>
-                    <span dangerouslySetInnerHTML={{ __html: item.content }} />
+                    <span dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(item.content) }} />
                     {item.items && item.items.length > 0 && (
                       <ListTag style={{ marginTop: '8px' }}>
                         {renderListItems(item.items)}
@@ -143,11 +146,12 @@ function BlockRenderer({ blocks }) {
                   src={data.file?.url} 
                   alt={cleanAlt} 
                   style={{ maxWidth: '100%', borderRadius: '8px' }} 
+                  loading="lazy"
                 />
                 {(showCaption && cleanCaption) && (
                   <figcaption 
                     className="institutional-caption" 
-                    dangerouslySetInnerHTML={{ __html: cleanCaption }} 
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(cleanCaption) }} 
                   />
                 )}
               </figure>
@@ -180,11 +184,11 @@ function BlockRenderer({ blocks }) {
             return (
               <div key={index} className="image-text-highlight">
                 <div className="ith-image-container">
-                  <img src={data.imageUrl} alt={data.title} />
+                  <img src={data.imageUrl} alt={data.title} loading="lazy" />
                 </div>
                 <div className="ith-text-container">
                   <h3>{data.title}</h3>
-                  <p dangerouslySetInnerHTML={{ __html: data.text }} />
+                  <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.text) }} />
                 </div>
               </div>
             );

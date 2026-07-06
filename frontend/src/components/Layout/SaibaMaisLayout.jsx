@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Breadcrumb from '../Breadcrumb/Breadcrumb';
-import { INSTITUCIONAL_MENU } from '../../constants/menu';
+import { INSTITUCIONAL_MENU } from '@/constants/menu';
 import './SaibaMaisLayout.css';
 
 // O 'children' é o conteúdo específico de cada página que vai ser renderizado aqui dentro

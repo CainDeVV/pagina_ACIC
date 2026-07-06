@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
-import logo from "../../assets/ACIC.png";
+import logo from '@/assets/ACIC.png';
 
 const QUICK_LINKS = [
   { label: 'Quem Somos', path: '/quem-somos' },

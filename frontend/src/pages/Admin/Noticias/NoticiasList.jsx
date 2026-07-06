@@ -1,10 +1,10 @@
 import { useNavigate } from 'react-router-dom';
-import { noticiasService } from '../../../services/noticiasService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { formatNumericDateTime } from '../../../utils/dateUtils';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineStatusSelect, InlineFeaturedToggle } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { noticiasService } from '@/services/noticiasService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { formatNumericDateTime } from '@/utils/dateUtils';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineStatusSelect, InlineFeaturedToggle } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function NoticiasList() {
   const navigate = useNavigate();

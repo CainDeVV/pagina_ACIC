@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import Breadcrumb from '../../../components/Breadcrumb/Breadcrumb';
-import { noticiasService } from '../../../services/noticiasService';
-import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
-import ContentCard from '../../../components/ContentCard/ContentCard';
-import CoverImage from '../../../components/CoverImage/CoverImage';
-import { formatDateLong } from '../../../utils/dateUtils';
-import { CONTENT_STATUS } from '../../../constants/status';
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
+import { noticiasService } from '@/services/noticiasService';
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer';
+import ContentCard from '@/components/ContentCard/ContentCard';
+import CoverImage from '@/components/CoverImage/CoverImage';
+import { formatDateLong } from '@/utils/dateUtils';
+import { CONTENT_STATUS } from '@/constants/status';
 import './NoticiaDetalhe.css';
 
 function NoticiaDetalhe() {

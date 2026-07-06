@@ -1,5 +1,5 @@
 import React from 'react';
-import { CONTENT_STATUS, STATUS_LABELS } from '../../constants/status';
+import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 
 export function InlineOrderInput({ row, onUpdate }) {
   const [val, setVal] = React.useState(row.sortOrder || 0);

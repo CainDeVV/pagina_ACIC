@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import SaibaMaisLayout from "../../../components/Layout/SaibaMaisLayout";
-import DirectorCard from "../../../components/DirectorCard/DirectorCard";
-import BlockRenderer from '../../../components/BlockRenderer/BlockRenderer';
-import { institucionalService } from '../../../services/institucionalService';
+import SaibaMaisLayout from '@/components/Layout/SaibaMaisLayout';
+import DirectorCard from '@/components/DirectorCard/DirectorCard';
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer';
+import { institucionalService } from '@/services/institucionalService';
 import './Institucional.css';
 import './Diretoria.css';
 

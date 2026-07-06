@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -11,23 +11,16 @@ export class UsuariosService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     const { password, ...rest } = createUsuarioDto;
     
-    try {
-      const passwordHash = await bcrypt.hash(password, 10);
-      
-      const user = await this.prisma.user.create({
-        data: {
-          ...rest,
-          passwordHash,
-        },
-      });
-      const { passwordHash: _, ...result } = user;
-      return result;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictException('E-mail já cadastrado.');
-      }
-      throw error;
-    }
+    const passwordHash = await bcrypt.hash(password, 10);
+    
+    const user = await this.prisma.user.create({
+      data: {
+        ...rest,
+        passwordHash,
+      },
+    });
+    const { passwordHash: _, ...result } = user;
+    return result;
   }
 
   async findAll() {
@@ -72,36 +65,19 @@ export class UsuariosService {
       dataToUpdate.passwordHash = await bcrypt.hash(password, 10);
     }
 
-    try {
-      const user = await this.prisma.user.update({
-        where: { id },
-        data: dataToUpdate,
-      });
-      const { passwordHash: _, ...result } = user;
-      return result;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictException('E-mail já cadastrado.');
-      }
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Usuário não encontrado.');
-      }
-      throw error;
-    }
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: dataToUpdate,
+    });
+    const { passwordHash: _, ...result } = user;
+    return result;
   }
 
   async remove(id: string) {
-    try {
-      const user = await this.prisma.user.delete({
-        where: { id },
-      });
-      const { passwordHash: _, ...result } = user;
-      return result;
-    } catch (error: any) {
-      if (error.code === 'P2025') {
-        throw new NotFoundException('Usuário não encontrado.');
-      }
-      throw error;
-    }
+    const user = await this.prisma.user.delete({
+      where: { id },
+    });
+    const { passwordHash: _, ...result } = user;
+    return result;
   }
 }

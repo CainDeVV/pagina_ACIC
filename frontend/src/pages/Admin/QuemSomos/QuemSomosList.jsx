@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { institucionalService } from '../../../services/institucionalService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { institucionalService } from '@/services/institucionalService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function QuemSomosList() {
   const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { parseCaption } from '../../utils/captionUtils';
+import { parseCaption } from '@/utils/captionUtils';
 import './CoverImage.css';
 
 const CoverImage = ({

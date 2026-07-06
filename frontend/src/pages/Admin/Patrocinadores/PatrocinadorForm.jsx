@@ -1,10 +1,10 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
-import ImageUploader from '../../../components/Admin/ImageUploader';
-import { patrocinadoresService } from '../../../services/patrocinadoresService';
-import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
-import { useAdminForm } from '../../../hooks/useAdminForm';
+import AdminFormLayout from '@/components/Admin/AdminFormLayout';
+import ImageUploader from '@/components/Admin/ImageUploader';
+import { patrocinadoresService } from '@/services/patrocinadoresService';
+import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
+import { useAdminForm } from '@/hooks/useAdminForm';
 
 function PatrocinadorForm() {
   const { id } = useParams();

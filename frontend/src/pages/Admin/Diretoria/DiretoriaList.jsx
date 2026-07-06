@@ -1,9 +1,9 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { institucionalService } from '../../../services/institucionalService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineOrderInput, InlineCategorySelect } from '../../../components/Admin/TableCells';
+import { institucionalService } from '@/services/institucionalService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineOrderInput, InlineCategorySelect } from '@/components/Admin/TableCells';
 
 function DiretoriaList() {
   const navigate = useNavigate();

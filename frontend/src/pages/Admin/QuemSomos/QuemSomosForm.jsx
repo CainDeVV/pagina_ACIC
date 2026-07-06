@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { institucionalService } from '../../../services/institucionalService';
-import RichEditor from '../../../components/RichEditor';
-import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
-import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
-import { useAdminForm } from '../../../hooks/useAdminForm';
+import { institucionalService } from '@/services/institucionalService';
+import RichEditor from '@/components/RichEditor';
+import AdminFormLayout from '@/components/Admin/AdminFormLayout';
+import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
+import { useAdminForm } from '@/hooks/useAdminForm';
 
 function QuemSomosForm() {
   const { id } = useParams();

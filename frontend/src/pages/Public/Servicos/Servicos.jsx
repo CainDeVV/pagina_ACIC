@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { servicosService } from '../../../services/servicosService';
-import ContentListLayout from '../../../components/Layout/ContentListLayout';
-import ServiceCard from '../../../components/ServiceCard/ServiceCard';
+import { servicosService } from '@/services/servicosService';
+import ContentListLayout from '@/components/Layout/ContentListLayout';
+import ServiceCard from '@/components/ServiceCard/ServiceCard';
 
 function Servicos() {
   const [sections, setSections] = useState([]);

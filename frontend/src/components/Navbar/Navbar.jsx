@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaBars, FaTimes, FaChevronDown, FaHome, FaCalendarAlt, FaNewspaper } from 'react-icons/fa';
-import { INSTITUCIONAL_MENU, SERVICOS_MENU } from '../../constants/menu';
+import { INSTITUCIONAL_MENU, SERVICOS_MENU } from '@/constants/menu';
 import './Navbar.css';
 
 function Navbar() {

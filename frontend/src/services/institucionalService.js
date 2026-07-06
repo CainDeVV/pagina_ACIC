@@ -1,4 +1,4 @@
-import api from './api';
+import api from '@/services/api';
 
 export const institucionalService = {
   // --- Gestão de Conteúdo (Quem Somos, Estatuto, CMEC...) ---

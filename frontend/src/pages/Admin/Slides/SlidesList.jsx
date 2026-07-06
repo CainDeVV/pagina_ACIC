@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { slidesService } from '../../../services/slidesService';
-import AdminListLayout from '../../../components/Admin/AdminListLayout';
-import { useAdminList } from '../../../hooks/useAdminList';
-import { InlineOrderInput, InlineStatusSelect } from '../../../components/Admin/TableCells';
-import { CONTENT_STATUS } from '../../../constants/status';
+import { slidesService } from '@/services/slidesService';
+import AdminListLayout from '@/components/Admin/AdminListLayout';
+import { useAdminList } from '@/hooks/useAdminList';
+import { InlineOrderInput, InlineStatusSelect } from '@/components/Admin/TableCells';
+import { CONTENT_STATUS } from '@/constants/status';
 
 function SlidesList() {
   const navigate = useNavigate();

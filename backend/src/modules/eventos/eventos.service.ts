@@ -1,9 +1,8 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { UpdateEventoDto } from './dto/update-evento.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import slugify from 'slugify';
 
 @Injectable()
@@ -12,16 +11,9 @@ export class EventosService {
 
   async create(createEventoDto: CreateEventoDto, authorId?: string) {
     const slug = slugify(createEventoDto.title, { lower: true, strict: true });
-    try {
-      return await this.prisma.evento.create({
-        data: { ...createEventoDto, slug, authorId },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ConflictException('Já existe um evento cadastrado com este título.');
-      }
-      throw error;
-    }
+    return await this.prisma.evento.create({
+      data: { ...createEventoDto, slug, authorId },
+    });
   }
 
   async findAll(pagination: PaginationDto) {
@@ -81,37 +73,18 @@ export class EventosService {
     if (updateEventoDto.title) {
       slug = slugify(updateEventoDto.title, { lower: true, strict: true });
     }
-    try {
-      return await this.prisma.evento.update({
-        where: { id },
-        data: {
-          ...updateEventoDto,
-          ...(slug && { slug }),
-        },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
-        if (error.code === 'P2025') {
-          throw new NotFoundException('Evento não encontrado para atualização.');
-        }
-        if (error.code === 'P2002') {
-          throw new ConflictException('A alteração de título gera um link (slug) que já está em uso.');
-        }
-      }
-      throw error;
-    }
+    return await this.prisma.evento.update({
+      where: { id },
+      data: {
+        ...updateEventoDto,
+        ...(slug && { slug }),
+      },
+    });
   }
 
   async remove(id: string) {
-    try {
-      return await this.prisma.evento.delete({
-        where: { id },
-      });
-    } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError && error.code === 'P2025') {
-        throw new NotFoundException('Evento não encontrado para exclusão.');
-      }
-      throw error;
-    }
+    return await this.prisma.evento.delete({
+      where: { id },
+    });
   }
 }

@@ -1,12 +1,12 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { eventosService } from '../../../services/eventosService';
-import RichEditor from '../../../components/RichEditor';
-import AdminFormLayout from '../../../components/Admin/AdminFormLayout';
-import CoverImageFields from '../../../components/Admin/CoverImageFields';
-import { CONTENT_STATUS, STATUS_LABELS } from '../../../constants/status';
-import { toDatetimeLocal } from '../../../utils/dateUtils';
-import { useAdminForm } from '../../../hooks/useAdminForm';
+import { eventosService } from '@/services/eventosService';
+import RichEditor from '@/components/RichEditor';
+import AdminFormLayout from '@/components/Admin/AdminFormLayout';
+import CoverImageFields from '@/components/Admin/CoverImageFields';
+import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
+import { toDatetimeLocal } from '@/utils/dateUtils';
+import { useAdminForm } from '@/hooks/useAdminForm';
 
 function EventoForm() {
   const { id } = useParams();

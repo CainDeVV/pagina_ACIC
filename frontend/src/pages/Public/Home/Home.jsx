@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
-import HeroSlider from '../../../components/HeroSlider/HeroSlider';
-import ServiceCard from '../../../components/ServiceCard/ServiceCard';
-import ContentCard from '../../../components/ContentCard/ContentCard';
-import DirectorCard from '../../../components/DirectorCard/DirectorCard';
-import Sponsors from '../../../components/Sponsors/Sponsors';
-import { CONTENT_STATUS } from '../../../constants/status';
+import HeroSlider from '@/components/HeroSlider/HeroSlider';
+import ServiceCard from '@/components/ServiceCard/ServiceCard';
+import ContentCard from '@/components/ContentCard/ContentCard';
+import DirectorCard from '@/components/DirectorCard/DirectorCard';
+import Sponsors from '@/components/Sponsors/Sponsors';
+import { CONTENT_STATUS } from '@/constants/status';
 
 /* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
-import { homeService } from '../../../services/homeService';
+import { homeService } from '@/services/homeService';
 
 import './Home.css';
 
@@ -97,6 +97,9 @@ export default function Home() {
     <>
       <Helmet>
         <title>ACIC - Associação Comercial e Industrial de Crateús</title>
+        <meta name="description" content="A Associação Comercial e Industrial de Crateús (ACIC) promove o desenvolvimento econômico e defende os interesses do empresariado no Sertão Central." />
+        <meta property="og:title" content="ACIC Crateús - A força do empresariado" />
+        <meta property="og:description" content="Conectando, capacitando e representando comércio, indústria, agropecuária e serviços em Crateús e região." />
       </Helmet>
       <main className="acic-home">
 

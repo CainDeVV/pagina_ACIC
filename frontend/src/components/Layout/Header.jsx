@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import './Header.css';
-import logo from '../../assets/ACIC.png'; 
+import logo from '@/assets/ACIC.png'; 
 
-import { MAIN_MENU } from '../../constants/menu';
+import { MAIN_MENU } from '@/constants/menu';
 
 function Header() {
   return (
