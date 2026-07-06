@@ -29,11 +29,10 @@ Thumbs.db
 !.vscode/extensions.json
 .idea/
 .agent
+.agents
 
 # Documentação e Mocks
 docs/
 CONTEXTO_GERAL.md
 auditoria-completa.md
 .agent.zip
-.context-frontend.md
-.context-backend.md
