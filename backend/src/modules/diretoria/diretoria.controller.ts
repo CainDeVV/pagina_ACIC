@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { DiretoriaService } from './diretoria.service';
 import { CreateDiretoriaDto } from './dto/create-diretoria.dto';
@@ -39,7 +48,10 @@ export class DiretoriaController {
 
   @Patch('admin/diretoria/:id')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  update(@Param('id') id: string, @Body() updateDiretoriaDto: UpdateDiretoriaDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDiretoriaDto: UpdateDiretoriaDto,
+  ) {
     return this.diretoriaService.update(id, updateDiretoriaDto);
   }
 

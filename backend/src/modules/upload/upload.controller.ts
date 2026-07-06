@@ -5,7 +5,7 @@ import {
   UploadedFile,
   BadRequestException,
   UseGuards,
-  Req
+  Req,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -48,13 +48,13 @@ export class UploadController {
           if (!/^[a-zA-Z0-9_-]+$/.test(folderName)) {
             folderName = 'geral';
           }
-          
+
           const uploadPath = join('./uploads', folderName);
-          
+
           if (!fs.existsSync(uploadPath)) {
             fs.mkdirSync(uploadPath, { recursive: true });
           }
-          
+
           cb(null, uploadPath);
         },
         filename: (req, file, cb) => {
@@ -65,7 +65,9 @@ export class UploadController {
       fileFilter: (req, file, cb) => {
         if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|pdf)$/)) {
           return cb(
-            new BadRequestException('Apenas arquivos de imagem e PDF são permitidos!'),
+            new BadRequestException(
+              'Apenas arquivos de imagem e PDF são permitidos!',
+            ),
             false,
           );
         }

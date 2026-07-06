@@ -2,7 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString, IsBoolean } from 'class-validator';
 
 export class CreateAssociadoDto {
-  @ApiProperty({ description: 'ID do usuário associado (User com role ASSOCIADO)' })
+  @ApiProperty({
+    description: 'ID do usuário associado (User com role ASSOCIADO)',
+  })
   @IsString()
   @IsNotEmpty()
   userId: string;
@@ -32,7 +34,11 @@ export class CreateAssociadoDto {
   @IsOptional()
   address?: string;
 
-  @ApiProperty({ description: 'Se a associação está ativa', required: false, default: true })
+  @ApiProperty({
+    description: 'Se a associação está ativa',
+    required: false,
+    default: true,
+  })
   @IsBoolean()
   @IsOptional()
   active?: boolean;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { institucionalService } from '@/services/institucionalService';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';

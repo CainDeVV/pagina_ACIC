@@ -8,7 +8,9 @@ export class HomeController {
   constructor(private readonly homeService: HomeService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Busca hiper-otimizada (BFF) com os Destaques da Home.' })
+  @ApiOperation({
+    summary: 'Busca hiper-otimizada (BFF) com os Destaques da Home.',
+  })
   async getDestaques() {
     return this.homeService.getDestaques();
   }

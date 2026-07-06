@@ -27,7 +27,10 @@ export class DiretoriaService {
       this.prisma.diretor.count(),
     ]);
 
-    const categoriasMap = new Map<string, any>();
+    const categoriasMap = new Map<
+      string,
+      { roleLabel: string; members: import('@prisma/client').Diretor[] }
+    >();
     for (const diretor of diretores) {
       if (!categoriasMap.has(diretor.category)) {
         categoriasMap.set(diretor.category, {
@@ -35,7 +38,7 @@ export class DiretoriaService {
           members: [],
         });
       }
-      categoriasMap.get(diretor.category).members.push(diretor);
+      categoriasMap.get(diretor.category)!.members.push(diretor);
     }
 
     return {
@@ -62,7 +65,10 @@ export class DiretoriaService {
       this.prisma.diretor.count(),
     ]);
 
-    const categoriasMap = new Map<string, any>();
+    const categoriasMap = new Map<
+      string,
+      { roleLabel: string; members: import('@prisma/client').Diretor[] }
+    >();
     for (const diretor of diretores) {
       if (!categoriasMap.has(diretor.category)) {
         categoriasMap.set(diretor.category, {
@@ -70,7 +76,7 @@ export class DiretoriaService {
           members: [],
         });
       }
-      categoriasMap.get(diretor.category).members.push(diretor);
+      categoriasMap.get(diretor.category)!.members.push(diretor);
     }
 
     return {
@@ -101,8 +107,13 @@ export class DiretoriaService {
         where: { id },
         data: updateDiretoriaDto,
       });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException('Diretor não encontrado para atualização.');
       }
       throw error;
@@ -114,8 +125,13 @@ export class DiretoriaService {
       return await this.prisma.diretor.delete({
         where: { id },
       });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException('Diretor não encontrado para exclusão.');
       }
       throw error;

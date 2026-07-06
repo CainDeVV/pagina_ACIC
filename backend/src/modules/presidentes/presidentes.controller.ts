@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PresidentesService } from './presidentes.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
@@ -37,7 +46,10 @@ export class PresidentesController {
 
   @Patch('admin/presidentes/:id')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  update(@Param('id') id: string, @Body() updatePresidenteDto: UpdatePresidenteDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updatePresidenteDto: UpdatePresidenteDto,
+  ) {
     return this.presidentesService.update(id, updatePresidenteDto);
   }
 

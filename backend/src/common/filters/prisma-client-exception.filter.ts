@@ -14,7 +14,8 @@ export class PrismaClientExceptionFilter extends BaseExceptionFilter {
       const status = HttpStatus.CONFLICT;
       response.status(status).json({
         statusCode: status,
-        message: 'Conflito de dados: o registro que você tentou inserir possui informações que já existem.',
+        message:
+          'Conflito de dados: o registro que você tentou inserir possui informações que já existem.',
         error: 'Conflict',
       });
       return;

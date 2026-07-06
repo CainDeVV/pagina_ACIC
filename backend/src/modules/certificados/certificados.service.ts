@@ -1,18 +1,30 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCertificadoSolicitacaoDto } from './dto/create-certificado.dto';
 import { UpdateCertificadoSolicitacaoDto } from './dto/update-certificado.dto';
 import { UserRole } from '@prisma/client';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @Injectable()
 export class CertificadosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createCertificadoDto: CreateCertificadoSolicitacaoDto, user: any) {
+  async create(
+    createCertificadoDto: CreateCertificadoSolicitacaoDto,
+    user: JwtPayload,
+  ) {
     if (user.role === UserRole.ASSOCIADO) {
-      const associado = await this.prisma.associado.findUnique({ where: { userId: user.id } });
+      const associado = await this.prisma.associado.findUnique({
+        where: { userId: user.id },
+      });
       if (!associado || associado.id !== createCertificadoDto.associadoId) {
-        throw new ForbiddenException('Você só pode solicitar certificados para sua própria empresa.');
+        throw new ForbiddenException(
+          'Você só pode solicitar certificados para sua própria empresa.',
+        );
       }
     }
 
@@ -50,7 +62,8 @@ export class CertificadosService {
         evento: true,
       },
     });
-    if (!certificado) throw new NotFoundException('Solicitação de certificado não encontrada');
+    if (!certificado)
+      throw new NotFoundException('Solicitação de certificado não encontrada');
     return certificado;
   }
 
@@ -63,13 +76,20 @@ export class CertificadosService {
     });
   }
 
-  async update(id: string, updateCertificadoDto: UpdateCertificadoSolicitacaoDto) {
+  async update(
+    id: string,
+    updateCertificadoDto: UpdateCertificadoSolicitacaoDto,
+  ) {
     await this.findOne(id);
     return this.prisma.certificadoSolicitacao.update({
       where: { id },
       data: {
         ...updateCertificadoDto,
-        reviewedAt: updateCertificadoDto.status && updateCertificadoDto.status !== 'PENDING' ? new Date() : undefined,
+        reviewedAt:
+          updateCertificadoDto.status &&
+          updateCertificadoDto.status !== 'PENDING'
+            ? new Date()
+            : undefined,
       },
     });
   }

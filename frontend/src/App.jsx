@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Helmet } from 'react-helmet-async';
+
 import { Routes, Route, useLocation } from 'react-router-dom';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';

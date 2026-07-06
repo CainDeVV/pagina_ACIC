@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ServicosService } from './servicos.service';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
@@ -39,7 +49,10 @@ export class ServicosController {
 
   @Post('admin/servicos')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  create(@Body() createServicoDto: CreateServicoDto, @CurrentUser() user: any) {
+  create(
+    @Body() createServicoDto: CreateServicoDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
     return this.servicosService.create(createServicoDto, user.id);
   }
 

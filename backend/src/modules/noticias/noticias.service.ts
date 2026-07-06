@@ -86,7 +86,8 @@ export class NoticiasService {
       },
     });
 
-    if (!noticia) throw new NotFoundException('Notícia não encontrada ou não publicada.');
+    if (!noticia)
+      throw new NotFoundException('Notícia não encontrada ou não publicada.');
     return noticia;
   }
 

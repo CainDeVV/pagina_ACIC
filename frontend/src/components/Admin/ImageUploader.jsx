@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef, useId } from 'react';
 
 function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
+  const uploadId = useId();
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
@@ -60,11 +61,10 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
           disabled={uploading}
           ref={fileInputRef}
           style={{ display: 'none' }}
-          id={`upload-${folder}-${Math.random()}`}
+          id={`upload-${folder}-${uploadId}`}
         />
         <label 
-          htmlFor={fileInputRef.current ? fileInputRef.current.id : undefined} 
-          onClick={() => fileInputRef.current && fileInputRef.current.click()}
+          htmlFor={`upload-${folder}-${uploadId}`}
           style={{ 
             padding: '8px 16px', 
             fontSize: '0.9rem', 

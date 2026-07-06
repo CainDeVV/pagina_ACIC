@@ -22,14 +22,16 @@ import { HomeModule } from './modules/home/home.module';
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
-    PrismaModule, 
-    AuthModule, 
-    UsuariosModule, 
-    PresidentesModule, 
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
+    PrismaModule,
+    AuthModule,
+    UsuariosModule,
+    PresidentesModule,
     SlidesModule,
     QuemSomosModule,
     ServicosModule,
@@ -41,7 +43,7 @@ import { HomeModule } from './modules/home/home.module';
     InscricoesModule,
     CertificadosModule,
     PatrocinadoresModule,
-    HomeModule
+    HomeModule,
   ],
   controllers: [AppController],
   providers: [

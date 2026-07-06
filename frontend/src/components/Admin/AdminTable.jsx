@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, Edit, Trash2, ChevronLeft, ChevronRight, GripVertical } from 'lucide-react';
 import {
   DndContext,

@@ -10,16 +10,17 @@ export class UsuariosService {
 
   async create(createUsuarioDto: CreateUsuarioDto) {
     const { password, ...rest } = createUsuarioDto;
-    
+
     const passwordHash = await bcrypt.hash(password, 10);
-    
+
     const user = await this.prisma.user.create({
       data: {
         ...rest,
         passwordHash,
       },
     });
-    const { passwordHash: _, ...result } = user;
+    const userObj = user;
+    const { passwordHash: _, ...result } = userObj;
     return result;
   }
 
@@ -59,7 +60,9 @@ export class UsuariosService {
 
   async update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
     const { password, ...rest } = updateUsuarioDto;
-    let dataToUpdate: any = { ...rest };
+    const dataToUpdate: import('@prisma/client').Prisma.UserUpdateInput = {
+      ...rest,
+    };
 
     if (password) {
       dataToUpdate.passwordHash = await bcrypt.hash(password, 10);
@@ -69,7 +72,8 @@ export class UsuariosService {
       where: { id },
       data: dataToUpdate,
     });
-    const { passwordHash: _, ...result } = user;
+    const userObj = user;
+    const { passwordHash: _, ...result } = userObj;
     return result;
   }
 
@@ -77,7 +81,8 @@ export class UsuariosService {
     const user = await this.prisma.user.delete({
       where: { id },
     });
-    const { passwordHash: _, ...result } = user;
+    const userObj = user;
+    const { passwordHash: _, ...result } = userObj;
     return result;
   }
 }

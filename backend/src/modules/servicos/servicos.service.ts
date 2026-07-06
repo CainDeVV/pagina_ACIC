@@ -87,7 +87,8 @@ export class ServicosService {
       },
     });
 
-    if (!servico) throw new NotFoundException('Serviço não encontrado ou não publicado.');
+    if (!servico)
+      throw new NotFoundException('Serviço não encontrado ou não publicado.');
     return servico;
   }
 

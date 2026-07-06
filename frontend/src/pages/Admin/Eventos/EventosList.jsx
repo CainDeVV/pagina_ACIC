@@ -3,12 +3,12 @@ import { eventosService } from '@/services/eventosService';
 import AdminListLayout from '@/components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '@/utils/dateUtils';
 import { useAdminList } from '@/hooks/useAdminList';
-import { InlineStatusSelect, InlineFeaturedToggle, InlineOrderInput } from '@/components/Admin/TableCells';
+import { InlineStatusSelect, InlineFeaturedToggle } from '@/components/Admin/TableCells';
 import { CONTENT_STATUS } from '@/constants/status';
 
 function EventosList() {
   const navigate = useNavigate();
-  const { data, loading, error, handleDelete, handleUpdateField, handleReorder } = useAdminList({
+  const { data, loading, error, handleDelete, handleUpdateField } = useAdminList({
     fetchMethod: eventosService.buscarTodosAdmin,
     deleteMethod: eventosService.deletar,
     updateMethod: eventosService.atualizar,

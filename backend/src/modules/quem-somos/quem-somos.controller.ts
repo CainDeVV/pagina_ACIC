@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { QuemSomosService } from './quem-somos.service';
 import { CreateQuemSomosDto } from './dto/create-quem-somos.dto';
@@ -45,7 +54,10 @@ export class QuemSomosController {
 
   @Patch('admin/quem-somos/:id')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  update(@Param('id') id: string, @Body() updateQuemSomosDto: UpdateQuemSomosDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateQuemSomosDto: UpdateQuemSomosDto,
+  ) {
     return this.quemSomosService.update(id, updateQuemSomosDto);
   }
 

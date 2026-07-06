@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InscricoesService } from './inscricoes.service';
 import { CreateInscricaoDto } from './dto/create-inscricao.dto';
@@ -8,6 +17,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @ApiTags('Inscricoes')
@@ -23,7 +33,10 @@ export class InscricoesController {
   @Post()
   @Roles(UserRole.ADMIN, UserRole.ASSOCIADO)
   @ApiOperation({ summary: 'Criar uma nova inscrição em evento' })
-  create(@Body() createInscricaoDto: CreateInscricaoDto, @CurrentUser() user: any) {
+  create(
+    @Body() createInscricaoDto: CreateInscricaoDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
     return this.inscricoesService.create(createInscricaoDto, user);
   }
 
@@ -37,8 +50,10 @@ export class InscricoesController {
   @Get('me')
   @Roles(UserRole.ASSOCIADO)
   @ApiOperation({ summary: 'Listar inscrições do associado logado' })
-  async findMyInscricoes(@CurrentUser() user: any) {
-    const associado = await this.prisma.associado.findUnique({ where: { userId: user.id } });
+  async findMyInscricoes(@CurrentUser() user: JwtPayload) {
+    const associado = await this.prisma.associado.findUnique({
+      where: { userId: user.id },
+    });
     if (!associado) {
       return [];
     }
@@ -55,7 +70,10 @@ export class InscricoesController {
   @Patch(':id')
   @Roles(UserRole.ADMIN)
   @ApiOperation({ summary: 'Atualizar uma inscrição (Apenas Admin)' })
-  update(@Param('id') id: string, @Body() updateInscricaoDto: UpdateInscricaoDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateInscricaoDto: UpdateInscricaoDto,
+  ) {
     return this.inscricoesService.update(id, updateInscricaoDto);
   }
 

@@ -19,13 +19,17 @@ export class AuthService {
     });
 
     if (!user || !user.active) {
-      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+      throw new UnauthorizedException(
+        'Credenciais inválidas ou usuário inativo.',
+      );
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Credenciais inválidas ou usuário inativo.');
+      throw new UnauthorizedException(
+        'Credenciais inválidas ou usuário inativo.',
+      );
     }
 
     const payload = { sub: user.id, email: user.email, role: user.role };

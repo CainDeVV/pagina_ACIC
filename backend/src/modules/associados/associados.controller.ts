@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AssociadosService } from './associados.service';
 import { CreateAssociadoDto } from './dto/create-associado.dto';
@@ -8,6 +17,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @ApiTags('Associados')
 @ApiBearerAuth()
@@ -33,7 +43,7 @@ export class AssociadosController {
   @Get('me')
   @Roles(UserRole.ASSOCIADO, UserRole.ADMIN)
   @ApiOperation({ summary: 'Obter dados da empresa do usuário logado' })
-  findMe(@CurrentUser() user: any) {
+  findMe(@CurrentUser() user: JwtPayload) {
     return this.associadosService.findByUserId(user.id);
   }
 
@@ -47,7 +57,10 @@ export class AssociadosController {
   @Patch(':id')
   @Roles(UserRole.ADMIN, UserRole.ASSOCIADO)
   @ApiOperation({ summary: 'Atualizar um associado' })
-  update(@Param('id') id: string, @Body() updateAssociadoDto: UpdateAssociadoDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAssociadoDto: UpdateAssociadoDto,
+  ) {
     return this.associadosService.update(id, updateAssociadoDto);
   }
 

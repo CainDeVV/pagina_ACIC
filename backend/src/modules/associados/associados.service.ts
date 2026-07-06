@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateAssociadoDto } from './dto/create-associado.dto';
 import { UpdateAssociadoDto } from './dto/update-associado.dto';
@@ -26,7 +30,9 @@ export class AssociadosService {
       where: { userId: createAssociadoDto.userId },
     });
     if (existingAssociadoByUser) {
-      throw new ConflictException('Este usuário já possui uma empresa associada');
+      throw new ConflictException(
+        'Este usuário já possui uma empresa associada',
+      );
     }
 
     return this.prisma.associado.create({
@@ -69,7 +75,9 @@ export class AssociadosService {
       },
     });
     if (!associado) {
-      throw new NotFoundException(`Associado não encontrado para o usuário com ID ${userId}`);
+      throw new NotFoundException(
+        `Associado não encontrado para o usuário com ID ${userId}`,
+      );
     }
     return associado;
   }

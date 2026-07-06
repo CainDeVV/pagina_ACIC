@@ -30,7 +30,11 @@ export function useAdminList({ fetchMethod, deleteMethod, updateMethod, itemName
       setData(sortedData);
     } catch (err) {
       console.error(err);
-      setError(`Erro ao carregar lista de ${itemName}s.`);
+      if (!err.response) {
+        setError(`Servidor offline ou sem conexão com a internet. Verifique sua rede.`);
+      } else {
+        setError(`Erro ao carregar lista de ${itemName}s.`);
+      }
     } finally {
       setLoading(false);
     }

@@ -13,7 +13,11 @@ export class CreateInscricaoDto {
   @IsNotEmpty()
   associadoId: string;
 
-  @ApiProperty({ description: 'Status da inscrição', enum: RegistrationStatus, required: false })
+  @ApiProperty({
+    description: 'Status da inscrição',
+    enum: RegistrationStatus,
+    required: false,
+  })
   @IsEnum(RegistrationStatus)
   @IsOptional()
   status?: RegistrationStatus;

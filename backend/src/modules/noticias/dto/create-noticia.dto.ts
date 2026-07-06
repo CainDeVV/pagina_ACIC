@@ -15,7 +15,9 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateNoticiaDto {
   @ApiProperty({ example: 'ACIC realiza evento de networking para associados' })
   @IsString()
-  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @Transform(({ value }: { value: unknown }): unknown =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty({ message: 'O título é obrigatório.' })
   title: string;
 
@@ -31,7 +33,9 @@ export class CreateNoticiaDto {
     example: { blocks: [] },
     description: 'JSON estruturado do Editor.js',
   })
-  @IsObject({ message: 'O conteúdo deve ser um objeto JSON válido do Editor.js.' })
+  @IsObject({
+    message: 'O conteúdo deve ser um objeto JSON válido do Editor.js.',
+  })
   @IsNotEmpty({ message: 'O conteúdo da notícia é obrigatório.' })
   content: any;
 
@@ -39,7 +43,10 @@ export class CreateNoticiaDto {
     example: 'https://imagens.acic.com/noticia.jpg',
     required: false,
   })
-  @IsUrl({ require_tld: false }, { message: 'A imagem de capa deve ser uma URL válida.' })
+  @IsUrl(
+    { require_tld: false },
+    { message: 'A imagem de capa deve ser uma URL válida.' },
+  )
   @IsOptional()
   coverImage?: string;
 
@@ -53,7 +60,8 @@ export class CreateNoticiaDto {
 
   @ApiProperty({
     example: true,
-    description: 'Define se a imagem de capa será exibida na página de detalhes',
+    description:
+      'Define se a imagem de capa será exibida na página de detalhes',
     required: false,
   })
   @IsBoolean()
@@ -83,7 +91,10 @@ export class CreateNoticiaDto {
     description: 'Data de publicação (ISO 8601)',
     required: false,
   })
-  @IsDateString({}, { message: 'A data de publicação deve estar no formato ISO 8601 válido.' })
+  @IsDateString(
+    {},
+    { message: 'A data de publicação deve estar no formato ISO 8601 válido.' },
+  )
   @IsOptional()
   publishedAt?: string;
 }

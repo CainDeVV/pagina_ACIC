@@ -1,4 +1,3 @@
-import React from 'react';
 import { useParams } from 'react-router-dom';
 import { slidesService } from '@/services/slidesService';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';

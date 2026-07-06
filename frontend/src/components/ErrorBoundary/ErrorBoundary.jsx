@@ -6,7 +6,7 @@ class ErrorBoundary extends React.Component {
     this.state = { hasError: false, error: null, errorInfo: null };
   }
 
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError() {
     // Atualiza o state para que a próxima renderização mostre a UI de fallback.
     return { hasError: true };
   }
@@ -32,7 +32,7 @@ class ErrorBoundary extends React.Component {
           </button>
           
           {/* Apenas visível em ambiente de desenvolvimento */}
-          {process.env.NODE_ENV === 'development' && this.state.error && (
+          {import.meta.env.MODE === 'development' && this.state.error && (
             <details style={{ whiteSpace: 'pre-wrap', textAlign: 'left', marginTop: '40px', background: '#f5f5f5', padding: '20px', borderRadius: '8px' }}>
               <summary>Detalhes do Erro Técnico</summary>
               <br />

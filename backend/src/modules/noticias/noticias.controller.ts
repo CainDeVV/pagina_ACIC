@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { NoticiasService } from './noticias.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
@@ -39,7 +49,10 @@ export class NoticiasController {
 
   @Post('admin/noticias')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  create(@Body() createNoticiaDto: CreateNoticiaDto, @CurrentUser() user: any) {
+  create(
+    @Body() createNoticiaDto: CreateNoticiaDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
     return this.noticiasService.create(createNoticiaDto, user.id);
   }
 

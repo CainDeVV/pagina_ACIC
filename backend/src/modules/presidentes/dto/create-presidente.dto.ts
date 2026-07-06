@@ -1,11 +1,19 @@
-import { IsInt, IsNotEmpty, IsOptional, IsString, IsUrl } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  IsUrl,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePresidenteDto {
   @ApiProperty({ example: 'Francisco Roberto Lima e Silva' })
   @IsString()
-  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @Transform(({ value }: { value: unknown }): unknown =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty()
   name!: string;
 
@@ -19,12 +27,18 @@ export class CreatePresidenteDto {
   @IsOptional()
   termEnd?: number;
 
-  @ApiProperty({ example: 'https://imagens.acic.com/presidente.jpg', required: false })
+  @ApiProperty({
+    example: 'https://imagens.acic.com/presidente.jpg',
+    required: false,
+  })
   @IsUrl({ require_tld: false })
   @IsOptional()
   photoUrl?: string;
 
-  @ApiProperty({ example: 'Atual presidente, focado na reestruturação e modernização...', required: false })
+  @ApiProperty({
+    example: 'Atual presidente, focado na reestruturação e modernização...',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   bio?: string;

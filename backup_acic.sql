@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict pG2ZQdk5oH3VBsWl6kDfYYMn3IcFPdpk13ubTcaEP5BpEtSnMf26XzrfuAdhFkd
+\restrict EcTZAbAuv6TKOy4WDThHffwMaH8D5gSz4CU7IMMdSLEksDLqRIP1hEEqm4xGwTY
 
 -- Dumped from database version 16.14
 -- Dumped by pg_dump version 16.14
@@ -445,11 +445,12 @@ c1b44966-599c-493f-b816-fb9b878a95ea	Limite do Simples Nacional é tema de debat
 COPY public."Patrocinador" (id, name, "logoUrl", "linkUrl", status, "sortOrder", "createdAt", "updatedAt") FROM stdin;
 da481d5b-806a-42f8-a1ee-6d4df5137837	Banco do Brasil	https://upload.wikimedia.org/wikipedia/commons/5/52/BB-logo1.jpg	https://www.bb.com.br/site/	PUBLISHED	2	2026-07-05 19:07:31.872	2026-07-05 19:14:04.62
 613f0895-afb3-4309-b18a-3454316eaf35	Kojima Productions	https://upload.wikimedia.org/wikipedia/pt/7/75/Kojima_Productions_logo.png	https://www.kojimaproductions.jp/	PUBLISHED	3	2026-07-05 19:08:10.527	2026-07-05 19:14:08.485
-a59ddaa1-2591-47c3-af61-4caf17239076	Hytale Studios	https://hytale.com/images/logo.webp	https://hytale.com/	PUBLISHED	7	2026-07-05 19:11:59.521	2026-07-05 19:30:53.465
 22bab48d-8e1f-44e2-855b-b2db34e5582a	CD Projekt Red	https://upload.wikimedia.org/wikipedia/pt/d/d0/CDProjekt_2014_logo.svg.png	https://www.cdprojektred.com/en	PUBLISHED	4	2026-07-05 19:12:34.758	2026-07-05 19:34:48.447
 74fcfb9f-ade9-44c2-a66a-e421dc4891e5	Arkane Studios	https://upload.wikimedia.org/wikipedia/commons/9/95/Arkane_Studios_Logo_2020.png	https://www.arkane-studios.com/en	PUBLISHED	6	2026-07-05 19:28:45.159	2026-07-05 19:34:55.862
 2de7d34d-9aa6-4b42-af8d-8540b09502ba	Bethesda Studios 	https://upload.wikimedia.org/wikipedia/commons/2/22/Bethesda_Game_Studios_logo.svg	https://bethesda.net/pt-BR	PUBLISHED	5	2026-07-05 19:10:57.329	2026-07-05 19:34:58.642
 4cf42e05-e92b-4d35-aef7-bdfdd9b8685a	Nubank	https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Nubank_logo.svg/1280px-Nubank_logo.svg.png	https://nubank.com.br/	PUBLISHED	1	2026-07-05 19:06:22.159	2026-07-05 19:35:18.671
+a59ddaa1-2591-47c3-af61-4caf17239076	Hytale Studios	https://hytale.com/images/logo.webp	https://hytale.com/	PUBLISHED	7	2026-07-05 19:11:59.521	2026-07-06 15:42:53.298
+01b9c18d-d61c-4c22-9b33-b8f474f9db72	Digital Extremes	https://upload.wikimedia.org/wikipedia/en/2/2a/Digital_Extremes_Logo.jpg	https://www.digitalextremes.com/	PUBLISHED	8	2026-07-06 15:42:39.65	2026-07-06 15:42:53.299
 \.
 
 
@@ -779,5 +780,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict pG2ZQdk5oH3VBsWl6kDfYYMn3IcFPdpk13ubTcaEP5BpEtSnMf26XzrfuAdhFkd
+\unrestrict EcTZAbAuv6TKOy4WDThHffwMaH8D5gSz4CU7IMMdSLEksDLqRIP1hEEqm4xGwTY
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { parseCaption } from '@/utils/captionUtils';
 import './CoverImage.css';
 

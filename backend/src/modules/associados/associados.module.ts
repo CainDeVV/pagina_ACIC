@@ -4,6 +4,6 @@ import { AssociadosService } from './associados.service';
 
 @Module({
   controllers: [AssociadosController],
-  providers: [AssociadosService]
+  providers: [AssociadosService],
 })
 export class AssociadosModule {}

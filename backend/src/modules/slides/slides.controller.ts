@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SlidesService } from './slides.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 import { UserRole } from '@prisma/client';
 
@@ -34,7 +44,10 @@ export class SlidesController {
 
   @Post('admin/slides')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
-  create(@Body() createSlideDto: CreateSlideDto, @CurrentUser() user: any) {
+  create(
+    @Body() createSlideDto: CreateSlideDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
     return this.slidesService.create(createSlideDto, user.id);
   }
 

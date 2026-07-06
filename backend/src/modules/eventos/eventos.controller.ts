@@ -1,10 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { UpdateEventoDto } from './dto/update-evento.dto';
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { UserRole } from '@prisma/client';
 import { PaginationDto } from '../../common/dto/pagination.dto';
 
@@ -15,7 +25,10 @@ export class EventosController {
 
   // ── ROTAS PÚBLICAS (slug) ──
   @ApiOperation({ summary: 'Listar eventos publicados' })
-  @ApiResponse({ status: 200, description: 'Lista paginada de eventos publicados.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista paginada de eventos publicados.',
+  })
   @Get('eventos')
   findAll(@Query() pagination: PaginationDto) {
     return this.eventosService.findAll(pagination);
@@ -51,7 +64,7 @@ export class EventosController {
   @ApiResponse({ status: 201, description: 'Evento criado com sucesso.' })
   @ApiResponse({ status: 409, description: 'Evento com título duplicado.' })
   @Post('admin/eventos')
-  create(@Body() dto: CreateEventoDto, @CurrentUser() user: any) {
+  create(@Body() dto: CreateEventoDto, @CurrentUser() user: JwtPayload) {
     return this.eventosService.create(dto, user.id);
   }
 

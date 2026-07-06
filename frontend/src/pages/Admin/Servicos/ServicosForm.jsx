@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { servicosService } from '@/services/servicosService';
 import RichEditor from '@/components/RichEditor';

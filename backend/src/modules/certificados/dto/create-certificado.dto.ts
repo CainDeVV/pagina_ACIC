@@ -8,17 +8,27 @@ export class CreateCertificadoSolicitacaoDto {
   @IsNotEmpty()
   associadoId: string;
 
-  @ApiProperty({ description: 'ID do Evento relacionado (opcional)', required: false })
+  @ApiProperty({
+    description: 'ID do Evento relacionado (opcional)',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   eventoId?: string;
 
-  @ApiProperty({ description: 'Motivo ou observação da solicitação', required: false })
+  @ApiProperty({
+    description: 'Motivo ou observação da solicitação',
+    required: false,
+  })
   @IsString()
   @IsOptional()
   reason?: string;
 
-  @ApiProperty({ description: 'Status inicial (default: PENDING)', enum: CertificateStatus, required: false })
+  @ApiProperty({
+    description: 'Status inicial (default: PENDING)',
+    enum: CertificateStatus,
+    required: false,
+  })
   @IsEnum(CertificateStatus)
   @IsOptional()
   status?: CertificateStatus;

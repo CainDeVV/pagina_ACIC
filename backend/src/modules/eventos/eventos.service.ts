@@ -29,7 +29,10 @@ export class EventosService {
       }),
       this.prisma.evento.count({ where }),
     ]);
-    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return {
+      data,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findAllAdmin(pagination: PaginationDto) {
@@ -43,7 +46,10 @@ export class EventosService {
       }),
       this.prisma.evento.count(),
     ]);
-    return { data, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return {
+      data,
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findBySlug(slug: string) {

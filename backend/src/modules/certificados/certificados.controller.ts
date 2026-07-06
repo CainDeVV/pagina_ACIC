@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CertificadosService } from './certificados.service';
 import { CreateCertificadoSolicitacaoDto } from './dto/create-certificado.dto';
@@ -8,6 +17,7 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @ApiTags('Certificados')
@@ -23,7 +33,10 @@ export class CertificadosController {
   @Post()
   @Roles(UserRole.ADMIN, UserRole.ASSOCIADO)
   @ApiOperation({ summary: 'Solicitar um novo certificado' })
-  create(@Body() createCertificadoDto: CreateCertificadoSolicitacaoDto, @CurrentUser() user: any) {
+  create(
+    @Body() createCertificadoDto: CreateCertificadoSolicitacaoDto,
+    @CurrentUser() user: JwtPayload,
+  ) {
     return this.certificadosService.create(createCertificadoDto, user);
   }
 
@@ -36,9 +49,13 @@ export class CertificadosController {
 
   @Get('me')
   @Roles(UserRole.ASSOCIADO)
-  @ApiOperation({ summary: 'Listar solicitações de certificado do associado logado' })
-  async findMyCertificados(@CurrentUser() user: any) {
-    const associado = await this.prisma.associado.findUnique({ where: { userId: user.id } });
+  @ApiOperation({
+    summary: 'Listar solicitações de certificado do associado logado',
+  })
+  async findMyCertificados(@CurrentUser() user: JwtPayload) {
+    const associado = await this.prisma.associado.findUnique({
+      where: { userId: user.id },
+    });
     if (!associado) {
       return [];
     }
@@ -54,8 +71,13 @@ export class CertificadosController {
 
   @Patch(':id')
   @Roles(UserRole.ADMIN)
-  @ApiOperation({ summary: 'Atualizar status ou arquivo do certificado (Apenas Admin)' })
-  update(@Param('id') id: string, @Body() updateCertificadoDto: UpdateCertificadoSolicitacaoDto) {
+  @ApiOperation({
+    summary: 'Atualizar status ou arquivo do certificado (Apenas Admin)',
+  })
+  update(
+    @Param('id') id: string,
+    @Body() updateCertificadoDto: UpdateCertificadoSolicitacaoDto,
+  ) {
     return this.certificadosService.update(id, updateCertificadoDto);
   }
 

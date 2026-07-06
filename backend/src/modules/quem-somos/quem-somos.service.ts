@@ -70,11 +70,11 @@ export class QuemSomosService {
       where: {
         AND: [
           { status: PublishStatus.PUBLISHED },
-          { OR: [{ id: idOrKey }, { key: idOrKey }] }
-        ]
+          { OR: [{ id: idOrKey }, { key: idOrKey }] },
+        ],
       },
     });
-    
+
     if (!section) {
       throw new NotFoundException('Seção não encontrada ou não publicada.');
     }
@@ -85,7 +85,7 @@ export class QuemSomosService {
     const section = await this.prisma.quemSomosSection.findUnique({
       where: { id },
     });
-    
+
     if (!section) {
       throw new NotFoundException('Seção não encontrada.');
     }

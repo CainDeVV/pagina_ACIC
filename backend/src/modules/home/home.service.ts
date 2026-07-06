@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
-import { PublishStatus, EventStatus } from '@prisma/client';
+import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class HomeService {
@@ -9,7 +9,14 @@ export class HomeService {
   async getDestaques() {
     const agora = new Date();
 
-    const [slides, servicos, diretoria, proximosEventos, eventosPassados, noticias] = await Promise.all([
+    const [
+      slides,
+      servicos,
+      diretoria,
+      proximosEventos,
+      eventosPassados,
+      noticias,
+    ] = await Promise.all([
       // 1. SLIDES: Todos publicados e ordenados
       this.prisma.homeSlide.findMany({
         where: { status: PublishStatus.PUBLISHED },
@@ -36,10 +43,14 @@ export class HomeService {
           startsAt: { gt: agora },
           NOT: {
             OR: [
-              { status: 'FINISHED' as any }, // Proteção caso o enum não tenha finished
-              { status: 'CANCELLED' as any }
-            ]
-          }
+              {
+                status: 'FINISHED',
+              }, // Proteção caso o enum não tenha finished
+              {
+                status: 'CANCELLED',
+              },
+            ],
+          },
         },
         orderBy: { startsAt: 'asc' },
         take: 3,
@@ -61,7 +72,8 @@ export class HomeService {
     ]);
 
     // Tratar Eventos (Se tiver próximos usa, se não tiver usa os antigos)
-    const eventos = proximosEventos.length > 0 ? proximosEventos : eventosPassados;
+    const eventos =
+      proximosEventos.length > 0 ? proximosEventos : eventosPassados;
 
     return {
       data: {
@@ -70,7 +82,7 @@ export class HomeService {
         diretoria,
         eventos,
         noticias,
-      }
+      },
     };
   }
 }

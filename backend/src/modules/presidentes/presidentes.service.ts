@@ -78,8 +78,13 @@ export class PresidentesService {
         where: { id },
         data: updatePresidenteDto,
       });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException('Presidente não encontrado.');
       }
       throw error;
@@ -91,8 +96,13 @@ export class PresidentesService {
       return await this.prisma.presidente.delete({
         where: { id },
       });
-    } catch (error: any) {
-      if (error.code === 'P2025') {
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === 'object' &&
+        'code' in error &&
+        error.code === 'P2025'
+      ) {
         throw new NotFoundException('Presidente não encontrado.');
       }
       throw error;

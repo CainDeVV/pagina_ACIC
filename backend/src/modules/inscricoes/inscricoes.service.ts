@@ -1,18 +1,28 @@
-import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateInscricaoDto } from './dto/create-inscricao.dto';
 import { UpdateInscricaoDto } from './dto/update-inscricao.dto';
 import { UserRole } from '@prisma/client';
+import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @Injectable()
 export class InscricoesService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createInscricaoDto: CreateInscricaoDto, user: any) {
+  async create(createInscricaoDto: CreateInscricaoDto, user: JwtPayload) {
     if (user.role === UserRole.ASSOCIADO) {
-      const associado = await this.prisma.associado.findUnique({ where: { userId: user.id } });
+      const associado = await this.prisma.associado.findUnique({
+        where: { userId: user.id },
+      });
       if (!associado || associado.id !== createInscricaoDto.associadoId) {
-        throw new ForbiddenException('Você só pode inscrever sua própria empresa em eventos.');
+        throw new ForbiddenException(
+          'Você só pode inscrever sua própria empresa em eventos.',
+        );
       }
     }
 
@@ -34,7 +44,8 @@ export class InscricoesService {
         },
       },
     });
-    if (existingInscricao) throw new ConflictException('Associado já inscrito neste evento');
+    if (existingInscricao)
+      throw new ConflictException('Associado já inscrito neste evento');
 
     return this.prisma.inscricaoEvento.create({
       data: createInscricaoDto,

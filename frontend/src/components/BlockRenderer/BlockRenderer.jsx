@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 import { parseCaption } from '@/utils/captionUtils';
 import DOMPurify from 'dompurify';
@@ -85,7 +85,7 @@ function BlockRenderer({ blocks }) {
         if (!data) return null;
 
         switch (type) {
-          case 'header':
+          case 'header': {
             const Tag = `h${data.level || 2}`;
             return (
               <Tag 
@@ -93,6 +93,7 @@ function BlockRenderer({ blocks }) {
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(data.text) }} 
               />
             );
+          }
 
           case 'paragraph':
             return (
@@ -102,7 +103,7 @@ function BlockRenderer({ blocks }) {
               />
             );
 
-          case 'list':
+          case 'list': {
             // O Editor.js suporta listas ordenadas (ol) e não ordenadas (ul)
             const ListTag = data.style === 'ordered' ? 'ol' : 'ul';
             
@@ -134,8 +135,9 @@ function BlockRenderer({ blocks }) {
                 {renderListItems(data.items)}
               </ListTag>
             );
+          }
 
-          case 'image':
+          case 'image': {
             // Padrão do plugin oficial @editorjs/image
             const { cleanAlt, showCaption, cleanCaption } = parseCaption(data.caption, 'Imagem do conteúdo');
 
@@ -156,6 +158,7 @@ function BlockRenderer({ blocks }) {
                 )}
               </figure>
             );
+          }
 
           /* * BLOCOS CUSTOMIZADOS
            * Mantidos aqui caso você crie plugins customizados para o Editor.js

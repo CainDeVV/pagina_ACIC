@@ -59,7 +59,6 @@ function NoticiaForm() {
         const errors = {};
         if (!currentData.title?.trim()) errors.title = 'O título é obrigatório.';
         
-        let parsedPublishedAt = undefined;
         if (currentData.publishedAt) {
           const d = new Date(currentData.publishedAt);
           if (isNaN(d.getTime())) {

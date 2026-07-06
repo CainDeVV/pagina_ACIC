@@ -8,7 +8,7 @@ import ServiceCard from '@/components/ServiceCard/ServiceCard';
 import ContentCard from '@/components/ContentCard/ContentCard';
 import DirectorCard from '@/components/DirectorCard/DirectorCard';
 import Sponsors from '@/components/Sponsors/Sponsors';
-import { CONTENT_STATUS } from '@/constants/status';
+
 
 /* --- IMPORTAÇÃO DOS SERVIÇOS (API REAL) --- */
 import { homeService } from '@/services/homeService';
