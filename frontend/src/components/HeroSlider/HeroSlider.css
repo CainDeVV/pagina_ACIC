@@ -16,7 +16,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(100deg, rgba(14, 63, 114, 0.95) 0%, rgba(14, 63, 114, 0.8) 40%, transparent 80%);
+  /* Mantém a camada azul cobrindo 100% da imagem.
+     Antes o gradiente terminava em transparente, deixando parte do slide sem cobertura. */
+  background: linear-gradient(
+    100deg,
+    rgba(14, 63, 114, 0.96) 0%,
+    rgba(14, 63, 114, 0.86) 42%,
+    rgba(14, 63, 114, 0.56) 72%,
+    rgba(14, 63, 114, 0.42) 100%
+  );
   z-index: 2;
   pointer-events: none;
 }
