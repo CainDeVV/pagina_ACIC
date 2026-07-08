@@ -20,6 +20,7 @@ function PatrocinadorForm() {
     id,
     service: patrocinadoresService,
     redirectPath: '/admin/patrocinadores',
+    fetchItemsFn: patrocinadoresService.buscarTodosAdmin,
     initialData: {
       name: '',
       logoUrl: '',
@@ -83,16 +84,6 @@ function PatrocinadorForm() {
       </div>
 
       <div className="form-group">
-        <label>Ordem (0 para primeiro)</label>
-        <input
-          type="number"
-          name="sortOrder"
-          value={formData.sortOrder}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="form-group">
         <label>Logomarca do Patrocinador *</label>
         <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '10px' }}>
           Recomendado: Fundo transparente (PNG), proporção quadrada ou retangular horizontal.
@@ -109,6 +100,16 @@ function PatrocinadorForm() {
           onChange={handleChange} 
           placeholder="Ou cole uma URL direta da logomarca aqui..."
           style={{ marginTop: '10px' }}
+        />
+      </div>
+
+      <div className="form-group">
+        <label>Ordem de Exibição (sortOrder)</label>
+        <input
+          type="number"
+          name="sortOrder"
+          value={formData.sortOrder === undefined ? '' : formData.sortOrder}
+          onChange={handleChange}
         />
       </div>
     </AdminFormLayout>

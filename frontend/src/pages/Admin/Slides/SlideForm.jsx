@@ -20,6 +20,7 @@ function SlideForm() {
     id,
     service: slidesService,
     redirectPath: '/admin/slides',
+    fetchItemsFn: slidesService.buscarTodosAdmin,
     initialData: {
       title: '',
       subtitle: '',
@@ -72,10 +73,10 @@ function SlideForm() {
 
       <div className="form-group">
         <label>Imagem do Slide *</label>
-        <ImageUploader 
-          folder="slides" 
-          currentUrl={formData.imageUrl} 
-          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} 
+        <ImageUploader
+          folder="slides"
+          currentUrl={formData.imageUrl}
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
         />
         <input
           type="text"

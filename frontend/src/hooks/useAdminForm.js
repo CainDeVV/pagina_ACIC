@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
  * @param {string} options.id - O ID da entidade (vindo do useParams), null/undefined se for criação
  * @param {Object} options.initialData - O estado inicial do formulário (vazio/defaults)
  * @param {Object} options.service - O objeto de serviço com os métodos (buscarPorId, criar, atualizar)
- * @param {string} options.redirectPath - A rota para redirecionar após sucesso (ex: '/admin/patrocinadores')
+ * @param {Function} [options.fetchItemsFn] - Opcional: Função que busca todos os itens para auto-incrementar o sortOrder na criação
  * @returns {Object} { formData, setFormData, loading, fetching, error, setError, handleChange, handleSubmit }
  */
-export function useAdminForm({ id, initialData, service, redirectPath }) {
+export function useAdminForm({ id, initialData, service, redirectPath, fetchItemsFn }) {
   const isEditing = !!id;
   const navigate = useNavigate();
 
@@ -20,6 +20,7 @@ export function useAdminForm({ id, initialData, service, redirectPath }) {
   const [fetching, setFetching] = useState(isEditing);
   const [error, setError] = useState(null);
 
+  // Efeito para carregar dados de edição
   useEffect(() => {
     if (isEditing) {
       const fetchData = async () => {
@@ -46,6 +47,27 @@ export function useAdminForm({ id, initialData, service, redirectPath }) {
       fetchData();
     }
   }, [id, service]);
+
+  // Efeito para adivinhar a ordem de exibição (auto-incremento DRY)
+  useEffect(() => {
+    if (!isEditing && fetchItemsFn) {
+      const fetchMaxOrder = async () => {
+        try {
+          const payload = await fetchItemsFn();
+          const items = payload.data || [];
+          if (items.length > 0) {
+            const maxOrder = Math.max(...items.map(i => Number(i.sortOrder) || 0));
+            setFormData(prev => ({ ...prev, sortOrder: maxOrder + 1 }));
+          } else {
+            setFormData(prev => ({ ...prev, sortOrder: 1 }));
+          }
+        } catch (err) {
+          console.error("Erro ao tentar auto-preencher sortOrder:", err);
+        }
+      };
+      fetchMaxOrder();
+    }
+  }, [isEditing, fetchItemsFn]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

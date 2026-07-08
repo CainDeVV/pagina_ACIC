@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { eventosService } from '@/services/eventosService';
 import { CONTENT_STATUS } from '@/constants/status';
 import ContentListLayout from '@/components/Layout/ContentListLayout';
+import { EventCard } from '@/components/Card';
 
 function Eventos() {
   const [sections, setSections] = useState([]);
@@ -65,6 +66,7 @@ function Eventos() {
         sliderData={sliderData}
         sections={sections}
         emptyMessage="Nenhum evento disponível no momento."
+        renderItem={(item) => <EventCard key={item.id} evento={item} variant="grid" />}
       />
     </>
   );

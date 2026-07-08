@@ -25,6 +25,7 @@ function PresidenteForm() {
     id,
     service: presidenteServiceAdapter,
     redirectPath: '/admin/presidentes',
+    fetchItemsFn: institucionalService.buscarPresidentesAdmin,
     initialData: {
       name: '',
       termStart: '',

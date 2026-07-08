@@ -23,6 +23,7 @@ function ServicosForm() {
     id,
     service: servicosService,
     redirectPath: '/admin/servicos',
+    fetchItemsFn: servicosService.buscarTodosAdmin,
     initialData: {
       title: '',
       summary: '',
@@ -30,7 +31,8 @@ function ServicosForm() {
       icon: '',
       imageUrl: '',
       destaque: false,
-      status: CONTENT_STATUS.DRAFT
+      status: CONTENT_STATUS.DRAFT,
+      sortOrder: 0
     }
   });
 
@@ -50,7 +52,8 @@ function ServicosForm() {
         description: finalDescription,
         summary: currentData.summary === '' ? null : currentData.summary,
         icon: currentData.icon === '' ? null : currentData.icon,
-        imageUrl: currentData.imageUrl === '' ? null : currentData.imageUrl
+        imageUrl: currentData.imageUrl === '' ? null : currentData.imageUrl,
+        sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
       };
     });
   };
@@ -142,6 +145,16 @@ function ServicosForm() {
           onChange={handleChange}
         />
         <label htmlFor="destaque">Destacar este serviço na página inicial?</label>
+      </div>
+
+      <div className="form-group">
+        <label>Ordem de Exibição (sortOrder)</label>
+        <input
+          type="number"
+          name="sortOrder"
+          value={formData.sortOrder === undefined ? '' : formData.sortOrder}
+          onChange={handleChange}
+        />
       </div>
     </AdminFormLayout>
   );

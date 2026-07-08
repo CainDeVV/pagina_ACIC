@@ -27,6 +27,7 @@ function QuemSomosForm() {
     id,
     service: quemSomosServiceAdapter,
     redirectPath: '/admin/quemsomos',
+    fetchItemsFn: institucionalService.buscarTodasPaginasAdmin,
     initialData: {
       key: '',
       title: '',

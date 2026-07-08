@@ -23,6 +23,19 @@ const diretoriaServiceAdapter = {
   atualizar: institucionalService.atualizarDiretoria 
 };
 
+const fetchDiretoriaFlat = async () => {
+  const result = await institucionalService.buscarDiretoriaAdmin();
+  const flatList = [];
+  if (result && Array.isArray(result.data)) {
+    result.data.forEach(group => {
+      if (group.members && Array.isArray(group.members)) {
+        flatList.push(...group.members);
+      }
+    });
+  }
+  return { data: flatList };
+};
+
 function DiretoriaForm() {
   const { id } = useParams();
 
@@ -38,6 +51,7 @@ function DiretoriaForm() {
     id,
     service: diretoriaServiceAdapter,
     redirectPath: '/admin/diretoria',
+    fetchItemsFn: fetchDiretoriaFlat,
     initialData: {
       name: '',
       role: '',
