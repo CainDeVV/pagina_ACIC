@@ -6,16 +6,19 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess, maxSizeM
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   const uploadId = useId();
+  const serverLimitMB = 100;
 
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > maxSizeMB * 1024 * 1024) {
-      setError(`O arquivo é muito grande. O tamanho máximo permitido é ${maxSizeMB}MB.`);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+    if (!optimize && file.size > maxSizeMB * 1024 * 1024) {
+      setError(`Sem otimização, o tamanho máximo permitido é ${maxSizeMB}MB.`);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    } else if (optimize && file.size > serverLimitMB * 1024 * 1024) {
+      setError(`O limite absoluto do servidor para envio é de ${serverLimitMB}MB por arquivo.`);
+      if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
 
@@ -91,7 +94,7 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess, maxSizeM
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <span style={{ fontSize: '0.8rem', color: 'var(--color-gray-dark)' }}>
-          Recomendado: Imagens em JPG, PNG ou WEBP. Tamanho máximo: {maxSizeMB}MB.
+          Recomendado: Imagens em JPG, PNG ou WEBP. Tamanho máximo: {optimize ? `${serverLimitMB}MB (Otimizado)` : `${maxSizeMB}MB`}.
         </span>
         <label style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--color-gray-dark)' }}>
           <input 

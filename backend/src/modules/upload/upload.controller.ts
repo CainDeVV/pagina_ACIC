@@ -98,7 +98,7 @@ export class UploadController {
       const webpPath = join(uploadDir, webpFilename);
 
       await sharp(file.path)
-        .resize({ width: 1920, withoutEnlargement: true })
+        .resize({ width: 3840, withoutEnlargement: true })
         .webp({ quality: 80 })
         .toFile(webpPath);
 
