@@ -13,6 +13,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
+const sharp = require('sharp');
 import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -22,7 +23,6 @@ import { UserRole } from '@prisma/client';
 @ApiTags('Upload')
 @Controller('upload')
 export class UploadController {
-  // ROTA ADMINISTRATIVA PROTEGIDA — mesmo padrão de eventos.controller.ts e servicos.controller.ts
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.EDITOR)
@@ -44,7 +44,6 @@ export class UploadController {
       storage: diskStorage({
         destination: (req, file, cb) => {
           let folderName = (req.query.folder as string) || 'geral';
-          // Previne Directory Traversal e caracteres estranhos
           if (!/^[a-zA-Z0-9_-]+$/.test(folderName)) {
             folderName = 'geral';
           }
@@ -74,11 +73,11 @@ export class UploadController {
         cb(null, true);
       },
       limits: {
-        fileSize: 10 * 1024 * 1024, // 10MB
+        fileSize: 100 * 1024 * 1024, // 100MB
       },
     }),
   )
-  uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
     if (!file) {
       throw new BadRequestException('Nenhum arquivo válido foi enviado.');
     }
@@ -88,16 +87,37 @@ export class UploadController {
       folderName = 'geral';
     }
 
-    // Retorna o caminho RELATIVO — o frontend monta a URL completa via VITE_API_URL
-    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${folderName}/${file.filename}`;
+    const optimize = req.query.optimize !== 'false';
+    const isImage = file.mimetype.startsWith('image/');
+    let finalFilename = file.filename;
+    let finalMimetype = file.mimetype;
+
+    if (isImage && optimize) {
+      const uploadDir = join('./uploads', folderName);
+      const webpFilename = uuidv4() + '.webp';
+      const webpPath = join(uploadDir, webpFilename);
+
+      await sharp(file.path)
+        .resize({ width: 1920, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(webpPath);
+
+      // Deleta a imagem original pesada que o multer salvou no disco
+      await fs.promises.unlink(file.path).catch(() => null);
+
+      finalFilename = webpFilename;
+      finalMimetype = 'image/webp';
+    }
+
+    const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${folderName}/${finalFilename}`;
 
     return {
       success: 1,
       file: {
         url: fileUrl,
       },
-      filename: file.filename,
-      mimetype: file.mimetype,
+      filename: finalFilename,
+      mimetype: finalMimetype,
     };
   }
 }

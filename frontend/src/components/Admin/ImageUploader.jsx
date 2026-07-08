@@ -1,7 +1,8 @@
 import { useState, useRef, useId } from 'react';
 
-function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
+function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess, maxSizeMB = 10 }) {
   const [uploading, setUploading] = useState(false);
+  const [optimize, setOptimize] = useState(true);
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   const uploadId = useId();
@@ -9,6 +10,14 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
   const handleFileChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      setError(`O arquivo é muito grande. O tamanho máximo permitido é ${maxSizeMB}MB.`);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
 
     setUploading(true);
     setError(null);
@@ -20,7 +29,7 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
       const token = localStorage.getItem('acic_access_token');
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
       
-      const response = await fetch(`${apiUrl}/api/upload?folder=${folder}`, {
+      const response = await fetch(`${apiUrl}/api/upload?folder=${folder}&optimize=${optimize}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -56,7 +65,7 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <input 
           type="file" 
-          accept="image/*" 
+          accept="image/*,application/pdf" 
           onChange={handleFileChange} 
           disabled={uploading}
           ref={fileInputRef}
@@ -77,10 +86,24 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess }) {
             transition: 'background 0.3s'
           }}
         >
-          {uploading ? 'Enviando imagem...' : '📸 Enviar Foto do Computador'}
+          {uploading ? 'Enviando arquivo...' : '📸 Enviar Arquivo'}
         </label>
       </div>
-      {error && <span style={{ color: 'red', fontSize: '0.9rem' }}>{error}</span>}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <span style={{ fontSize: '0.8rem', color: 'var(--color-gray-dark)' }}>
+          Recomendado: Imagens em JPG, PNG ou WEBP. Tamanho máximo: {maxSizeMB}MB.
+        </span>
+        <label style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--color-gray-dark)' }}>
+          <input 
+            type="checkbox" 
+            checked={optimize} 
+            onChange={(e) => setOptimize(e.target.checked)} 
+            disabled={uploading}
+          />
+          Otimizar imagem (Reduzir tamanho e converter para WebP)
+        </label>
+      </div>
+      {error && <span style={{ color: 'red', fontSize: '0.9rem', fontWeight: '500' }}>{error}</span>}
     </div>
   );
 }
