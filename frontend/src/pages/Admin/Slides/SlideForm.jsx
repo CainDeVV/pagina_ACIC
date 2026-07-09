@@ -4,9 +4,12 @@ import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import ImageUploader from '@/components/Admin/ImageUploader';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
+import { useState } from 'react';
 
 function SlideForm() {
   const { id } = useParams();
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const {
     formData,
@@ -20,6 +23,7 @@ function SlideForm() {
     id,
     service: slidesService,
     redirectPath: '/admin/slides',
+    fetchItemsFn: slidesService.buscarTodosAdmin,
     initialData: {
       title: '',
       subtitle: '',
@@ -31,12 +35,24 @@ function SlideForm() {
   });
 
   const onSave = (e) => {
-    handleSubmit(e, null, (currentData) => ({
-      ...currentData,
-      subtitle: currentData.subtitle === '' ? undefined : currentData.subtitle,
-      linkUrl: currentData.linkUrl === '' ? undefined : currentData.linkUrl,
-      sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
-    }));
+    setFieldErrors({});
+    handleSubmit(e, 
+      (currentData) => {
+        const errors = validateStandardFields(currentData, ['imageUrl']);
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
+        }
+        return null;
+      },
+      (currentData) => {
+        const cleanedData = cleanEmptyStrings(currentData);
+        return {
+          ...cleanedData,
+          sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
+        };
+      }
+    );
   };
 
   return (
@@ -58,6 +74,7 @@ function SlideForm() {
           onChange={handleChange}
           required
         />
+        {fieldErrors.title && <span className="field-error">{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
@@ -72,10 +89,10 @@ function SlideForm() {
 
       <div className="form-group">
         <label>Imagem do Slide *</label>
-        <ImageUploader 
-          folder="slides" 
-          currentUrl={formData.imageUrl} 
-          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))} 
+        <ImageUploader
+          folder="slides"
+          currentUrl={formData.imageUrl}
+          onUploadSuccess={(url) => setFormData(prev => ({ ...prev, imageUrl: url }))}
         />
         <input
           type="text"
@@ -86,6 +103,7 @@ function SlideForm() {
           placeholder="Ou cole uma URL direta da imagem aqui..."
           style={{ marginTop: '10px' }}
         />
+        {fieldErrors.imageUrl && <span className="field-error">{fieldErrors.imageUrl}</span>}
       </div>
 
       <div className="form-group">
@@ -107,7 +125,7 @@ function SlideForm() {
       </div>
 
       <div className="form-group">
-        <label>Ordem de Exibição (sortOrder)</label>
+        <label>Ordem de Exibição</label>
         <input
           type="number"
           name="sortOrder"

@@ -5,6 +5,8 @@ import RichEditor from '@/components/RichEditor';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
+import { useState } from 'react';
 
 const quemSomosServiceAdapter = { 
   buscarPorId: institucionalService.buscarPaginaPorIdAdmin, 
@@ -15,6 +17,7 @@ const quemSomosServiceAdapter = {
 function QuemSomosForm() {
   const { id } = useParams();
   const editorRef = useRef(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const {
     formData,
@@ -27,6 +30,7 @@ function QuemSomosForm() {
     id,
     service: quemSomosServiceAdapter,
     redirectPath: '/admin/quemsomos',
+    fetchItemsFn: institucionalService.buscarTodasPaginasAdmin,
     initialData: {
       key: '',
       title: '',
@@ -37,21 +41,39 @@ function QuemSomosForm() {
   });
 
   const onSave = (e) => {
-    handleSubmit(e, null, async (currentData) => {
-      let finalContent = currentData.content;
-      if (editorRef.current) {
-        const editorData = await editorRef.current.save();
-        if (editorData) {
-          finalContent = editorData;
+    setFieldErrors({});
+    handleSubmit(e, 
+      (currentData) => {
+        const errors = validateStandardFields(currentData, ['key']);
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
         }
-      }
+        return null;
+      },
+      async (currentData) => {
+        let finalContent = currentData.content;
+        if (editorRef.current) {
+          const editorData = await editorRef.current.save();
+          if (editorData) {
+            finalContent = editorData;
+          }
+        }
 
-      return {
-        ...currentData,
-        content: finalContent,
-        sortOrder: currentData.sortOrder === '' ? undefined : Number(currentData.sortOrder)
-      };
-    });
+        if (!finalContent) {
+          setFieldErrors(prev => ({ ...prev, content: 'O conteúdo da página é obrigatório.' }));
+          throw new Error('Validação falhou');
+        }
+
+        const cleanedData = cleanEmptyStrings(currentData);
+
+        return {
+          ...cleanedData,
+          content: finalContent,
+          sortOrder: currentData.sortOrder === '' ? undefined : Number(currentData.sortOrder)
+        };
+      }
+    );
   };
 
   return (
@@ -79,12 +101,13 @@ function QuemSomosForm() {
       </div>
 
       <div className="form-group">
-        <label>Título da Página *</label>
+        <label>Título *</label>
         <input type="text" name="title" value={formData.title || ''} onChange={handleChange} required />
+        {fieldErrors.title && <span className="field-error">{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
-        <label>Conteúdo (Editor) *</label>
+        <label>Conteúdo Principal *</label>
         {!fetching && (
           <RichEditor
             ref={editorRef}
@@ -92,6 +115,7 @@ function QuemSomosForm() {
             uploadFolder="institucional"
           />
         )}
+        {fieldErrors.content && <span className="field-error">{fieldErrors.content}</span>}
       </div>
 
       <div className="form-group">
@@ -103,7 +127,7 @@ function QuemSomosForm() {
       </div>
 
       <div className="form-group">
-        <label>Ordem de Exibição (sortOrder)</label>
+        <label>Ordem de Exibição</label>
         <input type="number" name="sortOrder" value={formData.sortOrder === undefined ? '' : formData.sortOrder} onChange={handleChange} />
       </div>
     </AdminFormLayout>

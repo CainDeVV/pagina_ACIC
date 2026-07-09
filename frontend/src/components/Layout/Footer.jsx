@@ -13,7 +13,7 @@ function Footer() {
   return (
     <footer className="footer-container">
       <div className="footer-content">
-        
+
         {/* Coluna 1: Logo e Sobre */}
         <div className="footer-col">
           <img src={logo} alt="Logo ACIC" className="footer-logo" />
@@ -43,7 +43,7 @@ function Footer() {
         </div>
 
       </div>
-      
+
       <div className="footer-bottom">
         <p>&copy; 2026 ACIC. Todos os direitos reservados.</p>
       </div>

@@ -76,7 +76,7 @@ class PdfLinkTool {
     return this.wrapper;
   }
 
-  save(blockContent) {
+  save() {
     return {
       text: this.textInput.value || '📄 Documento PDF',
       url: this.urlInput.value || ''

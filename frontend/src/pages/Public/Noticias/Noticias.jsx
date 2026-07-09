@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { noticiasService } from '@/services/noticiasService';
 import ContentListLayout from '@/components/Layout/ContentListLayout';
+import { NewsCard } from '@/components/Card';
 
 function Noticias() {
   const [sections, setSections] = useState([]);
@@ -58,6 +59,7 @@ function Noticias() {
         sliderData={sliderData}
         sections={sections}
         basePath="/noticias"
+        renderItem={(item) => <NewsCard key={item.id} noticia={item} variant="grid" />}
       />
     </>
   );

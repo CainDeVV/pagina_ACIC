@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict jU7c9DCfNXe2SI3Q9NXpjCKWzgUY44TuXa846F5pubI7rdk5GLrCKufDYzeRKfG
+\restrict l8qlCsi8bD5sJ4TzaW3HRAoKTlhviumQy5JeYiUIhphcZfi2UF0qKDTEFQAGlHN
 
 -- Dumped from database version 16.14
 -- Dumped by pg_dump version 16.14
@@ -385,11 +385,11 @@ COPY public."CertificadoSolicitacao" (id, "associadoId", "eventoId", reason, sta
 
 COPY public."Diretor" (id, name, role, category, "photoUrl", bio, "sortOrder", "createdAt", "updatedAt") FROM stdin;
 b93356f2-85c5-4a18-9f0d-0c15d76e205b	ANTONIA LUCINEIDE LEITÃO MACHADO	DISTRIBUIDORA DE ÁGUA E CIMENTO	DIRETOR SOCIAL	\N	\N	6	2026-07-06 11:47:03.991	2026-07-06 11:47:03.991
-0576984d-9e16-4604-9b97-a72e4eaa8d17	FRANCISCO ROBERTO LIMA E SILVA	GRÁFICA CRATEÚS	I VICE-PRESIDENTE	http://localhost:3000/uploads/diretoria/e9ab8795-0c59-4a77-b712-23cfb5679689.jpg	\N	2	2026-07-04 21:35:41.309	2026-07-06 17:05:48.407
-43526c1a-3e15-4fcf-93c1-0723cbc87f4a	ANTONIO OSVALDO PONTES DE MELO	TINA CONDIMENTOS	I SECRETÁRIO	http://localhost:3000/uploads/diretoria/b05d6daf-94e4-47e3-bf7b-d370f40626df.jpg	\N	4	2026-07-04 21:38:15.398	2026-07-06 17:05:48.41
-49afb6ee-7f5d-4030-8bb3-d326c3cc92a6	ANTÔNIO WAGNER CLAUDINO SALES	RANCHEIRA W&S	II SECRETÁRIO	http://localhost:3000/uploads/diretoria/4ef5a8fd-6795-419f-bf52-4a9ecf9fe420.jpg	\N	3	2026-07-04 21:38:43.887	2026-07-06 17:05:48.409
 a5bbcd03-16ef-4cd5-8e4d-7170201d2f6e	EDMILSON ARIMATEIA NORTE	MARCONORTE	I TESOUREIRO	\N	\N	5	2026-07-06 11:46:31.094	2026-07-06 17:05:48.412
 5453c786-3ce5-4ca8-900a-34042742d2b9	MARIA DO CARMO XIMENES DE PINHO	ACIC	PRESIDENTE	https://images.unsplash.com/photo-1438761681033-6461ffad8d80?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aHVtYW4lMjBmYWNlfGVufDB8fDB8fHww	Empresária com vasta experiência no varejo e gestão corporativa, focada na inovação do comércio de Crateús.	1	2026-07-04 21:35:14.882	2026-07-06 17:05:50.472
+0576984d-9e16-4604-9b97-a72e4eaa8d17	FRANCISCO ROBERTO LIMA E SILVA	GRÁFICA CRATEÚS	I VICE-PRESIDENTE	http://localhost:3000/uploads/diretoria/57afaef4-2c69-4675-b3da-f88945c3eeca.webp	\N	2	2026-07-04 21:35:41.309	2026-07-08 21:28:18.97
+49afb6ee-7f5d-4030-8bb3-d326c3cc92a6	ANTÔNIO WAGNER CLAUDINO SALES	RANCHEIRA W&S	II SECRETÁRIO	http://localhost:3000/uploads/diretoria/b3fe65aa-931d-459a-935d-b17eb646e734.webp	\N	3	2026-07-04 21:38:43.887	2026-07-08 21:28:26.308
+43526c1a-3e15-4fcf-93c1-0723cbc87f4a	ANTONIO OSVALDO PONTES DE MELO	TINA CONDIMENTOS	I SECRETÁRIO	http://localhost:3000/uploads/diretoria/f4839907-c626-43f5-8a1a-a46c1c4b7719.webp	\N	4	2026-07-04 21:38:15.398	2026-07-08 21:28:32.78
 \.
 
 
@@ -411,9 +411,9 @@ c0551376-5f4f-401c-b6c5-5a43e2006238	Seminário ACIC – Gestão, Inovação e D
 --
 
 COPY public."HomeSlide" (id, title, subtitle, "imageUrl", "linkUrl", status, "sortOrder", "authorId", "createdAt", "updatedAt") FROM stdin;
-b52b25a5-040c-4214-b632-81e0f9216480	Fortalecendo o comércio de Crateús	Há décadas unindo empresários e impulsionando a economia regional	http://localhost:3000/uploads/slides/7555ea21-a88f-410b-be1a-e280c588f5bc.jpg	\N	PUBLISHED	1	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:17:19.043	2026-07-05 20:19:23.649
-578dabd7-1345-4ead-a1dd-be8aa16633a6	Conectando empresários de todos os setores	Comércio, indústria, agropecuária e serviços em um só lugar	http://localhost:3000/uploads/slides/3e665307-c29f-4bdc-962a-9aa90c2c2f2f.jpg	\N	PUBLISHED	2	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:17:46.545	2026-07-05 20:19:23.65
-c25a524d-877a-4d36-aa39-732bb1a11b58	Sua voz no desenvolvimento regional	Representação política e institucional para o empresário cearense	http://localhost:3000/uploads/slides/d781afdb-6271-46f8-8cef-7f5632d2d93b.jpg	\N	PUBLISHED	3	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:18:02.059	2026-07-05 20:18:56.025
+c25a524d-877a-4d36-aa39-732bb1a11b58	Sua voz no desenvolvimento regional	Representação política e institucional para o empresário cearense	http://localhost:3000/uploads/slides/58c44dcc-81c6-44b5-a146-d21f0f2857fa.webp	\N	PUBLISHED	3	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:18:02.059	2026-07-08 21:26:15.854
+b52b25a5-040c-4214-b632-81e0f9216480	Fortalecendo o comércio de Crateús	Há décadas unindo empresários e impulsionando a economia regional	http://localhost:3000/uploads/slides/be5392ec-1d16-4673-8859-30e44d8e8a7e.webp	\N	PUBLISHED	1	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:17:19.043	2026-07-08 21:42:27.964
+578dabd7-1345-4ead-a1dd-be8aa16633a6	Conectando empresários de todos os setores	Comércio, indústria, agropecuária e serviços em um só lugar	http://localhost:3000/uploads/slides/71b31fd6-5eb9-4176-a61d-cf99ccd45c27.webp	\N	PUBLISHED	2	fe449d86-1afe-41a3-861d-2c5a1d2c572d	2026-07-04 22:17:46.545	2026-07-08 21:42:27.966
 \.
 
 
@@ -780,5 +780,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict jU7c9DCfNXe2SI3Q9NXpjCKWzgUY44TuXa846F5pubI7rdk5GLrCKufDYzeRKfG
+\unrestrict l8qlCsi8bD5sJ4TzaW3HRAoKTlhviumQy5JeYiUIhphcZfi2UF0qKDTEFQAGlHN
 

@@ -5,7 +5,7 @@ import { Helmet } from 'react-helmet-async';
 /* --- IMPORTAÇÃO DOS COMPONENTES REUTILIZÁVEIS --- */
 import HeroSlider from '@/components/HeroSlider/HeroSlider';
 import ServiceCard from '@/components/ServiceCard/ServiceCard';
-import ContentCard from '@/components/ContentCard/ContentCard';
+import { EventCard, NewsCard } from '@/components/Card';
 import DirectorCard from '@/components/DirectorCard/DirectorCard';
 import Sponsors from '@/components/Sponsors/Sponsors';
 
@@ -192,7 +192,7 @@ export default function Home() {
             {homeEventos.length > 0 ? (
               <div className="lista-eventos">
                 {homeEventos.map(e => (
-                  <ContentCard type="event" variant="compact" key={e.id} data={e} />
+                  <EventCard variant="compact" key={e.id} evento={e} />
                 ))}
               </div>
             ) : (
@@ -209,7 +209,7 @@ export default function Home() {
             {homeNoticias.length > 0 ? (
               <div className="lista-noticias">
                 {homeNoticias.map(n => (
-                  <ContentCard type="news" variant="compact" key={n.id} data={n} />
+                  <NewsCard variant="compact" key={n.id} noticia={n} />
                 ))}
               </div>
             ) : (

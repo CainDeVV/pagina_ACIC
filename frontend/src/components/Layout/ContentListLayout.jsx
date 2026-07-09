@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 import HeroSlider from '../HeroSlider/HeroSlider';
-import ContentCard from '../ContentCard/ContentCard';
 import './ContentListLayout.css';
 
 const ContentListLayout = ({ 
@@ -43,16 +42,7 @@ const ContentListLayout = ({
               <section key={idx} className="content-lista-section">
                 <h2 className="content-section-titulo">{section.title}</h2>
                 <div className="content-grid-moderno">
-                  {section.items.map((item) => 
-                    renderItem ? renderItem(item) : (
-                      <ContentCard 
-                        key={item.id} 
-                        type={section.type} 
-                        variant="grid" 
-                        data={item} 
-                      />
-                    )
-                  )}
+                  {section.items.map((item) => renderItem(item))}
                 </div>
               </section>
             );

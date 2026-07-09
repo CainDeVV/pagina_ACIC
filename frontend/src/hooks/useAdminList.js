@@ -41,6 +41,7 @@ export function useAdminList({ fetchMethod, deleteMethod, updateMethod, itemName
   }, [fetchMethod, itemName]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchData();
   }, [fetchData]);
 
