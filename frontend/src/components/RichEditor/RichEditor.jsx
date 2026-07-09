@@ -12,8 +12,10 @@ import Warning from '@editorjs/warning';
 import Embed from '@editorjs/embed';
 import Underline from '@editorjs/underline';
 import ColorPlugin from 'editorjs-text-color-plugin';
-import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+import AlignmentTuneModule from 'editor-js-alignment-tune';
 import DragDrop from 'editorjs-drag-drop';
+
+const AlignmentTuneTool = AlignmentTuneModule.default || AlignmentTuneModule;
 import AttachesTool from '@editorjs/attaches';
 
 import PdfEmbedTool from './tools/PdfEmbedTool';
@@ -131,6 +133,7 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
         quote: {
           class: Quote,
           inlineToolbar: true,
+          tunes: ['alignment'],
           shortcut: 'CMD+SHIFT+O',
           config: {
             quotePlaceholder: 'Digite a citação',
@@ -145,6 +148,7 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
         warning: {
           class: Warning,
           inlineToolbar: true,
+          tunes: ['alignment'],
           shortcut: 'CMD+SHIFT+W',
           config: {
             titlePlaceholder: 'Título',
@@ -207,6 +211,7 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
           .catch(e => console.error(e));
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Executa apenas na montagem
 
   return <div ref={wrapperRef} className="rich-editor-container" />;

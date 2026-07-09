@@ -3,11 +3,12 @@ import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 
 export function InlineOrderInput({ row, onUpdate }) {
   const [val, setVal] = React.useState(row.sortOrder || 0);
+  const [prevSortOrder, setPrevSortOrder] = React.useState(row.sortOrder || 0);
 
-  // Sincroniza se a ordem mudar por fora (Drag & Drop)
-  React.useEffect(() => {
+  if (row.sortOrder !== prevSortOrder) {
+    setPrevSortOrder(row.sortOrder || 0);
     setVal(row.sortOrder || 0);
-  }, [row.sortOrder]);
+  }
 
   return (
     <input 

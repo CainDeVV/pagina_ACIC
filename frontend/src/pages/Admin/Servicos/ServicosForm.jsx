@@ -6,10 +6,13 @@ import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import ImageUploader from '@/components/Admin/ImageUploader';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
+import { useState } from 'react';
 
 function ServicosForm() {
   const { id } = useParams();
   const editorRef = useRef(null);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const {
     formData,
@@ -37,25 +40,40 @@ function ServicosForm() {
   });
 
   const onSave = (e) => {
-    handleSubmit(e, null, async (currentData) => {
-      let finalDescription = currentData.description;
-      if (editorRef.current) {
-        const editorData = await editorRef.current.save();
-        if (editorData) {
-          finalDescription = editorData;
-        }
-      }
+    setFieldErrors({});
 
-      // Limpeza rigorosa: converte strings vazias em null para os opcionais
-      return {
-        ...currentData,
-        description: finalDescription,
-        summary: currentData.summary === '' ? null : currentData.summary,
-        icon: currentData.icon === '' ? null : currentData.icon,
-        imageUrl: currentData.imageUrl === '' ? null : currentData.imageUrl,
-        sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
-      };
-    });
+    handleSubmit(e, 
+      (currentData) => {
+        const errors = validateStandardFields(currentData);
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
+        }
+        return null;
+      },
+      async (currentData) => {
+        let finalDescription = currentData.description;
+        if (editorRef.current) {
+          const editorData = await editorRef.current.save();
+          if (editorData) {
+            finalDescription = editorData;
+          }
+        }
+
+        if (!finalDescription) {
+          setFieldErrors(prev => ({ ...prev, description: 'A descrição do serviço é obrigatória.' }));
+          throw new Error('Validação falhou');
+        }
+
+        const cleanedData = cleanEmptyStrings(currentData);
+
+        return {
+          ...cleanedData,
+          description: finalDescription,
+          sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
+        };
+      }
+    );
   };
 
   return (
@@ -77,10 +95,11 @@ function ServicosForm() {
           onChange={handleChange}
           required
         />
+        {fieldErrors.title && <span className="field-error">{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
-        <label>Resumo (Summary)</label>
+        <label>Resumo</label>
         <textarea
           name="summary"
           value={formData.summary || ''}
@@ -90,7 +109,7 @@ function ServicosForm() {
       </div>
 
       <div className="form-group">
-        <label>Descrição (Conteúdo Principal) *</label>
+        <label>Conteúdo Principal *</label>
         {/* Usamos a chave unida ao fetching para que o editor só renderize após receber os dados */}
         {!fetching && (
           <RichEditor
@@ -99,6 +118,7 @@ function ServicosForm() {
             uploadFolder="servicos"
           />
         )}
+        {fieldErrors.description && <span className="field-error">{fieldErrors.description}</span>}
       </div>
 
       <div className="form-group">
@@ -148,7 +168,7 @@ function ServicosForm() {
       </div>
 
       <div className="form-group">
-        <label>Ordem de Exibição (sortOrder)</label>
+        <label>Ordem de Exibição</label>
         <input
           type="number"
           name="sortOrder"

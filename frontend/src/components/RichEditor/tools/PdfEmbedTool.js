@@ -38,7 +38,7 @@ class PdfEmbedTool {
     input.style.flex = '1';
     input.style.minWidth = '250px';
 
-    input.addEventListener('paste', (event) => {
+    input.addEventListener('paste', () => {
       setTimeout(() => {
         if (input.value) {
           this._createIframe(input.value);
@@ -136,7 +136,7 @@ class PdfEmbedTool {
     this.wrapper.appendChild(iframe);
   }
 
-  save(blockContent) {
+  save() {
     return {
       url: this.data.url || ''
     };

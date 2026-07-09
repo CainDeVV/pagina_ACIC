@@ -35,7 +35,7 @@ const sanitizeUrl = (url) => {
       return parsed.href;
     }
     return 'about:blank';
-  } catch (e) {
+  } catch {
     if (url.startsWith('/')) return url;
     return 'about:blank';
   }
@@ -48,7 +48,7 @@ const isAllowedEmbedDomain = (url) => {
     const hostname = new URL(url).hostname.toLowerCase();
     const allowed = ['youtube.com', 'youtu.be', 'vimeo.com', 'twitter.com', 'instagram.com', 'facebook.com', 'codepen.io'];
     return allowed.some(domain => hostname === domain || hostname.endsWith(`.${domain}`));
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -129,7 +129,7 @@ function BlockRenderer({ blocks }) {
         const { type, data } = block;
         if (!data && type !== 'delimiter') return null;
 
-        let blockContent = null;
+        let blockContent;
 
         switch (type) {
           case 'header': {

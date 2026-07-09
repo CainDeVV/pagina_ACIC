@@ -7,6 +7,7 @@ import CoverImageFields from '@/components/Admin/CoverImageFields';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { toDatetimeLocal } from '@/utils/dateUtils';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
 
 function NoticiaForm() {
   const { id } = useParams();
@@ -56,8 +57,7 @@ function NoticiaForm() {
     handleSubmit(e, 
       // validationFn
       (currentData) => {
-        const errors = {};
-        if (!currentData.title?.trim()) errors.title = 'O título é obrigatório.';
+        const errors = validateStandardFields(currentData);
         
         if (currentData.publishedAt) {
           const d = new Date(currentData.publishedAt);
@@ -95,13 +95,11 @@ function NoticiaForm() {
 
         const { ...validFormData } = currentData;
         
+        const cleanedData = cleanEmptyStrings(validFormData);
+        
         return {
-          ...validFormData,
+          ...cleanedData,
           content: finalContent,
-          summary: currentData.summary === '' ? null : currentData.summary,
-          coverImage: currentData.coverImage === '' ? null : currentData.coverImage,
-          coverImageCaption: currentData.coverImageCaption === '' ? null : currentData.coverImageCaption,
-          showCoverImage: currentData.showCoverImage,
           publishedAt: parsedPublishedAt
         };
       }
@@ -125,12 +123,12 @@ function NoticiaForm() {
       </div>
 
       <div className="form-group">
-        <label>Resumo (Summary)</label>
+        <label>Resumo</label>
         <textarea name="summary" value={formData.summary || ''} onChange={handleChange} rows="3" />
       </div>
 
       <div className="form-group">
-        <label>Conteúdo (Content) *</label>
+        <label>Conteúdo Principal *</label>
         {!fetching && (
           <RichEditor 
             ref={editorRef} 

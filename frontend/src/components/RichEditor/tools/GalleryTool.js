@@ -134,7 +134,7 @@ class GalleryTool {
     this.imagesContainer.appendChild(imgWrapper);
   }
 
-  save(blockContent) {
+  save() {
     return {
       images: this.data.images || []
     };

@@ -3,6 +3,8 @@ import { institucionalService } from '@/services/institucionalService';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import ImageUploader from '@/components/Admin/ImageUploader';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
+import { useState } from 'react';
 
 const PRESET_CATEGORIES = [
   "PRESIDENTE",
@@ -38,6 +40,7 @@ const fetchDiretoriaFlat = async () => {
 
 function DiretoriaForm() {
   const { id } = useParams();
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const {
     formData,
@@ -63,12 +66,24 @@ function DiretoriaForm() {
   });
 
   const onSave = (e) => {
-    handleSubmit(e, null, (currentData) => ({
-      ...currentData,
-      photoUrl: currentData.photoUrl === '' ? null : currentData.photoUrl,
-      bio: currentData.bio === '' ? null : currentData.bio,
-      sortOrder: currentData.sortOrder === '' ? undefined : Number(currentData.sortOrder)
-    }));
+    setFieldErrors({});
+    handleSubmit(e, 
+      (currentData) => {
+        const errors = validateStandardFields(currentData, ['role', 'category']);
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
+        }
+        return null;
+      },
+      (currentData) => {
+        const cleanedData = cleanEmptyStrings(currentData);
+        return {
+          ...cleanedData,
+          sortOrder: currentData.sortOrder === '' ? undefined : Number(currentData.sortOrder)
+        };
+      }
+    );
   };
 
   return (
@@ -84,15 +99,17 @@ function DiretoriaForm() {
       <div className="form-group">
         <label>Nome *</label>
         <input type="text" name="name" value={formData.name || ''} onChange={handleChange} required />
+        {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
       </div>
 
       <div className="form-group">
-        <label>Empresa Representada (Role) *</label>
+        <label>Empresa Representada *</label>
         <input type="text" name="role" value={formData.role || ''} onChange={handleChange} placeholder="Ex: Gráfica Crateús" required />
+        {fieldErrors.role && <span className="field-error">{fieldErrors.role}</span>}
       </div>
 
       <div className="form-group">
-        <label>Cargo na ACIC (Categoria) *</label>
+        <label>Cargo na ACIC *</label>
         <select 
           name="category"
           value={formData.category || ''} 
@@ -124,12 +141,12 @@ function DiretoriaForm() {
       </div>
 
       <div className="form-group">
-        <label>Biografia (bio)</label>
+        <label>Biografia</label>
         <textarea name="bio" value={formData.bio || ''} onChange={handleChange} rows="4" />
       </div>
 
       <div className="form-group">
-        <label>Ordem de Exibição (sortOrder)</label>
+        <label>Ordem de Exibição</label>
         <input type="number" name="sortOrder" value={formData.sortOrder === undefined ? '' : formData.sortOrder} onChange={handleChange} />
       </div>
     </AdminFormLayout>

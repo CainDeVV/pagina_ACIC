@@ -94,7 +94,8 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess, maxSizeM
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
         <span style={{ fontSize: '0.8rem', color: 'var(--color-gray-dark)' }}>
-          Recomendado: Imagens em JPG, PNG ou WEBP. Tamanho máximo: {optimize ? `${serverLimitMB}MB (Otimizado)` : `${maxSizeMB}MB`}.
+          <strong>Formatos aceitos:</strong> JPG, PNG, WEBP, PDF, DOCX, ZIP. <br/>
+          <strong>Tamanho máximo permitido:</strong> {optimize ? `${serverLimitMB}MB (Otimizado)` : `${maxSizeMB}MB`}.
         </span>
         <label style={{ fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', color: 'var(--color-gray-dark)' }}>
           <input 

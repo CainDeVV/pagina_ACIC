@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -18,19 +18,18 @@ import './Dashboard.css';
 
 function Dashboard() {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
-
-  useEffect(() => {
+  const [userName] = useState(() => {
     const userStr = localStorage.getItem('acic_user');
     if (userStr) {
       try {
         const user = JSON.parse(userStr);
-        setUserName(user.name || '');
+        return user.name || '';
       } catch (error) {
         console.error('Erro ao fazer parse do usuário no localStorage', error);
       }
     }
-  }, []);
+    return '';
+  });
 
   const handleLogout = () => {
     localStorage.removeItem('acic_access_token');

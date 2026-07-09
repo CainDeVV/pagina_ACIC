@@ -13,7 +13,7 @@ import { diskStorage } from 'multer';
 import { extname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
-const sharp = require('sharp');
+import sharp from 'sharp';
 import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -63,7 +63,10 @@ export class UploadController {
       }),
       fileFilter: (req, file, cb) => {
         const allowedMimeTypes = [
-          'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+          'image/jpeg',
+          'image/png',
+          'image/gif',
+          'image/webp',
           'application/pdf',
           'application/msword', // .doc
           'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
@@ -93,7 +96,10 @@ export class UploadController {
       },
     }),
   )
-  async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request) {
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+  ) {
     if (!file) {
       throw new BadRequestException('Nenhum arquivo válido foi enviado.');
     }
@@ -133,7 +139,7 @@ export class UploadController {
         url: fileUrl,
         name: file.originalname,
         size: file.size,
-        extension: require('path').extname(file.originalname).replace('.', ''),
+        extension: extname(file.originalname).replace('.', ''),
       },
       filename: finalFilename,
       mimetype: finalMimetype,

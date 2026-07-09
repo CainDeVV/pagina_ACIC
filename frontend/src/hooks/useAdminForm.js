@@ -46,6 +46,7 @@ export function useAdminForm({ id, initialData, service, redirectPath, fetchItem
       };
       fetchData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, service]);
 
   // Efeito para adivinhar a ordem de exibição (auto-incremento DRY)

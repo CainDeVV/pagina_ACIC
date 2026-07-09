@@ -7,6 +7,7 @@ import CoverImageFields from '@/components/Admin/CoverImageFields';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { toDatetimeLocal } from '@/utils/dateUtils';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
 
 function EventoForm() {
   const { id } = useParams();
@@ -59,8 +60,7 @@ function EventoForm() {
     handleSubmit(e, 
       // validationFn
       (currentData) => {
-        const errors = {};
-        if (!currentData.title?.trim()) errors.title = 'O título é obrigatório.';
+        const errors = validateStandardFields(currentData);
 
         if (!currentData.startsAt) {
           errors.startsAt = 'A data de início é obrigatória.';
@@ -108,16 +108,14 @@ function EventoForm() {
         let parsedStartsAt = new Date(currentData.startsAt).toISOString();
         let parsedEndsAt = currentData.endsAt ? new Date(currentData.endsAt).toISOString() : undefined;
 
+        const cleanedData = cleanEmptyStrings(currentData);
+
         return {
-          ...currentData,
+          ...cleanedData,
           description: finalDescription,
           startsAt: parsedStartsAt,
           endsAt: parsedEndsAt,
-          capacity: currentData.capacity === '' ? null : Number(currentData.capacity),
-          coverImage: currentData.coverImage === '' ? null : currentData.coverImage,
-          coverImageCaption: currentData.coverImageCaption === '' ? null : currentData.coverImageCaption,
-          showCoverImage: currentData.showCoverImage,
-          location: currentData.location === '' ? null : currentData.location,
+          capacity: currentData.capacity === '' ? null : Number(currentData.capacity)
         };
       }
     );
@@ -142,11 +140,11 @@ function EventoForm() {
           onChange={handleChange}
           required
         />
-        {fieldErrors.title && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.title}</span>}
+        {fieldErrors.title && <span className="field-error">{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
-        <label>Descrição *</label>
+        <label>Conteúdo Principal *</label>
         {!fetching && (
           <RichEditor
             ref={editorRef}

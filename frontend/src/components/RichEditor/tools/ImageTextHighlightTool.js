@@ -76,7 +76,7 @@ class ImageTextHighlightTool {
     return this.wrapper;
   }
 
-  save(blockContent) {
+  save() {
     return {
       imageUrl: this.urlInput.value,
       title: this.titleInput.value,

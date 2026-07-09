@@ -4,9 +4,12 @@ import ImageUploader from '@/components/Admin/ImageUploader';
 import { patrocinadoresService } from '@/services/patrocinadoresService';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { useAdminForm } from '@/hooks/useAdminForm';
+import { validateStandardFields, cleanEmptyStrings } from '@/utils/formUtils';
+import { useState } from 'react';
 
 function PatrocinadorForm() {
   const { id } = useParams();
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const {
     formData,
@@ -31,10 +34,24 @@ function PatrocinadorForm() {
   });
 
   const onSave = (e) => {
-    handleSubmit(e, (data) => {
-      if (!data.logoUrl) return 'A logomarca é obrigatória!';
-      return null;
-    });
+    setFieldErrors({});
+    handleSubmit(e, 
+      (currentData) => {
+        const errors = validateStandardFields(currentData, ['logoUrl']);
+        if (Object.keys(errors).length > 0) {
+          setFieldErrors(errors);
+          return 'Foram encontrados erros nos campos do formulário. Corrija-os e tente novamente.';
+        }
+        return null;
+      },
+      (currentData) => {
+        const cleanedData = cleanEmptyStrings(currentData);
+        return {
+          ...cleanedData,
+          sortOrder: currentData.sortOrder === '' ? 0 : Number(currentData.sortOrder)
+        };
+      }
+    );
   };
 
   return (
@@ -48,7 +65,7 @@ function PatrocinadorForm() {
       onSubmit={onSave}
     >
       <div className="form-group">
-        <label>Nome do Patrocinador *</label>
+        <label>Nome *</label>
         <input
           type="text"
           name="name"
@@ -57,10 +74,11 @@ function PatrocinadorForm() {
           required
           placeholder="Ex: Banco do Brasil"
         />
+        {fieldErrors.name && <span className="field-error">{fieldErrors.name}</span>}
       </div>
 
       <div className="form-group">
-        <label>Link do Patrocinador (Site / Instagram)</label>
+        <label>Link Externo (Site ou Redes Sociais)</label>
         <input
           type="url"
           name="linkUrl"
@@ -98,13 +116,14 @@ function PatrocinadorForm() {
           name="logoUrl" 
           value={formData.logoUrl} 
           onChange={handleChange} 
-          placeholder="Ou cole uma URL direta da logomarca aqui..."
+          placeholder="Ou cole uma URL direta da imagem aqui..."
           style={{ marginTop: '10px' }}
         />
+        {fieldErrors.logoUrl && <span className="field-error">{fieldErrors.logoUrl}</span>}
       </div>
 
       <div className="form-group">
-        <label>Ordem de Exibição (sortOrder)</label>
+        <label>Ordem de Exibição</label>
         <input
           type="number"
           name="sortOrder"
