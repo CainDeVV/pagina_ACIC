@@ -3,6 +3,19 @@ import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import ImageTool from '@editorjs/image';
+import Paragraph from '@editorjs/paragraph';
+import Table from '@editorjs/table';
+import Quote from '@editorjs/quote';
+import Delimiter from '@editorjs/delimiter';
+import Checklist from '@editorjs/checklist';
+import Warning from '@editorjs/warning';
+import Embed from '@editorjs/embed';
+import Underline from '@editorjs/underline';
+import ColorPlugin from 'editorjs-text-color-plugin';
+import AlignmentTuneTool from 'editorjs-text-alignment-blocktune';
+import DragDrop from 'editorjs-drag-drop';
+import AttachesTool from '@editorjs/attaches';
+
 import PdfEmbedTool from './tools/PdfEmbedTool';
 import PdfLinkTool from './tools/PdfLinkTool';
 import GalleryTool from './tools/GalleryTool';
@@ -44,29 +57,53 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
     const editor = new EditorJS({
       holder: editorElement, // Passa o elemento DOM direto, não o ID
       data: initialData || {},
+      onReady: () => {
+        new DragDrop(editor);
+      },
       tools: {
+        alignment: {
+          class: AlignmentTuneTool,
+          config: {
+            default: "left",
+          }
+        },
+        Color: {
+          class: ColorPlugin,
+          config: {
+            colorCollections: ['#0266b0', '#fdc300', '#008668', '#ef4444', '#10b981', '#3b82f6', '#f59e0b', '#333333'],
+            defaultColor: '#333333',
+            type: 'text', 
+          }
+        },
+        Marker: {
+          class: ColorPlugin,
+          config: {
+            defaultColor: '#fef08a',
+            type: 'marker',
+            icon: `<svg viewBox="0 0 20 20" width="16" height="16"><path fill="currentColor" d="M10 2L2 10l8 8 8-8-8-8zM4.83 10l5.17-5.17L15.17 10 10 15.17 4.83 10z"/></svg>`
+          }
+        },
+        underline: Underline,
+        
+        // --- ORDEM VISUAL NO MENU (+) ---
         header: {
           class: Header,
+          inlineToolbar: ['link', 'bold', 'italic', 'underline', 'Color', 'Marker'],
+          tunes: ['alignment'],
           config: {
             levels: [2, 3, 4],
             defaultLevel: 2
           }
         },
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: ['link', 'bold', 'italic', 'underline', 'Color', 'Marker'],
+          tunes: ['alignment']
+        },
         list: {
           class: List,
-          inlineToolbar: true
-        },
-        pdfEmbed: {
-          class: PdfEmbedTool
-        },
-        pdfLink: {
-          class: PdfLinkTool
-        },
-        gallery: {
-          class: GalleryTool
-        },
-        imageTextHighlight: {
-          class: ImageTextHighlightTool
+          inlineToolbar: ['link', 'bold', 'italic', 'underline', 'Color', 'Marker'],
+          tunes: ['alignment']
         },
         image: {
           class: ImageTool,
@@ -79,20 +116,73 @@ const RichEditor = forwardRef(({ value, uploadFolder = 'geral' }, ref) => {
               'Authorization': `Bearer ${localStorage.getItem('acic_access_token')}`
             },
             uploader: {
-              // Intercepta a colagem de URLs (uploadByUrl) para não enviar POST para o backend/frontend
-              // Apenas retorna a própria URL para ser renderizada imediatamente
               uploadByUrl(url) {
                 return new Promise((resolve) => {
-                  resolve({
-                    success: 1,
-                    file: {
-                      url: url
-                    }
-                  });
+                  resolve({ success: 1, file: { url: url } });
                 });
               }
             }
           }
+        },
+        table: {
+          class: Table,
+          inlineToolbar: true,
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          shortcut: 'CMD+SHIFT+O',
+          config: {
+            quotePlaceholder: 'Digite a citação',
+            captionPlaceholder: 'Autor da citação',
+          },
+        },
+        checklist: {
+          class: Checklist,
+          inlineToolbar: true,
+        },
+        delimiter: Delimiter,
+        warning: {
+          class: Warning,
+          inlineToolbar: true,
+          shortcut: 'CMD+SHIFT+W',
+          config: {
+            titlePlaceholder: 'Título',
+            messagePlaceholder: 'Mensagem',
+          },
+        },
+        embed: {
+          class: Embed,
+          config: {
+            services: {
+              youtube: true,
+              twitter: true,
+              instagram: true
+            }
+          }
+        },
+        attaches: {
+          class: AttachesTool,
+          config: {
+            endpoint: `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload?folder=${uploadFolder}`,
+            additionalRequestHeaders: {
+              'Authorization': `Bearer ${localStorage.getItem('acic_access_token')}`
+            },
+            errorMessage: 'Erro ao enviar o anexo',
+          }
+        },
+        // --- CUSTOM ACIC PLUGINS ---
+        gallery: {
+          class: GalleryTool
+        },
+        imageTextHighlight: {
+          class: ImageTextHighlightTool
+        },
+        pdfEmbed: {
+          class: PdfEmbedTool
+        },
+        pdfLink: {
+          class: PdfLinkTool
         }
       }
     });

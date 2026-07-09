@@ -62,10 +62,26 @@ export class UploadController {
         },
       }),
       fileFilter: (req, file, cb) => {
-        if (!file.mimetype.match(/\/(jpg|jpeg|png|gif|webp|pdf)$/)) {
+        const allowedMimeTypes = [
+          'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+          'application/pdf',
+          'application/msword', // .doc
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+          'application/vnd.ms-excel', // .xls
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+          'text/csv', // .csv
+          'application/zip', // .zip
+          'application/x-zip-compressed', // .zip (windows)
+          'application/vnd.rar', // .rar
+          'application/x-rar-compressed', // .rar
+          'application/vnd.ms-powerpoint', // .ppt
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+        ];
+
+        if (!allowedMimeTypes.includes(file.mimetype)) {
           return cb(
             new BadRequestException(
-              'Apenas arquivos de imagem e PDF são permitidos!',
+              'Formato de arquivo não permitido pelas políticas de segurança do servidor.',
             ),
             false,
           );
@@ -115,6 +131,9 @@ export class UploadController {
       success: 1,
       file: {
         url: fileUrl,
+        name: file.originalname,
+        size: file.size,
+        extension: require('path').extname(file.originalname).replace('.', ''),
       },
       filename: finalFilename,
       mimetype: finalMimetype,

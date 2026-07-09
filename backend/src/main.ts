@@ -17,8 +17,12 @@ async function bootstrap() {
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new PrismaClientExceptionFilter(httpAdapter));
 
-  // Escudo de segurança para os Headers HTTP (Contra XSS e afins)
-  app.use(helmet({ crossOriginResourcePolicy: false })); // Permite servir imagens no Frontend
+  // Escudo de segurança para os Headers HTTP
+  app.use(helmet({ 
+    crossOriginResourcePolicy: false, // Permite servir imagens
+    contentSecurityPolicy: false,     // Permite exibir PDFs no iframe do Frontend
+    xFrameOptions: false,             // Desativa o bloqueio de frames
+  }));
 
   // Habilita CORS estrito (Apenas o seu Frontend tem a chave)
   app.enableCors({
