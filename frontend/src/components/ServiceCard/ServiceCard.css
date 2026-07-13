@@ -1,0 +1,154 @@
+/* ========================================================
+   VARIANTE: PREMIUM (Página de Serviços)
+   ======================================================== */
+.premium-service-card {
+  background: var(--color-white);
+  border-radius: 16px;
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid var(--color-gray-light);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+}
+
+.premium-service-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(2, 102, 176, 0.12);
+  border-color: var(--color-primary-light);
+}
+
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.premium-service-card:hover .card-img {
+  transform: scale(1.1);
+}
+
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(2, 102, 176, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.premium-service-card:hover .card-overlay {
+  opacity: 1;
+}
+
+.view-more-label {
+  color: white;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transform: translateY(10px);
+  transition: transform 0.3s ease;
+}
+
+.premium-service-card:hover .view-more-label {
+  transform: translateY(0);
+}
+
+.card-info {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title {
+  color: var(--color-primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.card-description {
+  color: var(--color-gray-medium);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.card-footer {
+  margin-top: auto;
+  padding-top: 15px;
+  border-top: 1px solid var(--color-gray-light);
+}
+
+.card-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-primary-light);
+  letter-spacing: 1px;
+}
+
+/* ========================================================
+   VARIANTE: SIMPLES (Página Home)
+   ======================================================== */
+.simples-service-card {
+  background: var(--color-white);
+  border-radius: 12px;
+  padding: 28px 24px;
+  border: 1px solid #E8EAF0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  cursor: pointer;
+}
+
+.simples-service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(26, 95, 168, 0.1);
+  border-color: var(--color-primary);
+}
+
+.simples-card-icon {
+  width: 52px;
+  height: 52px;
+  background: #EBF3FB; /* Fundo azul bem clarinho da Home */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.simples-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1A1A2E; /* Cor de texto escuro da Home */
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.simples-card-description {
+  font-size: 0.9rem;
+  color: #5A6172; /* Cor de texto mutado da Home */
+  line-height: 1.6;
+  margin: 0;
+}
