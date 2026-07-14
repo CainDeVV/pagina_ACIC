@@ -26,6 +26,8 @@ const EventosList = lazy(() => import('./pages/Admin/Eventos/EventosList'));
 const EventoForm = lazy(() => import('./pages/Admin/Eventos/EventoForm'));
 const NoticiasList = lazy(() => import('./pages/Admin/Noticias/NoticiasList'));
 const NoticiaForm = lazy(() => import('./pages/Admin/Noticias/NoticiaForm'));
+const UsuariosList = lazy(() => import('./pages/Admin/Usuarios/UsuariosList'));
+const UsuarioForm = lazy(() => import('./pages/Admin/Usuarios/UsuarioForm'));
 
 // Páginas Públicas carregadas dinamicamente
 const Home = lazy(() => import('./pages/Public/Home/Home'));
@@ -96,6 +98,10 @@ function App() {
             <Route path="noticias" element={<NoticiasList />} />
             <Route path="noticias/nova" element={<NoticiaForm />} />
             <Route path="noticias/:id/editar" element={<NoticiaForm />} />
+
+            <Route path="usuarios" element={<UsuariosList />} />
+            <Route path="usuarios/novo" element={<UsuarioForm />} />
+            <Route path="usuarios/:id/editar" element={<UsuarioForm />} />
           </Route>
 
           {/* === ROTAS PÚBLICAS === */}

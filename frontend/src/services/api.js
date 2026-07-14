@@ -35,6 +35,14 @@ api.interceptors.response.use(
       localStorage.removeItem('acic_user');
       window.location.href = '/login'; 
     }
+
+    // 1.5. Tratamento para Permissões Revogadas (403 - Forbidden)
+    if (error.response?.status === 403) {
+      localStorage.removeItem('acic_access_token');
+      localStorage.removeItem('acic_user');
+      alert('Suas permissões foram alteradas ou você não tem acesso a este recurso. Por favor, faça login novamente.');
+      window.location.href = '/login'; 
+    }
     
     // 2. Tratamento para Servidor Offline ou Internet Caiu
     if (!error.response) {

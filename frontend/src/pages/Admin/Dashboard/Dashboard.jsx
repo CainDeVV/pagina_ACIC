@@ -11,7 +11,8 @@ import {
   Settings,
   LogOut,
   Image as ImageIcon,
-  Award
+  Award,
+  ShieldCheck
 } from 'lucide-react';
 import '@/components/Admin/AdminGlobal.css';
 import './Dashboard.css';
@@ -24,6 +25,19 @@ function Dashboard() {
       try {
         const user = JSON.parse(userStr);
         return user.name || '';
+      } catch (error) {
+        console.error('Erro ao fazer parse do usuário no localStorage', error);
+      }
+    }
+    return '';
+  });
+
+  const [userRole] = useState(() => {
+    const userStr = localStorage.getItem('acic_user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        return user.role || '';
       } catch (error) {
         console.error('Erro ao fazer parse do usuário no localStorage', error);
       }
@@ -72,6 +86,14 @@ function Dashboard() {
       </div>
 
       <div className="dashboard-grid">
+        {userRole === 'ADMIN' && (
+          <Link to="/admin/usuarios" className="dashboard-card highlight-card">
+            <div className="dashboard-card-icon">
+              <ShieldCheck size={32} strokeWidth={1.5} color="var(--color-primary)" />
+            </div>
+            <h3>Equipe (Usuários)</h3>
+          </Link>
+        )}
         {adminModules.map((module, index) => (
           <Link key={index} to={module.path} className="dashboard-card">
             <div className="dashboard-card-icon">

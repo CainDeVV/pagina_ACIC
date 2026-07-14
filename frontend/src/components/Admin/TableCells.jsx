@@ -123,6 +123,34 @@ export function InlineFeaturedToggle({ row, field = 'destaque', onUpdate }) {
   );
 }
 
+export function InlineBooleanToggle({ row, field = 'active', onUpdate }) {
+  const isActive = !!row[field];
+  return (
+    <button
+      onClick={() => onUpdate(row, field, !isActive)}
+      style={{
+        background: isActive ? 'var(--color-brand-green)' : '#dc3545',
+        border: 'none',
+        borderRadius: '50%',
+        cursor: 'pointer',
+        width: '28px',
+        height: '28px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        fontSize: '1rem',
+        fontWeight: 'bold',
+        transition: 'all 0.2s ease',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+      }}
+      title={isActive ? "Desativar (bloquear acesso)" : "Ativar acesso"}
+    >
+      {isActive ? '✓' : '✕'}
+    </button>
+  );
+}
+
 export function InlineCategorySelect({ row, field = 'category', onUpdate }) {
   const presetCategories = [
     "PRESIDENTE",

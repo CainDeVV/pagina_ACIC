@@ -6,18 +6,22 @@ import {
   IsOptional,
   IsString,
   MinLength,
+  IsBoolean,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUsuarioDto {
   @ApiProperty({ example: 'Administrador ACIC' })
   @IsString()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.trim())
   name!: string;
 
   @ApiProperty({ example: 'admin@acic.local' })
   @IsEmail()
   @IsNotEmpty()
+  @Transform(({ value }) => value?.toLowerCase()?.trim())
   email!: string;
 
   @ApiProperty({
@@ -33,4 +37,9 @@ export class CreateUsuarioDto {
   @IsEnum(UserRole)
   @IsOptional()
   role?: UserRole;
+
+  @ApiProperty({ example: true, required: false })
+  @IsBoolean()
+  @IsOptional()
+  active?: boolean;
 }
