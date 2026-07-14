@@ -42,7 +42,10 @@ export class UsuariosController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUsuarioDto: UpdateUsuarioDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUsuarioDto: UpdateUsuarioDto,
+  ) {
     return this.usuariosService.update(id, updateUsuarioDto);
   }
 

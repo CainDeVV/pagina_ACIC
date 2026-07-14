@@ -7,7 +7,7 @@ import { PublishStatus } from '@prisma/client';
 export class EventosCronService {
   private readonly logger = new Logger(EventosCronService.name);
 
-  constructor(private readonly prisma: PrismaService) { }
+  constructor(private readonly prisma: PrismaService) {}
 
   // Roda a cada minuto para verificar se há eventos agendados
   @Cron(CronExpression.EVERY_MINUTE)
@@ -28,10 +28,15 @@ export class EventosCronService {
       });
 
       if (result.count > 0) {
-        this.logger.log(`Publicação Automática (Cron): ${result.count} evento(s) publicado(s) com sucesso.`);
+        this.logger.log(
+          `Publicação Automática (Cron): ${result.count} evento(s) publicado(s) com sucesso.`,
+        );
       }
     } catch (error) {
-      this.logger.error('Erro ao executar o cron de agendamento de eventos', error);
+      this.logger.error(
+        'Erro ao executar o cron de agendamento de eventos',
+        error,
+      );
     }
   }
 }

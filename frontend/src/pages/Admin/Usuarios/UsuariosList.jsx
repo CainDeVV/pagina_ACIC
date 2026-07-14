@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAdminList } from '@/hooks/useAdminList';
 import AdminListLayout from '@/components/Admin/AdminListLayout';
 import { usuariosService } from '@/services/usuariosService';
@@ -18,7 +19,7 @@ function UsuariosList() {
       try {
         const user = JSON.parse(userStr);
         return user.id;
-      } catch (err) {}
+      } catch (e) { console.error('Erro ao ler id cacheado', e); }
     }
     return null;
   }, []);
@@ -56,6 +57,8 @@ function UsuariosList() {
     }
   ];
 
+  const navigate = useNavigate();
+
   return (
     <AdminListLayout
       title="Usuários (Equipe)"
@@ -65,8 +68,8 @@ function UsuariosList() {
       error={error}
       data={data}
       columns={columns}
-      onEdit={(row) => `/admin/usuarios/${row.id}/editar`}
-      onDelete={(row) => safeHandleDelete(row.id)}
+      onEdit={(row) => navigate(`/admin/usuarios/${row.id}/editar`)}
+      onDelete={(id) => safeHandleDelete(id)}
     />
   );
 }

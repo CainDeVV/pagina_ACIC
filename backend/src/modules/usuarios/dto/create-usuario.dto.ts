@@ -15,13 +15,17 @@ export class CreateUsuarioDto {
   @ApiProperty({ example: 'Administrador ACIC' })
   @IsString()
   @IsNotEmpty()
-  @Transform(({ value }) => value?.trim())
+  @Transform(({ value }: { value: string }) =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   name!: string;
 
   @ApiProperty({ example: 'admin@acic.local' })
   @IsEmail()
   @IsNotEmpty()
-  @Transform(({ value }) => value?.toLowerCase()?.trim())
+  @Transform(({ value }: { value: string }) =>
+    typeof value === 'string' ? value.toLowerCase().trim() : value,
+  )
   email!: string;
 
   @ApiProperty({

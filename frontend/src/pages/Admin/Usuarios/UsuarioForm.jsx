@@ -15,8 +15,7 @@ function UsuarioForm() {
     fetching: loading, 
     error, 
     setError,
-    handleChange, 
-    handleSubmit 
+    handleChange
   } = useAdminForm({
     id,
     initialData: {
@@ -33,7 +32,7 @@ function UsuarioForm() {
   const loggedInUserId = React.useMemo(() => {
     const userStr = localStorage.getItem('acic_user');
     if (userStr) {
-      try { return JSON.parse(userStr).id; } catch (err) {}
+      try { return JSON.parse(userStr).id; } catch (e) { console.error('Erro ao fazer parse do usuario cacheado', e); }
     }
     return null;
   }, []);
@@ -63,13 +62,19 @@ function UsuarioForm() {
             const newCache = { ...loggedInUser, name: updatedUser.name, email: updatedUser.email, role: updatedUser.role };
             localStorage.setItem('acic_user', JSON.stringify(newCache));
           }
-        } catch(err) {}
+        } catch(e) { console.error('Erro ao salvar no cache local', e); }
       }
 
       navigate('/admin/usuarios');
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || 'Erro ao salvar os dados. Verifique e tente novamente.');
+      let errorMessage = 'Erro ao salvar os dados. Verifique e tente novamente.';
+      if (err.response?.data?.message) {
+        // Se o erro vier como Array (class-validator), transforma em string
+        const msg = err.response.data.message;
+        errorMessage = Array.isArray(msg) ? msg.join(' | ') : msg;
+      }
+      setError(errorMessage);
     }
   };
 
@@ -77,10 +82,11 @@ function UsuarioForm() {
 
   return (
     <AdminFormLayout
-      title={isEdit ? 'Editar Usuário' : 'Novo Usuário'}
-      saving={saving}
+      title="Usuário"
+      isEditing={isEdit}
+      loading={saving}
       error={error}
-      onSave={handleCustomSubmit}
+      onSubmit={handleCustomSubmit}
       backPath="/admin/usuarios"
     >
       <div className="form-group">

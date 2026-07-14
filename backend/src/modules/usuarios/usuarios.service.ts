@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -22,9 +27,12 @@ export class UsuariosService {
       });
       const { passwordHash: _, ...result } = user;
       return result;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictException('Este e-mail já está em uso por outro usuário.');
+    } catch (error: unknown) {
+      const err = error as { code?: string };
+      if (err.code === 'P2002') {
+        throw new ConflictException(
+          'Este e-mail já está em uso por outro usuário.',
+        );
       }
       throw error;
     }
@@ -70,20 +78,22 @@ export class UsuariosService {
   async update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
     const userToUpdate = await this.findOne(id);
     const { password, ...rest } = updateUsuarioDto;
-    
+
     // Anti-Lockout no Update (Prevenir que o único ADMIN seja desativado ou rebaixado)
     if (userToUpdate.role === UserRole.ADMIN) {
       const isTryingToDeactivate = rest.active === false;
       const isTryingToDemote = rest.role && rest.role !== UserRole.ADMIN;
-      
+
       if (isTryingToDeactivate || isTryingToDemote) {
         const adminCount = await this.prisma.user.count({
           where: { role: UserRole.ADMIN, active: true },
         });
-        
+
         // Se há apenas 1 admin ativo no sistema, e estamos tentando mexer nele
         if (adminCount <= 1) {
-          throw new ForbiddenException('Não é possível desativar ou rebaixar o último administrador ativo do sistema.');
+          throw new ForbiddenException(
+            'Não é possível desativar ou rebaixar o último administrador ativo do sistema.',
+          );
         }
       }
     }
@@ -103,9 +113,12 @@ export class UsuariosService {
       });
       const { passwordHash: _, ...result } = user;
       return result;
-    } catch (error: any) {
-      if (error.code === 'P2002') {
-        throw new ConflictException('Este e-mail já está em uso por outro usuário.');
+    } catch (error: unknown) {
+      const err = error as { code?: string };
+      if (err.code === 'P2002') {
+        throw new ConflictException(
+          'Este e-mail já está em uso por outro usuário.',
+        );
       }
       throw error;
     }
@@ -120,9 +133,11 @@ export class UsuariosService {
       const adminCount = await this.prisma.user.count({
         where: { role: UserRole.ADMIN },
       });
-      
+
       if (adminCount <= 1) {
-        throw new ForbiddenException('Não é possível deletar o último administrador do sistema.');
+        throw new ForbiddenException(
+          'Não é possível deletar o último administrador do sistema.',
+        );
       }
     }
 

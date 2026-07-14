@@ -29,8 +29,8 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // 1. Tratamento para Token Expirado (401)
-    if (error.response?.status === 401) {
+    // 1. Tratamento para Token Expirado (401) ignorando a rota de login
+    if (error.response?.status === 401 && !error.config.url.includes('/auth/login')) {
       localStorage.removeItem('acic_access_token');
       localStorage.removeItem('acic_user');
       window.location.href = '/login'; 

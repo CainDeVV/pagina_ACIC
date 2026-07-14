@@ -108,7 +108,10 @@ export class CreateEventoDto {
     description: 'Data de publicação automática agendada',
     required: false,
   })
-  @IsDateString({}, { message: 'A data de publicação deve estar no formato ISO 8601 válido.' })
+  @IsDateString(
+    {},
+    { message: 'A data de publicação deve estar no formato ISO 8601 válido.' },
+  )
   @IsOptional()
   publishedAt?: string;
 }
