@@ -22,10 +22,12 @@ function Eventos() {
         const naoDestaques = eventosPublicos.filter(e => e.destaque !== true);
         
         const futuros = naoDestaques.filter(e => new Date(e.startsAt) > agora && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED);
-        const passados = naoDestaques.filter(e => new Date(e.startsAt) <= agora || e.status === CONTENT_STATUS.FINISHED || e.status === CONTENT_STATUS.CANCELLED);
+        const passados = naoDestaques.filter(e => (new Date(e.startsAt) <= agora || e.status === CONTENT_STATUS.FINISHED) && e.status !== CONTENT_STATUS.CANCELLED);
+        const cancelados = naoDestaques.filter(e => e.status === CONTENT_STATUS.CANCELLED);
 
         futuros.sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt));
         passados.sort((a, b) => new Date(b.startsAt) - new Date(a.startsAt));
+        cancelados.sort((a, b) => new Date(b.startsAt) - new Date(a.startsAt));
 
         const eventosParaSlider = destaques.length > 0 ? destaques : futuros.length > 0 ? futuros : passados;
         
@@ -42,7 +44,8 @@ function Eventos() {
         setSections([
           { title: "Em Destaque", items: destaques, type: "event" },
           { title: "Próximos Eventos", items: futuros, type: "event" },
-          { title: "Eventos Realizados", items: passados, type: "event" }
+          { title: "Eventos Realizados", items: passados, type: "event" },
+          { title: "Eventos Cancelados", items: cancelados, type: "event" }
         ]);
 
       } catch (error) {

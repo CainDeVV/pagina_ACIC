@@ -102,4 +102,13 @@ export class CreateEventoDto {
   @IsEnum(EventStatus)
   @IsOptional()
   status?: EventStatus;
+
+  @ApiProperty({
+    example: '2026-06-15T19:00:00Z',
+    description: 'Data de publicação automática agendada',
+    required: false,
+  })
+  @IsDateString({}, { message: 'A data de publicação deve estar no formato ISO 8601 válido.' })
+  @IsOptional()
+  publishedAt?: string;
 }

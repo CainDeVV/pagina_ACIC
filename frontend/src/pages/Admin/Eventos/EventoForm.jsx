@@ -39,7 +39,8 @@ function EventoForm() {
       coverImageCaption: '',
       showCoverImage: true,
       destaque: false,
-      status: CONTENT_STATUS.DRAFT
+      status: CONTENT_STATUS.DRAFT,
+      publishedAt: ''
     }
   });
 
@@ -49,7 +50,8 @@ function EventoForm() {
       setFormData(prev => ({ 
         ...prev, 
         startsAt: toDatetimeLocal(prev.startsAt),
-        endsAt: prev.endsAt ? toDatetimeLocal(prev.endsAt) : ''
+        endsAt: prev.endsAt ? toDatetimeLocal(prev.endsAt) : '',
+        publishedAt: prev.publishedAt ? toDatetimeLocal(prev.publishedAt) : ''
       }));
     }
   }, [formData.startsAt, setFormData]);
@@ -107,6 +109,7 @@ function EventoForm() {
 
         let parsedStartsAt = new Date(currentData.startsAt).toISOString();
         let parsedEndsAt = currentData.endsAt ? new Date(currentData.endsAt).toISOString() : undefined;
+        let parsedPublishedAt = currentData.publishedAt ? new Date(currentData.publishedAt).toISOString() : undefined;
 
         const cleanedData = cleanEmptyStrings(currentData);
 
@@ -115,6 +118,7 @@ function EventoForm() {
           description: finalDescription,
           startsAt: parsedStartsAt,
           endsAt: parsedEndsAt,
+          publishedAt: parsedPublishedAt,
           capacity: currentData.capacity === '' ? null : Number(currentData.capacity)
         };
       }
@@ -214,6 +218,19 @@ function EventoForm() {
           <option value={CONTENT_STATUS.CANCELLED}>{STATUS_LABELS[CONTENT_STATUS.CANCELLED]}</option>
           <option value={CONTENT_STATUS.FINISHED}>{STATUS_LABELS[CONTENT_STATUS.FINISHED]}</option>
         </select>
+      </div>
+
+      <div className="form-group">
+        <label>Agendar Publicação Automática (Opcional)</label>
+        <input
+          type="datetime-local"
+          name="publishedAt"
+          value={formData.publishedAt || ''}
+          onChange={handleChange}
+        />
+        <span style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px', display: 'block' }}>
+          Deixe em branco para controle manual. Se preenchido e o status for Rascunho, o evento será publicado automaticamente nesta data.
+        </span>
       </div>
 
       <div className="form-group form-group-checkbox">

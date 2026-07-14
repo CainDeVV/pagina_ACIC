@@ -16,7 +16,22 @@ function EventosList() {
   });
 
   const columns = [
-    { label: 'Título', key: 'title' },
+    { 
+      label: 'Título', 
+      render: (row) => (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span>{row.title}</span>
+          {row.status === CONTENT_STATUS.DRAFT && row.publishedAt && new Date(row.publishedAt) > new Date() && (
+            <span style={{ 
+              fontSize: '0.75rem', padding: '2px 6px', background: '#fff3cd', 
+              color: '#856404', borderRadius: '4px', border: '1px solid #ffeeba', whiteSpace: 'nowrap' 
+            }}>
+              ⏰ Agendado
+            </span>
+          )}
+        </div>
+      )
+    },
     { 
       label: 'Status', 
       key: 'status',

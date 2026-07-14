@@ -23,9 +23,9 @@ export class HomeService {
         orderBy: { sortOrder: 'asc' },
       }),
 
-      // 2. SERVIÇOS: Apenas os 6 primeiros publicados
+      // 2. SERVIÇOS: Apenas os 6 primeiros publicados E em destaque
       this.prisma.servico.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where: { status: PublishStatus.PUBLISHED, destaque: true },
         orderBy: { sortOrder: 'asc' },
         take: 6,
       }),

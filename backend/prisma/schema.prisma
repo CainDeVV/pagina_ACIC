@@ -107,6 +107,7 @@ model Evento {
   author       User?              @relation("EventoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   inscricoes   InscricaoEvento[]
   certificados CertificadoSolicitacao[]
+  publishedAt  DateTime?
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 }
