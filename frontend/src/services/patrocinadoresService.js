@@ -22,7 +22,7 @@ export const patrocinadoresService = {
   },
 
   atualizar: async (id, dados) => {
-    const response = await api.put(`/admin/patrocinadores/${id}`, dados);
+    const response = await api.patch(`/admin/patrocinadores/${id}`, dados);
     return response.data;
   },
 

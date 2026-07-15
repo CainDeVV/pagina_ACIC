@@ -16,7 +16,7 @@ function Footer() {
 
         {/* Coluna 1: Logo e Sobre */}
         <div className="footer-col">
-          <img src={logo} alt="Logo ACIC" className="footer-logo" />
+          <img loading="lazy" src={logo} alt="Logo ACIC" className="footer-logo" />
           <p>Focada em fortalecer o empreendedorismo local, conectar e capacitar a classe empresarial de Crateús e região.</p>
         </div>
 

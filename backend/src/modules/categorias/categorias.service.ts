@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -8,6 +8,8 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CategoriasService {
+  private readonly logger = new Logger(CategoriasService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createCategoriaDto: CreateCategoriaDto) {
@@ -15,6 +17,7 @@ export class CategoriasService {
       lower: true,
       strict: true,
     });
+    this.logger.log(`Criando categoria com slug: ${slug}`);
     return this.prisma.categoria.create({
       data: {
         ...createCategoriaDto,

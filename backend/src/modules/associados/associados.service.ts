@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateAssociadoDto } from './dto/create-associado.dto';
@@ -9,9 +10,14 @@ import { UpdateAssociadoDto } from './dto/update-associado.dto';
 
 @Injectable()
 export class AssociadosService {
+  private readonly logger = new Logger(AssociadosService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createAssociadoDto: CreateAssociadoDto) {
+    this.logger.log(
+      `Criando associado para o userId: ${createAssociadoDto.userId}`,
+    );
     const existingUser = await this.prisma.user.findUnique({
       where: { id: createAssociadoDto.userId },
     });

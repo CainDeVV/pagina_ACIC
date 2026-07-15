@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import HeroSlider from '../HeroSlider/HeroSlider';
+import HeroSlider from '@/components/HeroSlider/HeroSlider';
 import './ContentListLayout.css';
 
 const ContentListLayout = ({ 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateDiretoriaDto } from './dto/create-diretoria.dto';
 import { UpdateDiretoriaDto } from './dto/update-diretoria.dto';
@@ -6,9 +6,12 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class DiretoriaService {
+  private readonly logger = new Logger(DiretoriaService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   create(createDiretoriaDto: CreateDiretoriaDto) {
+    this.logger.log('Criando novo diretor');
     return this.prisma.diretor.create({
       data: createDiretoriaDto,
     });
@@ -102,39 +105,15 @@ export class DiretoriaService {
   }
 
   async update(id: string, updateDiretoriaDto: UpdateDiretoriaDto) {
-    try {
-      return await this.prisma.diretor.update({
-        where: { id },
-        data: updateDiretoriaDto,
-      });
-    } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new NotFoundException('Diretor não encontrado para atualização.');
-      }
-      throw error;
-    }
+    return this.prisma.diretor.update({
+      where: { id },
+      data: updateDiretoriaDto,
+    });
   }
 
   async remove(id: string) {
-    try {
-      return await this.prisma.diretor.delete({
-        where: { id },
-      });
-    } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new NotFoundException('Diretor não encontrado para exclusão.');
-      }
-      throw error;
-    }
+    return this.prisma.diretor.delete({
+      where: { id },
+    });
   }
 }

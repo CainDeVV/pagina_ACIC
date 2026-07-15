@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
 import { UpdatePresidenteDto } from './dto/update-presidente.dto';
@@ -6,9 +6,12 @@ import { PaginationDto } from '../../common/dto/pagination.dto';
 
 @Injectable()
 export class PresidentesService {
+  private readonly logger = new Logger(PresidentesService.name);
+
   constructor(private prisma: PrismaService) {}
 
   create(createPresidenteDto: CreatePresidenteDto) {
+    this.logger.log(`Criando novo presidente: ${createPresidenteDto.name}`);
     return this.prisma.presidente.create({
       data: createPresidenteDto,
     });
@@ -73,39 +76,15 @@ export class PresidentesService {
   }
 
   async update(id: string, updatePresidenteDto: UpdatePresidenteDto) {
-    try {
-      return await this.prisma.presidente.update({
-        where: { id },
-        data: updatePresidenteDto,
-      });
-    } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new NotFoundException('Presidente não encontrado.');
-      }
-      throw error;
-    }
+    return this.prisma.presidente.update({
+      where: { id },
+      data: updatePresidenteDto,
+    });
   }
 
   async remove(id: string) {
-    try {
-      return await this.prisma.presidente.delete({
-        where: { id },
-      });
-    } catch (error: unknown) {
-      if (
-        error &&
-        typeof error === 'object' &&
-        'code' in error &&
-        error.code === 'P2025'
-      ) {
-        throw new NotFoundException('Presidente não encontrado.');
-      }
-      throw error;
-    }
+    return this.prisma.presidente.delete({
+      where: { id },
+    });
   }
 }

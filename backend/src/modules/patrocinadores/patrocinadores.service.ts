@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePatrocinadorDto } from './dto/create-patrocinador.dto';
 import { UpdatePatrocinadorDto } from './dto/update-patrocinador.dto';
@@ -7,9 +7,12 @@ import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class PatrocinadoresService {
+  private readonly logger = new Logger(PatrocinadoresService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createDto: CreatePatrocinadorDto) {
+    this.logger.log(`Criando novo patrocinador: ${createDto.name}`);
     return this.prisma.patrocinador.create({
       data: createDto,
     });

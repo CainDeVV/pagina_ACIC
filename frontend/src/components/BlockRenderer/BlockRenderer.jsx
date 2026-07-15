@@ -73,7 +73,7 @@ const GalleryViewer = ({ images }) => {
       <div className="institutional-gallery" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginTop: '24px' }}>
         {images.map((img, i) => (
           <figure key={i} style={{ margin: 0, cursor: 'pointer', position: 'relative', overflow: 'hidden', borderRadius: '8px' }} onClick={() => setSelectedIndex(i)} className="gallery-thumbnail">
-            <img 
+            <img loading="lazy" 
               src={sanitizeUrl(img.url)} 
               alt={img.alt || 'Imagem da galeria'} 
               style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
@@ -101,7 +101,7 @@ const GalleryViewer = ({ images }) => {
             </button>
           )}
 
-          <img 
+          <img loading="lazy" 
             src={sanitizeUrl(images[selectedIndex].url)} 
             alt={images[selectedIndex].alt} 
             style={{ maxWidth: '85vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: '8px' }} 
@@ -209,7 +209,7 @@ function BlockRenderer({ blocks }) {
             const { cleanAlt, showCaption, cleanCaption } = parseCaption(data.caption, 'Imagem do conteúdo');
             blockContent = (
               <figure className="institutional-figure">
-                <img 
+                <img loading="lazy" 
                   src={sanitizeUrl(data.file?.url)} 
                   alt={cleanAlt} 
                   style={{ maxWidth: '100%', borderRadius: '8px' }} 
@@ -326,7 +326,7 @@ function BlockRenderer({ blocks }) {
             blockContent = (
               <div className="image-text-highlight">
                 <div className="ith-image-container">
-                  <img src={sanitizeUrl(data.imageUrl)} alt={data.title} loading="lazy" />
+                  <img loading="lazy" src={sanitizeUrl(data.imageUrl)} alt={data.title} />
                 </div>
                 <div className="ith-text-container">
                   <h3>{data.title}</h3>

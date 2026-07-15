@@ -10,7 +10,7 @@
   width: 50px;
   height: 50px;
   border: 4px solid rgba(2, 102, 176, 0.2);
-  border-left-color: #0266b0;
+  border-left-color: var(--color-brand-blue);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

@@ -36,7 +36,7 @@
 .nav-btn {
   display: inline-block;
   font-weight: bold;
-  color: #4d4d4d;
+  color: var(--color-gray-dark);
   cursor: pointer;
   text-transform: uppercase;
   font-size: 1rem;
@@ -48,8 +48,8 @@
 
 .nav-btn:hover,
 .dropdown:hover .nav-btn {
-  color: #0088cc;
-  background-color: #f4f6f8;
+  color: var(--color-primary);
+  background-color: var(--color-gray-light);
 }
 
 

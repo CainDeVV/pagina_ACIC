@@ -40,6 +40,9 @@ export class CreatePresidenteDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   bio?: string;
 

@@ -3,39 +3,52 @@ import {
   NotFoundException,
   ConflictException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
-import { UserRole } from '@prisma/client';
+import { UserRole, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+
+const USER_SELECT: Prisma.UserSelect = {
+  id: true,
+  name: true,
+  email: true,
+  role: true,
+  active: true,
+  createdAt: true,
+  updatedAt: true,
+};
 
 @Injectable()
 export class UsuariosService {
+  private readonly logger = new Logger(UsuariosService.name);
+
   constructor(private prisma: PrismaService) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
+    this.logger.log(`Criando usuário: ${createUsuarioDto.email}`);
     const { password, ...rest } = createUsuarioDto;
+
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: rest.email },
+    });
+    if (existingUser) {
+      throw new ConflictException(
+        'Este e-mail já está em uso por outro usuário.',
+      );
+    }
+
     const passwordHash = await bcrypt.hash(password, 10);
 
-    try {
-      const user = await this.prisma.user.create({
-        data: {
-          ...rest,
-          passwordHash,
-        },
-      });
-      const { passwordHash: _, ...result } = user;
-      return result;
-    } catch (error: unknown) {
-      const err = error as { code?: string };
-      if (err.code === 'P2002') {
-        throw new ConflictException(
-          'Este e-mail já está em uso por outro usuário.',
-        );
-      }
-      throw error;
-    }
+    return this.prisma.user.create({
+      data: {
+        ...rest,
+        passwordHash,
+      },
+      select: USER_SELECT,
+    });
   }
 
   async findAll() {
@@ -43,30 +56,14 @@ export class UsuariosService {
       where: {
         role: { in: [UserRole.ADMIN, UserRole.EDITOR] },
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        active: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: USER_SELECT,
     });
   }
 
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        active: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: USER_SELECT,
     });
 
     if (!user) {
@@ -78,6 +75,17 @@ export class UsuariosService {
   async update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
     const userToUpdate = await this.findOne(id);
     const { password, ...rest } = updateUsuarioDto;
+
+    if (rest.email && rest.email !== userToUpdate.email) {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: rest.email },
+      });
+      if (existingUser) {
+        throw new ConflictException(
+          'Este e-mail já está em uso por outro usuário.',
+        );
+      }
+    }
 
     // Anti-Lockout no Update (Prevenir que o único ADMIN seja desativado ou rebaixado)
     if (userToUpdate.role === UserRole.ADMIN) {
@@ -98,7 +106,7 @@ export class UsuariosService {
       }
     }
 
-    const dataToUpdate: import('@prisma/client').Prisma.UserUpdateInput = {
+    const dataToUpdate: Prisma.UserUpdateInput = {
       ...rest,
     };
 
@@ -106,22 +114,11 @@ export class UsuariosService {
       dataToUpdate.passwordHash = await bcrypt.hash(password, 10);
     }
 
-    try {
-      const user = await this.prisma.user.update({
-        where: { id },
-        data: dataToUpdate,
-      });
-      const { passwordHash: _, ...result } = user;
-      return result;
-    } catch (error: unknown) {
-      const err = error as { code?: string };
-      if (err.code === 'P2002') {
-        throw new ConflictException(
-          'Este e-mail já está em uso por outro usuário.',
-        );
-      }
-      throw error;
-    }
+    return this.prisma.user.update({
+      where: { id },
+      data: dataToUpdate,
+      select: USER_SELECT,
+    });
   }
 
   async remove(id: string) {
@@ -141,10 +138,9 @@ export class UsuariosService {
       }
     }
 
-    const user = await this.prisma.user.delete({
+    return this.prisma.user.delete({
       where: { id },
+      select: USER_SELECT,
     });
-    const { passwordHash: _, ...result } = user;
-    return result;
   }
 }

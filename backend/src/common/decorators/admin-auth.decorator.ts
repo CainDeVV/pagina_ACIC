@@ -7,8 +7,8 @@ import { Roles } from './roles.decorator';
 
 export function AdminAuth(...roles: UserRole[]) {
   return applyDecorators(
-    ApiBearerAuth(),
     UseGuards(JwtAuthGuard, RolesGuard),
+    ApiBearerAuth(),
     Roles(...roles),
   );
 }

@@ -2,6 +2,13 @@
 
 /* PALETA DE CORES GLOBAL ACIC */
 :root {
+  /* Novas Variáveis Adicionadas (Refatoração) */
+  --color-whatsapp: #25D366;
+  --color-warning-bg: #fffbeb;
+  --color-warning-text: #92400e;
+  --color-warning-border: #b45309;
+  --color-info: #17a2b8;
+
   /* Cores Oficiais da Marca */
   --color-brand-blue: #0266b0;
   --color-brand-yellow: #fdc300;

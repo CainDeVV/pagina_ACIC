@@ -20,11 +20,17 @@ export class CreatePatrocinadorDto {
 
   @ApiProperty({ description: 'URL da logomarca' })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty()
   logoUrl: string;
 
   @ApiPropertyOptional({ description: 'Link para o site do patrocinador' })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   linkUrl?: string;
 

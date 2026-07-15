@@ -7,7 +7,6 @@ import { EventCard } from '@/components/Card';
 import CoverImage from '@/components/CoverImage/CoverImage';
 import { eventosService } from '@/services/eventosService';
 import { formatDateTime } from '@/utils/dateUtils';
-import { CONTENT_STATUS } from '@/constants/status';
 import { getEventBadge } from '@/utils/eventUtils';
 import { FaCalendarAlt } from 'react-icons/fa';
 import '@/components/Layout/PublicDetailLayout.css';

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { UpdateEventoDto } from './dto/update-evento.dto';
@@ -8,9 +8,12 @@ import slugify from 'slugify';
 
 @Injectable()
 export class EventosService {
+  private readonly logger = new Logger(EventosService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createEventoDto: CreateEventoDto, authorId: string) {
+    this.logger.log(`Criando novo evento: ${createEventoDto.title}`);
     const slug = slugify(createEventoDto.title, { lower: true, strict: true });
     const { categoriasIds, ...data } = createEventoDto;
 
@@ -30,7 +33,13 @@ export class EventosService {
   }
 
   async findAll(pagination: PaginationDto) {
-    const { page = 1, limit = 10, search, categoriasIds, upcomingOnly } = pagination;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      categoriasIds,
+      upcomingOnly,
+    } = pagination;
     const skip = (page - 1) * limit;
 
     const todayStart = new Date();
@@ -47,10 +56,7 @@ export class EventosService {
                   { startsAt: { gte: new Date() } },
                   { endsAt: { gte: new Date() } },
                   {
-                    AND: [
-                      { endsAt: null },
-                      { startsAt: { gte: todayStart } },
-                    ],
+                    AND: [{ endsAt: null }, { startsAt: { gte: todayStart } }],
                   },
                 ],
               },

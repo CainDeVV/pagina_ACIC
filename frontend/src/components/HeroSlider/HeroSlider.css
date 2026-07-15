@@ -127,8 +127,8 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 }
 
 .hero-slider-badge.gold {
-  background-color: #F5A500;
-  color: #5C3A00;
+  background-color: var(--color-brand-yellow);
+  color: var(--color-black);
 }
 
 .hero-slider-title {
@@ -168,8 +168,8 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 }
 
 .hero-btn-primary {
-  background: #F5A500;
-  color: #5C3A00;
+  background: var(--color-brand-yellow);
+  color: var(--color-black);
   border: none;
 }
 
@@ -208,7 +208,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--color-gray-dark, #4d4d4d);
+  color: var(--color-gray-dark, var(--color-gray-dark));
   font-size: 1.2rem;
   transition: all 0.2s;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
@@ -246,7 +246,7 @@ a.hero-slider-content.is-link:hover .hero-slider-title {
 }
 
 .hero-indicator.active {
-  background-color: #F5A500;
+  background-color: var(--color-brand-yellow);
   /* Dourado */
   width: 44px;
 }

@@ -8,7 +8,7 @@
 }
 
 .rich-editor-container:focus-within {
-  border-color: #cccccc;
+  border-color: var(--color-gray-border);
   /* Borda mais sutil em vez do azul chamativo */
   outline: none;
 }

@@ -35,7 +35,7 @@ function Sponsors() {
               className="sponsor-card"
               title={patrocinador.name}
             >
-              <img src={patrocinador.logoUrl} alt={`Logo ${patrocinador.name}`} />
+              <img loading="lazy" src={patrocinador.logoUrl} alt={`Logo ${patrocinador.name}`} />
             </a>
           ))}
         </div>

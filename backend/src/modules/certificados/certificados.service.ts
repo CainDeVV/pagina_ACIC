@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateCertificadoSolicitacaoDto } from './dto/create-certificado.dto';
@@ -11,12 +12,15 @@ import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @Injectable()
 export class CertificadosService {
+  private readonly logger = new Logger(CertificadosService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(
     createCertificadoDto: CreateCertificadoSolicitacaoDto,
     user: JwtPayload,
   ) {
+    this.logger.log(`Nova solicitação de certificado pelo usuário: ${user.id}`);
     if (user.role === UserRole.ASSOCIADO) {
       const associado = await this.prisma.associado.findUnique({
         where: { userId: user.id },

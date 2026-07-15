@@ -3,6 +3,7 @@ import {
   NotFoundException,
   ConflictException,
   ForbiddenException,
+  Logger,
 } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateInscricaoDto } from './dto/create-inscricao.dto';
@@ -12,9 +13,12 @@ import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @Injectable()
 export class InscricoesService {
+  private readonly logger = new Logger(InscricoesService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createInscricaoDto: CreateInscricaoDto, user: JwtPayload) {
+    this.logger.log(`Nova inscrição solicitada pelo usuário: ${user.id}`);
     if (user.role === UserRole.ASSOCIADO) {
       const associado = await this.prisma.associado.findUnique({
         where: { userId: user.id },

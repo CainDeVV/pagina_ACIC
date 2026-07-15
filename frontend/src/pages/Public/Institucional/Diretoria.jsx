@@ -117,7 +117,7 @@ function Diretoria() {
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               {selectedMember.photoUrl ? (
-                <img src={selectedMember.photoUrl} alt={selectedMember.name} className="modal-avatar" />
+                <img loading="lazy" src={selectedMember.photoUrl} alt={selectedMember.name} className="modal-avatar" />
               ) : (
                 <div className="modal-avatar placeholder-sm">👤</div>
               )}

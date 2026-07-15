@@ -73,7 +73,7 @@ function GaleriaPresidentes() {
               <div className="presidente-card" key={presidente.id}>
                 
                 <div className="presidente-foto-container">
-                  <img 
+                  <img loading="lazy" 
                     src={presidente.photoUrl || 'https://placehold.co/300x400?text=Sem+Foto'} 
                     alt={`Foto de ${presidente.name}`} 
                     className="presidente-foto" 

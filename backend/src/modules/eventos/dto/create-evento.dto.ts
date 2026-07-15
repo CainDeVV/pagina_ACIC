@@ -20,6 +20,9 @@ export class CreateEventoDto {
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty({ message: 'O título é obrigatório.' })
   title!: string;
 
@@ -36,6 +39,9 @@ export class CreateEventoDto {
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   location?: string;
 
@@ -82,6 +88,9 @@ export class CreateEventoDto {
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   coverImageCaption?: string;
 
@@ -115,5 +124,8 @@ export class CreateEventoDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   categoriasIds?: string[];
 }

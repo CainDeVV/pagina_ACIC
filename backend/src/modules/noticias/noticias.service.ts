@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
@@ -8,9 +8,12 @@ import slugify from 'slugify';
 
 @Injectable()
 export class NoticiasService {
+  private readonly logger = new Logger(NoticiasService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createNoticiaDto: CreateNoticiaDto, authorId: string) {
+    this.logger.log(`Criando nova notícia: ${createNoticiaDto.title}`);
     const slug = slugify(createNoticiaDto.title, { lower: true, strict: true });
     const { categoriasIds, ...data } = createNoticiaDto;
 

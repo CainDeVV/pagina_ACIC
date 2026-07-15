@@ -56,7 +56,7 @@
   margin-top: 0;
   margin-bottom: 24px;
   color: var(--color-gray-dark);
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--color-gray-border);
   padding-bottom: 16px;
 }
 
@@ -86,7 +86,7 @@
   font-size: 16px;
   font-family: inherit;
   transition: all 0.2s ease;
-  background-color: #fcfcfc;
+  background-color: var(--color-gray-light);
 }
 
 .form-group input:not([type="checkbox"]):focus,
@@ -170,7 +170,7 @@
 
 .error-msg {
   color: var(--color-danger);
-  background-color: #f8d7da;
+  background-color: var(--color-danger-bg);
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #f5c6cb;
@@ -181,7 +181,7 @@
    ESTILOS DE FEEDBACK E UTILITÁRIOS (DRY)
    ========================================= */
 .admin-field-error {
-  color: #d9534f;
+  color: var(--color-danger);
   font-size: 0.85rem;
   margin-top: 4px;
   display: block;
@@ -249,7 +249,7 @@
   height: 24px;
   border-radius: 50%;
   vertical-align: middle;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-gray-border);
 }
 
 .admin-category-bullet {
@@ -310,8 +310,8 @@
 
 .admin-status-select[data-status="PUBLISHED"] { background-color: var(--color-brand-green); }
 .admin-status-select[data-status="DRAFT"] { background-color: var(--color-gray-medium); }
-.admin-status-select[data-status="FINISHED"] { background-color: #17a2b8; }
-.admin-status-select[data-status="CANCELLED"] { background-color: #dc3545; }
+.admin-status-select[data-status="FINISHED"] { background-color: var(--color-info); }
+.admin-status-select[data-status="CANCELLED"] { background-color: var(--color-danger); }
 
 .admin-featured-toggle {
   background: none;
@@ -325,8 +325,8 @@
   padding: 0;
 }
 
-.admin-featured-toggle[data-featured="true"] { color: #f39c12; }
-.admin-featured-toggle[data-featured="false"] { color: #ccc; }
+.admin-featured-toggle[data-featured="true"] { color: var(--color-brand-yellow); }
+.admin-featured-toggle[data-featured="false"] { color: var(--color-gray-border); }
 
 .admin-boolean-toggle {
   border: none;
@@ -345,7 +345,7 @@
 }
 
 .admin-boolean-toggle[data-active="true"] { background: var(--color-brand-green); }
-.admin-boolean-toggle[data-active="false"] { background: #dc3545; }
+.admin-boolean-toggle[data-active="false"] { background: var(--color-danger); }
 
 .admin-category-select {
   padding: 6px 14px;

@@ -6,14 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { CertificadosService } from './certificados.service';
 import { CreateCertificadoSolicitacaoDto } from './dto/create-certificado.dto';
 import { UpdateCertificadoSolicitacaoDto } from './dto/update-certificado.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
@@ -21,8 +19,7 @@ import { JwtPayload } from '../../common/interfaces/request-user.interface';
 import { PrismaService } from '../../prisma/prisma.service';
 
 @ApiTags('Certificados')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@AdminAuth()
 @Controller('certificados')
 export class CertificadosController {
   constructor(

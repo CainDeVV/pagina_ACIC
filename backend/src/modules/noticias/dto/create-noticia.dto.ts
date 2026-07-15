@@ -27,6 +27,9 @@ export class CreateNoticiaDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   summary?: string;
 
@@ -56,6 +59,9 @@ export class CreateNoticiaDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   coverImageCaption?: string;
 
@@ -98,5 +104,8 @@ export class CreateNoticiaDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   categoriasIds?: string[];
 }

@@ -54,7 +54,7 @@
 
 /* ===== BARRA DE PESQUISA (PUBLIC) ===== */
 .public-search-wrapper {
-  background-color: #f8fafc;
+  background-color: var(--color-gray-light);
   padding: 2rem 1rem;
   border-bottom: 1px solid #e2e8f0;
 }
@@ -101,7 +101,7 @@
 }
 
 .public-filter-btn:hover {
-  background-color: #f1f5f9;
+  background-color: var(--color-gray-light);
 }
 
 .public-filter-btn.active {

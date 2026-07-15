@@ -1,12 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class HomeService {
+  private readonly logger = new Logger(HomeService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async getDestaques() {
+    this.logger.log('Buscando dados de destaques para a Home');
     const agora = new Date();
 
     const [

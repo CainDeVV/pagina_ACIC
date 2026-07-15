@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
@@ -7,9 +7,12 @@ import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class SlidesService {
+  private readonly logger = new Logger(SlidesService.name);
+
   constructor(private prisma: PrismaService) {}
 
   create(createSlideDto: CreateSlideDto, authorId?: string) {
+    this.logger.log(`Criando slide: ${createSlideDto.title}`);
     return this.prisma.homeSlide.create({
       data: {
         ...createSlideDto,

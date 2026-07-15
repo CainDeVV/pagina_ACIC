@@ -71,7 +71,7 @@ function ServicoDetalhe() {
         <Breadcrumb items={[{ label: 'Serviços', path: '/servicos' }, { label: servicoAtual.title }]} />
 
         <div className="servico-banner">
-          <img src={imagemBanner} alt={servicoAtual.title} />
+          <img loading="lazy" src={imagemBanner} alt={servicoAtual.title} />
           <div className="servico-banner-content">
             <h1>{servicoAtual.title}</h1>
             <button className="btn-eu-quero" onClick={() => setIsModalOpen(true)}>
@@ -114,7 +114,7 @@ function ServicoDetalhe() {
             📞 (88) 99999-9999
           </div>
 
-          <a href="https://wa.me/5588999999999" target="_blank" rel="noreferrer" className="btn-whatsapp">
+          <a href="https://wa.me/5588999999999" target="_blank" rel="noopener noreferrer" className="btn-whatsapp">
             Enviar mensagem no WhatsApp
           </a>
         </div>

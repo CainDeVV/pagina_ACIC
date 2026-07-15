@@ -4,7 +4,7 @@ import {
   Post,
   Body,
   Param,
-  Put,
+  Patch,
   Delete,
   Query,
 } from '@nestjs/common';
@@ -51,7 +51,7 @@ export class PatrocinadoresController {
   }
 
   @ApiOperation({ summary: 'Atualizar patrocinador' })
-  @Put('admin/patrocinadores/:id')
+  @Patch('admin/patrocinadores/:id')
   @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
   update(@Param('id') id: string, @Body() updateDto: UpdatePatrocinadorDto) {
     return this.patrocinadoresService.update(id, updateDto);

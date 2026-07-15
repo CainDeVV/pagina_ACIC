@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import Breadcrumb from '../Breadcrumb/Breadcrumb';
+import Breadcrumb from '@/components/Breadcrumb/Breadcrumb';
 import { INSTITUCIONAL_MENU } from '@/constants/menu';
 import './SaibaMaisLayout.css';
 

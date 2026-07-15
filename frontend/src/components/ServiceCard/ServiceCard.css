@@ -141,14 +141,14 @@
   font-family: 'Sora', sans-serif;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #1A1A2E; /* Cor de texto escuro da Home */
+  color: var(--color-gray-dark); /* Cor de texto escuro da Home */
   margin: 0 0 8px 0;
   line-height: 1.3;
 }
 
 .simples-card-description {
   font-size: 0.9rem;
-  color: #5A6172; /* Cor de texto mutado da Home */
+  color: var(--color-gray-medium); /* Cor de texto mutado da Home */
   line-height: 1.6;
   margin: 0;
 }

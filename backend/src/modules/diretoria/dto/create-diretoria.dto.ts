@@ -30,6 +30,9 @@ export class CreateDiretoriaDto {
     description: 'Categoria usada para agrupar na tela',
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty({ message: 'A categoria é obrigatória.' })
   category!: string;
 
@@ -46,6 +49,9 @@ export class CreateDiretoriaDto {
 
   @ApiProperty({ example: 'Biografia do diretor...', required: false })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   bio?: string;
 

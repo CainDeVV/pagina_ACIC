@@ -6,22 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { AssociadosService } from './associados.service';
 import { CreateAssociadoDto } from './dto/create-associado.dto';
 import { UpdateAssociadoDto } from './dto/update-associado.dto';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { JwtPayload } from '../../common/interfaces/request-user.interface';
 
 @ApiTags('Associados')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@AdminAuth()
 @Controller('associados')
 export class AssociadosController {
   constructor(private readonly associadosService: AssociadosService) {}

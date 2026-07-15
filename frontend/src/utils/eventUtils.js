@@ -1,4 +1,4 @@
-import { CONTENT_STATUS } from '../constants/status';
+import { CONTENT_STATUS } from '@/constants/status';
 
 /**
  * Utilitários exclusivos para as regras de negócio de Eventos.

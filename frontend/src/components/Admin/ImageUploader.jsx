@@ -62,7 +62,7 @@ function ImageUploader({ folder = 'geral', currentUrl, onUploadSuccess, maxSizeM
     <div className="image-uploader-container" style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '10px' }}>
       {currentUrl && (
         <div style={{ width: '120px', height: '120px', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--color-primary)', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>
-          <img src={currentUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+          <img loading="lazy" src={currentUrl} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         </div>
       )}
       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

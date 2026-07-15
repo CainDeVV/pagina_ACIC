@@ -5,11 +5,15 @@ import {
   IsOptional,
   Matches,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateCategoriaDto {
   @ApiProperty({ description: 'Nome da categoria', example: 'Saúde' })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty()
   name: string;
 
@@ -19,6 +23,9 @@ export class CreateCategoriaDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @Matches(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, {
     message: 'color must be a valid HEX color code',
   })

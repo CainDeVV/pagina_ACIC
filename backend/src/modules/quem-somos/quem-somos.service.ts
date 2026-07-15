@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateQuemSomosDto } from './dto/create-quem-somos.dto';
 import { UpdateQuemSomosDto } from './dto/update-quem-somos.dto';
@@ -7,9 +7,12 @@ import { PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class QuemSomosService {
+  private readonly logger = new Logger(QuemSomosService.name);
+
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createQuemSomosDto: CreateQuemSomosDto) {
+    this.logger.log(`Criando seção Quem Somos: ${createQuemSomosDto.title}`);
     return await this.prisma.quemSomosSection.create({
       data: createQuemSomosDto,
     });

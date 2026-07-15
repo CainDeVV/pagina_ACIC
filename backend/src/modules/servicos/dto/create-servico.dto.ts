@@ -25,6 +25,9 @@ export class CreateServicoDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   summary?: string;
 
@@ -40,6 +43,9 @@ export class CreateServicoDto {
 
   @ApiProperty({ example: '💻', required: false })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   icon?: string;
 

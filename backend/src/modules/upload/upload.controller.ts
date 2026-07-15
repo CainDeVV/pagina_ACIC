@@ -4,7 +4,6 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
-  UseGuards,
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
@@ -14,18 +13,23 @@ import { extname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import * as fs from 'fs';
 import sharp from 'sharp';
-import { ApiBearerAuth, ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
-import { RolesGuard } from '../../common/guards/roles.guard';
-import { Roles } from '../../common/decorators/roles.decorator';
+import {
+  ApiTags,
+  ApiConsumes,
+  ApiBody,
+  ApiOperation,
+  ApiResponse,
+} from '@nestjs/swagger';
+import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Upload')
 @Controller('upload')
 export class UploadController {
-  @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.EDITOR)
+  @AdminAuth(UserRole.ADMIN, UserRole.EDITOR)
+  @ApiOperation({ summary: 'Fazer upload de um arquivo' })
+  @ApiResponse({ status: 201, description: 'Upload realizado com sucesso.' })
+  @ApiResponse({ status: 400, description: 'Arquivo inválido.' })
   @Post()
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -92,7 +96,7 @@ export class UploadController {
         cb(null, true);
       },
       limits: {
-        fileSize: 100 * 1024 * 1024, // 100MB
+        fileSize: 100 * 1024 * 1024, // 100MB global
       },
     }),
   )

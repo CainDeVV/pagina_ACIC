@@ -131,7 +131,7 @@ export default function Home() {
         {/* ── QUEM SOMOS ── */}
         <section className="secao-quem-somos">
           <div className="qs-visual">
-            <img className="qs-img" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80" alt="Reunião empresarial" />
+            <img loading="lazy" className="qs-img" src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&q=80" alt="Reunião empresarial" />
             <div className="qs-tag">
               <span>+500</span> Empresas associadas
             </div>

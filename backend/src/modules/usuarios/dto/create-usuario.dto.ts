@@ -34,6 +34,9 @@ export class CreateUsuarioDto {
     minLength: 6,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @MinLength(6)
   password!: string;
 

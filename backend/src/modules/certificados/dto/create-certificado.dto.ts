@@ -1,10 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsEnum, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { CertificateStatus } from '@prisma/client';
 
 export class CreateCertificadoSolicitacaoDto {
   @ApiProperty({ description: 'ID do Associado solicitante' })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsNotEmpty()
   associadoId: string;
 
@@ -13,6 +17,9 @@ export class CreateCertificadoSolicitacaoDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   eventoId?: string;
 
@@ -21,6 +28,9 @@ export class CreateCertificadoSolicitacaoDto {
     required: false,
   })
   @IsString()
+  @Transform(({ value }): any =>
+    typeof value === 'string' ? value.trim() : value,
+  )
   @IsOptional()
   reason?: string;
 

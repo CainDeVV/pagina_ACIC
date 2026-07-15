@@ -23,7 +23,7 @@
 }
 
 .footer-col h3 {
-  color: #FFD700; /* Destaque em amarelo/dourado */
+  color: var(--color-brand-yellow); /* Destaque em amarelo/dourado */
   margin-bottom: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 8px;
@@ -55,7 +55,7 @@
 .footer-bottom {
   text-align: center;
   padding: 16px;
-  background-color: #002244; /* Um azul ainda mais escuro pro copyright */
+  background-color: var(--color-primary-hover); /* Um azul ainda mais escuro pro copyright */
   font-size: 0.9rem;
-  color: #aaaaaa;
+  color: var(--color-gray-medium);
 }

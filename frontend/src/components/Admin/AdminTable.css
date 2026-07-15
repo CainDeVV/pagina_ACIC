@@ -35,7 +35,7 @@
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.2s ease;
-  background-color: #fcfcfc;
+  background-color: var(--color-gray-light);
 }
 
 .admin-search-input:focus {

@@ -58,7 +58,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1A5FA8;
+  color: var(--color-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   transition: background 0.2s ease, transform 0.2s ease;
   z-index: 2;
@@ -105,7 +105,7 @@
 }
 
 .variant-dark .director-info {
-  border-top: 3px solid #F5A500;
+  border-top: 3px solid var(--color-brand-yellow);
 }
 
 .variant-dark .director-name {
@@ -113,7 +113,7 @@
 }
 
 .variant-dark .director-role {
-  color: #F5A500;
+  color: var(--color-brand-yellow);
 }
 
 /* ========================================================
@@ -146,10 +146,10 @@
 }
 
 .variant-light .director-name {
-  color: #1A1A2E;
+  color: var(--color-gray-dark);
   font-size: 14px;
 }
 
 .variant-light .director-role {
-  color: #5A6172;
+  color: var(--color-gray-medium);
 }
