@@ -51,3 +51,61 @@
   color: var(--color-gray-medium);
   font-size: 1.2rem;
 }
+
+/* ===== BARRA DE PESQUISA (PUBLIC) ===== */
+.public-search-wrapper {
+  background-color: #f8fafc;
+  padding: 2rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.public-search-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.public-search-input {
+  width: 100%;
+  max-width: 600px;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 1rem;
+}
+
+.public-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #004d80);
+  box-shadow: 0 0 0 3px rgba(0, 77, 128, 0.1);
+}
+
+.public-category-filters {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.public-filter-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+}
+
+.public-filter-btn:hover {
+  background-color: #f1f5f9;
+}
+
+.public-filter-btn.active {
+  background-color: var(--color-primary, #004d80);
+  color: white;
+  border-color: var(--color-primary, #004d80);
+}

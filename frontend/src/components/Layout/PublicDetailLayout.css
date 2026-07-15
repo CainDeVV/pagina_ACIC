@@ -1,0 +1,82 @@
+/* ===== LAYOUT GLOBAL DE DETALHES (NOTÍCIAS E EVENTOS) ===== */
+.public-detail-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.public-detail-header-limpo {
+  margin-top: 24px;
+  margin-bottom: 32px;
+}
+
+.public-detail-badges {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.public-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--color-gray-medium);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.public-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.public-detail-titulo {
+  font-size: 2.2rem;
+  color: var(--color-primary-hover);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.public-detail-categorias {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.public-detail-categoria-pill {
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.public-detail-conteudo-limpo {
+  font-size: 1.1rem;
+  color: var(--color-gray-dark);
+  line-height: 1.8;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* ===== ELEMENTOS RELACIONADOS (RODAPÉ) ===== */
+.public-detail-relacionados-wrapper {
+  margin-top: 64px;
+}
+
+.public-detail-relacionados-titulo {
+  font-size: 2rem;
+  margin: 0 0 24px 0;
+  color: var(--color-heading, var(--color-black));
+}
+
+.public-detail-relacionados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 32px;
+}

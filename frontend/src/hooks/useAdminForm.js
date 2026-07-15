@@ -9,9 +9,10 @@ import { useNavigate } from 'react-router-dom';
  * @param {Object} options.initialData - O estado inicial do formulário (vazio/defaults)
  * @param {Object} options.service - O objeto de serviço com os métodos (buscarPorId, criar, atualizar)
  * @param {Function} [options.fetchItemsFn] - Opcional: Função que busca todos os itens para auto-incrementar o sortOrder na criação
+ * @param {Function} [options.onDataLoad] - Opcional: Callback (data, mappedData) para processar os dados após o carregamento da API
  * @returns {Object} { formData, setFormData, loading, fetching, error, setError, handleChange, handleSubmit }
  */
-export function useAdminForm({ id, initialData, service, redirectPath, fetchItemsFn }) {
+export function useAdminForm({ id, initialData, service, redirectPath, fetchItemsFn, onDataLoad }) {
   const isEditing = !!id;
   const navigate = useNavigate();
 
@@ -29,12 +30,17 @@ export function useAdminForm({ id, initialData, service, redirectPath, fetchItem
           
           // Mapeia os dados do banco sobre os defaults definidos no initialData.
           // Garante que chaves ausentes não virem undefined puro se initialData tem '' ou 0.
-          const mappedData = { ...initialData };
+          let mappedData = { ...initialData };
           for (const key in initialData) {
             if (data[key] !== undefined && data[key] !== null) {
               mappedData[key] = data[key];
             }
           }
+          
+          if (onDataLoad) {
+            mappedData = onDataLoad(data, mappedData);
+          }
+          
           setFormData(mappedData);
           
         } catch (err) {

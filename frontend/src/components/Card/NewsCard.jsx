@@ -13,8 +13,7 @@ const NewsCard = ({ noticia, variant = 'compact' }) => {
     return (
       <Card.Root link={linkTo} variant="grid">
         <Card.ImageWrapper>
-          <Card.Image src={coverImage} alt={noticia.title} className="card-img" />
-        </Card.ImageWrapper>
+          <Card.Image src={coverImage} alt={noticia.title} className="card-img" /></Card.ImageWrapper>
         
         <Card.Content className="card-content">
           <Card.Meta className="card-meta-date">
@@ -35,7 +34,11 @@ const NewsCard = ({ noticia, variant = 'compact' }) => {
     <Card.Root link={linkTo} variant="compact">
       <Card.Image src={coverImage} alt={noticia.title} className="compact-img" />
       <Card.Content className="compact-info">
-        <Card.Badge className="compact-category news">Notícia</Card.Badge>
+        <Card.CategoryList 
+          destaque={noticia.destaque} 
+          categorias={noticia.categorias} 
+          fallbackType="news" 
+        />
         <Card.Title className="compact-title">{noticia.title}</Card.Title>
         <Card.Meta className="compact-meta">
           <span>📅 {formatDateCompact(dataOficial)}</span>

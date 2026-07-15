@@ -20,6 +20,7 @@ import { InscricoesModule } from './modules/inscricoes/inscricoes.module';
 import { CertificadosModule } from './modules/certificados/certificados.module';
 import { PatrocinadoresModule } from './modules/patrocinadores/patrocinadores.module';
 import { HomeModule } from './modules/home/home.module';
+import { CategoriasModule } from './modules/categorias/categorias.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { HomeModule } from './modules/home/home.module';
     CertificadosModule,
     PatrocinadoresModule,
     HomeModule,
+    CategoriasModule,
   ],
   controllers: [AppController],
   providers: [

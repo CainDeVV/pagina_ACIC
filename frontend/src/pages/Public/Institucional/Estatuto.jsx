@@ -27,7 +27,7 @@ function Estatuto() {
   if (carregando) {
     return (
       <SaibaMaisLayout titulo="Carregando...">
-        <p style={{ padding: '20px' }}>Carregando informações...</p>
+        <p className="inst-loading">Carregando informações...</p>
       </SaibaMaisLayout>
     );
   }
@@ -36,7 +36,7 @@ function Estatuto() {
   if (!pagina) {
     return (
       <SaibaMaisLayout titulo="Estatuto">
-        <p style={{ padding: '20px' }}>
+        <p className="inst-loading">
           Conteúdo ainda não publicado. Aguarde a inserção de dados no painel administrativo.
         </p>
       </SaibaMaisLayout>

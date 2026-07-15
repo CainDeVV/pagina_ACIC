@@ -103,7 +103,7 @@ function PatrocinadorForm() {
 
       <div className="form-group">
         <label>Logomarca do Patrocinador *</label>
-        <p style={{ fontSize: '0.85rem', color: '#666', marginBottom: '10px' }}>
+        <p className="admin-field-hint">
           Recomendado: Fundo transparente (PNG), proporção quadrada ou retangular horizontal.
         </p>
         <ImageUploader 
@@ -117,7 +117,7 @@ function PatrocinadorForm() {
           value={formData.logoUrl} 
           onChange={handleChange} 
           placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
+          className="admin-form-group-margin"
         />
         {fieldErrors.logoUrl && <span className="field-error">{fieldErrors.logoUrl}</span>}
       </div>

@@ -59,7 +59,9 @@ export function formatNumericDateTime(dateInput) {
 // Tratamento limpo de fuso horário para inputs datetime-local de formulários
 export function toDatetimeLocal(isoString) {
   if (!isoString) return '';
+  if (isoString.length <= 16) return isoString; // já está no formato YYYY-MM-DDThh:mm
   const date = new Date(isoString);
+  if (isNaN(date.getTime())) return ''; // Proteção contra Invalid Date
   const offset = date.getTimezoneOffset() * 60000;
   return new Date(date.getTime() - offset).toISOString().slice(0, 16);
 }

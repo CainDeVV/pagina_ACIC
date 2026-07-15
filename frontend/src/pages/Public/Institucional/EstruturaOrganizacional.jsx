@@ -27,7 +27,7 @@ function EstruturaOrganizacional() {
   if (carregando) {
     return (
       <SaibaMaisLayout activeItem="estrutura-organizacional" titulo="Carregando...">
-        <p style={{ padding: '20px' }}>Carregando informações...</p>
+        <p className="inst-loading">Carregando informações...</p>
       </SaibaMaisLayout>
     );
   }
@@ -36,7 +36,7 @@ function EstruturaOrganizacional() {
   if (!pagina) {
     return (
       <SaibaMaisLayout activeItem="estrutura-organizacional" titulo="Estrutura Organizacional">
-        <p style={{ padding: '20px' }}>
+        <p className="inst-loading">
           Conteúdo ainda não publicado. Aguarde a inserção de dados no painel administrativo.
         </p>
       </SaibaMaisLayout>

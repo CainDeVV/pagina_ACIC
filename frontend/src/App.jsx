@@ -22,6 +22,8 @@ const ServicosList = lazy(() => import('./pages/Admin/Servicos/ServicosList'));
 const ServicosForm = lazy(() => import('./pages/Admin/Servicos/ServicosForm'));
 const PatrocinadoresList = lazy(() => import('./pages/Admin/Patrocinadores/PatrocinadoresList'));
 const PatrocinadorForm = lazy(() => import('./pages/Admin/Patrocinadores/PatrocinadorForm'));
+const CategoriasList = lazy(() => import('./pages/Admin/Categorias/CategoriasList'));
+const CategoriaForm = lazy(() => import('./pages/Admin/Categorias/CategoriaForm'));
 const EventosList = lazy(() => import('./pages/Admin/Eventos/EventosList'));
 const EventoForm = lazy(() => import('./pages/Admin/Eventos/EventoForm'));
 const NoticiasList = lazy(() => import('./pages/Admin/Noticias/NoticiasList'));
@@ -90,6 +92,10 @@ function App() {
             <Route path="patrocinadores" element={<PatrocinadoresList />} />
             <Route path="patrocinadores/novo" element={<PatrocinadorForm />} />
             <Route path="patrocinadores/:id/editar" element={<PatrocinadorForm />} />
+
+            <Route path="categorias" element={<CategoriasList />} />
+            <Route path="categorias/nova" element={<CategoriaForm />} />
+            <Route path="categorias/:id/editar" element={<CategoriaForm />} />
 
             <Route path="eventos" element={<EventosList />} />
             <Route path="eventos/novo" element={<EventoForm />} />

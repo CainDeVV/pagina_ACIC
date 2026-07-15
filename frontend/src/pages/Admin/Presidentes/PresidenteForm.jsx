@@ -102,7 +102,7 @@ function PresidenteForm() {
           value={formData.photoUrl || ''} 
           onChange={handleChange} 
           placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
+          className="admin-form-group-margin"
         />
       </div>
 

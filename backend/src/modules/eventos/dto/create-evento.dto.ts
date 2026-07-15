@@ -9,8 +9,9 @@ import {
   IsUrl,
   IsDateString,
   IsBoolean,
+  IsArray,
 } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 
 export class CreateEventoDto {
@@ -103,15 +104,16 @@ export class CreateEventoDto {
   @IsOptional()
   status?: EventStatus;
 
-  @ApiProperty({
-    example: '2026-06-15T19:00:00Z',
-    description: 'Data de publicação automática agendada',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Data de publicação. Se omitido, publicado imediatamente.',
   })
-  @IsDateString(
-    {},
-    { message: 'A data de publicação deve estar no formato ISO 8601 válido.' },
-  )
   @IsOptional()
+  @IsDateString()
   publishedAt?: string;
+
+  @ApiPropertyOptional({ description: 'IDs das categorias vinculadas' })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  categoriasIds?: string[];
 }

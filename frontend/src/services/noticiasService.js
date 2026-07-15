@@ -1,13 +1,13 @@
 import api from '@/services/api';
 
 export const noticiasService = {
-  buscarTodosPublico: async () => {
-    const resposta = await api.get('/noticias');
+  buscarTodosPublico: async (params) => {
+    const resposta = await api.get('/noticias', { params });
     return resposta.data;
   },
 
-  buscarTodosAdmin: async () => {
-    const resposta = await api.get('/admin/noticias');
+  buscarTodosAdmin: async (params) => {
+    const resposta = await api.get('/admin/noticias', { params });
     return resposta.data;
   },
 

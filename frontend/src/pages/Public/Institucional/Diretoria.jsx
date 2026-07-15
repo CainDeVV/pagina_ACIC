@@ -58,7 +58,7 @@ function Diretoria() {
   if (carregando) {
     return (
       <SaibaMaisLayout activeItem="diretoria" titulo="Carregando...">
-        <p style={{ padding: '20px' }}>Carregando informações...</p>
+        <p className="inst-loading">Carregando informações...</p>
       </SaibaMaisLayout>
     );
   }
@@ -73,12 +73,12 @@ function Diretoria() {
         
         {/* Cabeçalho Editável (Mini-CMS) */}
         {paginaIntro ? (
-          <div style={{ marginBottom: '40px' }}>
+          <div className="inst-mb">
             <BlockRenderer blocks={paginaIntro.content?.blocks || []} />
           </div>
         ) : (
-          <div style={{ marginBottom: '40px' }}>
-            <p style={{ padding: '20px' }}>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
+          <div className="inst-mb">
+            <p className="inst-loading">Conteúdo introdutório ainda não publicado no painel administrativo.</p>
           </div>
         )}
 
@@ -105,7 +105,7 @@ function Diretoria() {
             </div>
           ))
         ) : (
-          <p style={{ padding: '20px 0', textAlign: 'center' }}>
+          <p className="inst-empty-center">
             Nenhum membro da diretoria cadastrado no banco de dados.
           </p>
         )}

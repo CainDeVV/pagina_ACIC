@@ -85,6 +85,7 @@ model Noticia {
   publishedAt DateTime?
   authorId    String?
   author      User?         @relation("NoticiaAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  categorias  Categoria[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
@@ -107,6 +108,7 @@ model Evento {
   author       User?              @relation("EventoAuthor", fields: [authorId], references: [id], onDelete: SetNull)
   inscricoes   InscricaoEvento[]
   certificados CertificadoSolicitacao[]
+  categorias   Categoria[]
   publishedAt  DateTime?
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
@@ -215,3 +217,16 @@ model Patrocinador {
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 }
+
+model Categoria {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  slug        String    @unique
+  color       String?   @default("#3B82F6")
+  active      Boolean   @default(true)
+  noticias    Noticia[]
+  eventos     Evento[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+

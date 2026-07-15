@@ -1,47 +1,4 @@
-/* ===== DETALHE DO EVENTO (NOVO DESIGN LIMPO) ===== */
-.evento-detalhe-header-limpo {
-  margin-top: 24px;
-  margin-bottom: 32px;
-}
-
-.evento-detalhe-badges {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.evento-detalhe-meta {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  color: var(--color-gray-medium);
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.evento-detalhe-meta span {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.evento-detalhe-titulo {
-  font-size: 2.2rem;
-  color: var(--color-primary-hover);
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 0;
-}
-
-.evento-detalhe-conteudo-limpo {
-  font-size: 1.1rem;
-  color: var(--color-gray-dark);
-  line-height: 1.8;
-}
-
-/* Botão voltar */
+/* ===== DETALHE DO EVENTO (NOVO DESIGN LIMPO) ===== *//* Botão voltar */
 .btn-voltar {
   display: inline-block;
   color: var(--color-primary);
@@ -49,10 +6,15 @@
   font-weight: bold;
   text-decoration: none;
   margin-bottom: 20px;
+  transition: color 0.2s;
 }
 
 .btn-voltar:hover {
   text-decoration: underline;
+}
+
+.evento-detalhe-voltar:hover {
+  color: var(--color-primary-hover);
 }
 
 /* Headings dentro do conteúdo */

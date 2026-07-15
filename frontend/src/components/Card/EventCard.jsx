@@ -42,7 +42,11 @@ const EventCard = ({ evento, variant = 'compact' }) => {
     <Card.Root link={linkTo} variant="compact">
       <Card.Image src={coverImage} alt={evento.title} className="compact-img" />
       <Card.Content className="compact-info">
-        <Card.Badge className="compact-category event">Evento</Card.Badge>
+        <Card.CategoryList 
+          destaque={evento.destaque} 
+          categorias={evento.categorias} 
+          fallbackType="event" 
+        />
         <Card.Title className="compact-title">{evento.title}</Card.Title>
         <Card.Meta className="compact-meta">
           <span>📅 {day} {month}</span>

@@ -8,6 +8,8 @@ import { NewsCard } from '@/components/Card';
 import CoverImage from '@/components/CoverImage/CoverImage';
 import { formatDateLong } from '@/utils/dateUtils';
 import { CONTENT_STATUS } from '@/constants/status';
+import { FaCalendarAlt } from 'react-icons/fa';
+import '@/components/Layout/PublicDetailLayout.css';
 import './NoticiaDetalhe.css';
 
 function NoticiaDetalhe() {
@@ -23,7 +25,7 @@ function NoticiaDetalhe() {
         const data = await noticiasService.buscarPorSlugPublico(slug);
         setNoticia(data);
 
-        const todasNoticias = await noticiasService.buscarTodosPublico();
+        const todasNoticias = await noticiasService.buscarTodosPublico({ limit: 5 });
         const relacionadas = (todasNoticias?.data || [])
           .filter(n => n.status === CONTENT_STATUS.PUBLISHED)
           .filter(n => n.id !== data.id)
@@ -73,21 +75,30 @@ function NoticiaDetalhe() {
         <meta name="description" content={noticia.summary || "Leia esta notícia no portal da ACIC."} />
       </Helmet>
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
-
+      <div className="public-detail-wrapper">
         <Breadcrumb items={[{ label: 'Notícias', path: '/noticias' }, { label: noticia.title }]} />
 
-        {/* Cabeçalho Limpo (Novo Design) */}
-        <div className="noticia-detalhe-header-limpo">
-          <div className="noticia-detalhe-badges">
-            <div className="noticia-detalhe-meta">
-              <span className="noticia-detalhe-data-novo">📅 {formattedDate}</span>
+        <div className="public-detail-header-limpo">
+          <div className="public-detail-badges">
+            <div className="public-detail-meta">
+              <div className="public-meta-item">
+                <FaCalendarAlt />
+                <span className="noticia-data">{formattedDate}</span>
+              </div>
             </div>
           </div>
-          <h1 className="noticia-detalhe-titulo-novo">{noticia.title}</h1>
+          {noticia.categorias && noticia.categorias.length > 0 && (
+            <div className="public-detail-categorias">
+              {noticia.categorias.map(cat => (
+                <span key={cat.id} className="public-detail-categoria-pill" style={{ backgroundColor: cat.color }}>
+                  {cat.name}
+                </span>
+              ))}
+            </div>
+          )}
+          <h1 className="public-detail-titulo">{noticia.title}</h1>
         </div>
 
-        {/* Imagem de Capa Arredondada */}
         {noticia.showCoverImage !== false && (
           <CoverImage 
             src={noticia.coverImage} 
@@ -97,8 +108,7 @@ function NoticiaDetalhe() {
           />
         )}
 
-        {/* Área de Leitura */}
-        <div className="noticia-detalhe-conteudo-limpo">
+        <div className="public-detail-conteudo-limpo">
           {noticia.summary && (
             <p className="noticia-resumo-destaque">{noticia.summary}</p>
           )}
@@ -108,13 +118,10 @@ function NoticiaDetalhe() {
           </div>
         </div>
 
-        {/* Notícias Relacionadas */}
         {noticiasRelacionadas.length > 0 && (
-          <div style={{ marginTop: '64px' }}>
-            <h2 style={{ color: 'var(--color-primary-hover)', fontSize: '1.2rem', borderBottom: '2px solid var(--color-gray-border)', paddingBottom: '8px', marginBottom: '24px' }}>
-              Últimas Notícias
-            </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+          <div className="public-detail-relacionados-wrapper">
+            <h2 className="public-detail-relacionados-titulo">Últimas Notícias</h2>
+            <div className="public-detail-relacionados-grid">
               {noticiasRelacionadas.map(relacionada => (
                 <NewsCard variant="grid" key={relacionada.id} noticia={relacionada} />
               ))}

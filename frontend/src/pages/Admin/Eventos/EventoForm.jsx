@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { eventosService } from '@/services/eventosService';
+import categoriasService from '@/services/categoriasService';
 import RichEditor from '@/components/RichEditor';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import CoverImageFields from '@/components/Admin/CoverImageFields';
+import CategoryCheckboxGroup from '@/components/Admin/CategoryCheckboxGroup';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { toDatetimeLocal } from '@/utils/dateUtils';
 import { useAdminForm } from '@/hooks/useAdminForm';
@@ -14,6 +16,8 @@ function EventoForm() {
   const editorRef = useRef(null);
 
   const [fieldErrors, setFieldErrors] = useState({});
+  const [categoriasAtivas, setCategoriasAtivas] = useState([]);
+  const [loadingCategorias, setLoadingCategorias] = useState(true);
 
   const {
     formData,
@@ -40,21 +44,28 @@ function EventoForm() {
       showCoverImage: true,
       destaque: false,
       status: CONTENT_STATUS.DRAFT,
-      publishedAt: ''
+      publishedAt: '',
+      categoriasIds: []
+    },
+    onDataLoad: (apiData, mappedData) => {
+      if (apiData.publishedAt) mappedData.publishedAt = toDatetimeLocal(apiData.publishedAt);
+      if (apiData.startsAt) mappedData.startsAt = toDatetimeLocal(apiData.startsAt);
+      if (apiData.endsAt) mappedData.endsAt = toDatetimeLocal(apiData.endsAt);
+      if (apiData.categorias) {
+        mappedData.categoriasIds = apiData.categorias.map(c => c.id);
+      }
+      return mappedData;
     }
   });
 
-  // Corrige formato da data quando vem da API
   React.useEffect(() => {
-    if (formData.startsAt && formData.startsAt.includes('T') && formData.startsAt.endsWith('Z')) {
-      setFormData(prev => ({ 
-        ...prev, 
-        startsAt: toDatetimeLocal(prev.startsAt),
-        endsAt: prev.endsAt ? toDatetimeLocal(prev.endsAt) : '',
-        publishedAt: prev.publishedAt ? toDatetimeLocal(prev.publishedAt) : ''
-      }));
-    }
-  }, [formData.startsAt, setFormData]);
+    categoriasService.buscarAtivas()
+      .then(setCategoriasAtivas)
+      .catch(console.error)
+      .finally(() => setLoadingCategorias(false));
+  }, []);
+
+
 
   const onSave = (e) => {
     setFieldErrors({});
@@ -111,7 +122,10 @@ function EventoForm() {
         let parsedEndsAt = currentData.endsAt ? new Date(currentData.endsAt).toISOString() : undefined;
         let parsedPublishedAt = currentData.publishedAt ? new Date(currentData.publishedAt).toISOString() : undefined;
 
-        const cleanedData = cleanEmptyStrings(currentData);
+        const validFormData = { ...currentData };
+        delete validFormData.categorias;
+        
+        const cleanedData = cleanEmptyStrings(validFormData);
 
         return {
           ...cleanedData,
@@ -119,10 +133,25 @@ function EventoForm() {
           startsAt: parsedStartsAt,
           endsAt: parsedEndsAt,
           publishedAt: parsedPublishedAt,
-          capacity: currentData.capacity === '' ? null : Number(currentData.capacity)
+          capacity: currentData.capacity === '' ? null : Number(currentData.capacity),
+          categoriasIds: currentData.categoriasIds || []
         };
       }
     );
+  };
+
+  const handleCategoriaToggle = (catId) => {
+    setFormData(prev => {
+      const currentIds = prev.categoriasIds || [];
+      const isSelected = currentIds.includes(catId);
+      let newIds;
+      if (isSelected) {
+        newIds = currentIds.filter(id => id !== catId);
+      } else {
+        newIds = [...currentIds, catId];
+      }
+      return { ...prev, categoriasIds: newIds };
+    });
   };
 
   return (
@@ -156,7 +185,7 @@ function EventoForm() {
             uploadFolder="eventos"
           />
         )}
-        {fieldErrors.description && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.description}</span>}
+        {fieldErrors.description && <span className="admin-field-error">{fieldErrors.description}</span>}
       </div>
 
       <div className="form-group">
@@ -178,7 +207,7 @@ function EventoForm() {
           onChange={handleChange}
           required
         />
-        {fieldErrors.startsAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.startsAt}</span>}
+        {fieldErrors.startsAt && <span className="admin-field-error">{fieldErrors.startsAt}</span>}
       </div>
 
       <div className="form-group">
@@ -189,7 +218,7 @@ function EventoForm() {
           value={formData.endsAt || ''}
           onChange={handleChange}
         />
-        {fieldErrors.endsAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.endsAt}</span>}
+        {fieldErrors.endsAt && <span className="admin-field-error">{fieldErrors.endsAt}</span>}
       </div>
 
       <div className="form-group">
@@ -228,7 +257,7 @@ function EventoForm() {
           value={formData.publishedAt || ''}
           onChange={handleChange}
         />
-        <span style={{ fontSize: '0.85rem', color: '#666', marginTop: '4px', display: 'block' }}>
+        <span className="admin-field-hint">
           Deixe em branco para controle manual. Se preenchido e o status for Rascunho, o evento será publicado automaticamente nesta data.
         </span>
       </div>
@@ -242,6 +271,16 @@ function EventoForm() {
           onChange={handleChange}
         />
         <label htmlFor="destaque">Destacar este evento na página inicial?</label>
+      </div>
+
+      <div className="form-group">
+        <label>Categorias</label>
+        <CategoryCheckboxGroup 
+          categoriasAtivas={categoriasAtivas} 
+          selectedIds={formData.categoriasIds || []} 
+          onChange={handleCategoriaToggle} 
+          loading={loadingCategorias}
+        />
       </div>
     </AdminFormLayout>
   );

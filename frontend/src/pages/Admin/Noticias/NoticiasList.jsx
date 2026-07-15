@@ -3,7 +3,7 @@ import { noticiasService } from '@/services/noticiasService';
 import AdminListLayout from '@/components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '@/utils/dateUtils';
 import { useAdminList } from '@/hooks/useAdminList';
-import { InlineStatusSelect, InlineFeaturedToggle } from '@/components/Admin/TableCells';
+import { InlineStatusSelect, InlineFeaturedToggle, InlineCategoryList } from '@/components/Admin/TableCells';
 import { CONTENT_STATUS } from '@/constants/status';
 
 function NoticiasList() {
@@ -16,7 +16,34 @@ function NoticiasList() {
   });
 
   const columns = [
-    { label: 'Título', key: 'title' },
+    { 
+      label: 'Título', 
+      render: (row) => (
+        <div className="admin-flex-row">
+          <span>{row.title}</span>
+          {row.status === CONTENT_STATUS.PUBLISHED && row.publishedAt && new Date(row.publishedAt) > new Date() && (
+            <span className="admin-badge admin-badge-warning">
+              ⏰ Agendado
+            </span>
+          )}
+        </div>
+      )
+    },
+    { 
+      label: 'Autor', 
+      key: 'author',
+      render: (row) => row.author?.name || 'Sistema'
+    },
+    {
+      label: 'Categorias',
+      key: 'categorias',
+      render: (row) => <InlineCategoryList categorias={row.categorias} />
+    },
+    { 
+      label: 'Data de Publicação', 
+      key: 'publishedAt',
+      render: (row) => row.publishedAt ? formatNumericDateTime(row.publishedAt) : '—'
+    },
     { 
       label: 'Status', 
       key: 'status',
@@ -27,10 +54,6 @@ function NoticiasList() {
           options={[CONTENT_STATUS.PUBLISHED, CONTENT_STATUS.DRAFT]}
         />
       )
-    },
-    { 
-      label: 'Publicado em', 
-      render: (row) => row.publishedAt ? formatNumericDateTime(row.publishedAt) : '—' 
     },
     { 
       label: 'Destaque', 

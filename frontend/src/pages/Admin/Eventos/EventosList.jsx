@@ -3,7 +3,7 @@ import { eventosService } from '@/services/eventosService';
 import AdminListLayout from '@/components/Admin/AdminListLayout';
 import { formatNumericDateTime } from '@/utils/dateUtils';
 import { useAdminList } from '@/hooks/useAdminList';
-import { InlineStatusSelect, InlineFeaturedToggle } from '@/components/Admin/TableCells';
+import { InlineStatusSelect, InlineFeaturedToggle, InlineCategoryList } from '@/components/Admin/TableCells';
 import { CONTENT_STATUS } from '@/constants/status';
 
 function EventosList() {
@@ -19,18 +19,20 @@ function EventosList() {
     { 
       label: 'Título', 
       render: (row) => (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div className="admin-flex-row">
           <span>{row.title}</span>
-          {row.status === CONTENT_STATUS.DRAFT && row.publishedAt && new Date(row.publishedAt) > new Date() && (
-            <span style={{ 
-              fontSize: '0.75rem', padding: '2px 6px', background: '#fff3cd', 
-              color: '#856404', borderRadius: '4px', border: '1px solid #ffeeba', whiteSpace: 'nowrap' 
-            }}>
+          {row.status === CONTENT_STATUS.PUBLISHED && row.publishedAt && new Date(row.publishedAt) > new Date() && (
+            <span className="admin-badge admin-badge-warning">
               ⏰ Agendado
             </span>
           )}
         </div>
       )
+    },
+    {
+      label: 'Categorias',
+      key: 'categorias',
+      render: (row) => <InlineCategoryList categorias={row.categorias} />
     },
     { 
       label: 'Status', 

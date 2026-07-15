@@ -8,9 +8,10 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  IsArray,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateNoticiaDto {
   @ApiProperty({ example: 'ACIC realiza evento de networking para associados' })
@@ -86,15 +87,16 @@ export class CreateNoticiaDto {
   @IsOptional()
   status?: PublishStatus;
 
-  @ApiProperty({
-    example: '2026-06-19T14:00:00Z',
-    description: 'Data de publicação (ISO 8601)',
-    required: false,
+  @ApiPropertyOptional({
+    description: 'Data de publicação. Se omitido, publicado imediatamente.',
   })
-  @IsDateString(
-    {},
-    { message: 'A data de publicação deve estar no formato ISO 8601 válido.' },
-  )
   @IsOptional()
+  @IsDateString()
   publishedAt?: string;
+
+  @ApiPropertyOptional({ description: 'IDs das categorias vinculadas' })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  categoriasIds?: string[];
 }

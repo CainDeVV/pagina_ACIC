@@ -115,7 +115,7 @@ function UsuarioForm() {
 
       <div className="form-group">
         <label>
-          Senha {isEdit && <span style={{fontSize: '0.8rem', color: '#666'}}>(Deixe em branco para não alterar)</span>}
+          Senha {isEdit && <span className="admin-field-hint">(Deixe em branco para não alterar)</span>}
           {!isEdit && '*'}
         </label>
         <input 
@@ -141,7 +141,7 @@ function UsuarioForm() {
           <option value="ADMIN">Administrador (Pode gerenciar usuários e configurações do sistema)</option>
         </select>
         {isEdit && loggedInUserId === id && (
-          <small style={{color: '#f39c12', display: 'block', marginTop: '5px'}}>
+          <small className="admin-field-error">
             Você não pode rebaixar seu próprio cargo. Peça a outro Administrador se for necessário.
           </small>
         )}

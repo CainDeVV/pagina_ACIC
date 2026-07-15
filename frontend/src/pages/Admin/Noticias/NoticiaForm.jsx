@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { noticiasService } from '@/services/noticiasService';
+import categoriasService from '@/services/categoriasService';
 import RichEditor from '@/components/RichEditor';
 import AdminFormLayout from '@/components/Admin/AdminFormLayout';
 import CoverImageFields from '@/components/Admin/CoverImageFields';
+import CategoryCheckboxGroup from '@/components/Admin/CategoryCheckboxGroup';
 import { CONTENT_STATUS, STATUS_LABELS } from '@/constants/status';
 import { toDatetimeLocal } from '@/utils/dateUtils';
 import { useAdminForm } from '@/hooks/useAdminForm';
@@ -14,6 +16,8 @@ function NoticiaForm() {
   const editorRef = useRef(null);
 
   const [fieldErrors, setFieldErrors] = useState({});
+  const [categoriasAtivas, setCategoriasAtivas] = useState([]);
+  const [loadingCategorias, setLoadingCategorias] = useState(true);
 
   const {
     formData,
@@ -37,18 +41,24 @@ function NoticiaForm() {
       showCoverImage: true,
       destaque: false,
       status: CONTENT_STATUS.DRAFT,
-      publishedAt: ''
+      publishedAt: '',
+      categoriasIds: []
+    },
+    onDataLoad: (apiData, mappedData) => {
+      if (apiData.publishedAt) mappedData.publishedAt = toDatetimeLocal(apiData.publishedAt);
+      if (apiData.categorias) {
+        mappedData.categoriasIds = apiData.categorias.map(c => c.id);
+      }
+      return mappedData;
     }
   });
 
-  // Gambiarra necessária pois publishedAt vem do banco em ISO
-  // O ideal era formatar no useAdminForm, mas para preservar a genericidade,
-  // fazemos um parse local se a string tiver formato ISO longo
   React.useEffect(() => {
-    if (formData.publishedAt && formData.publishedAt.includes('T') && formData.publishedAt.endsWith('Z')) {
-      setFormData(prev => ({ ...prev, publishedAt: toDatetimeLocal(prev.publishedAt) }));
-    }
-  }, [formData.publishedAt, setFormData]);
+    categoriasService.buscarAtivas()
+      .then(setCategoriasAtivas)
+      .catch(console.error)
+      .finally(() => setLoadingCategorias(false));
+  }, []);
 
 
   const onSave = (e) => {
@@ -93,17 +103,33 @@ function NoticiaForm() {
           parsedPublishedAt = new Date(currentData.publishedAt).toISOString();
         }
 
-        const { ...validFormData } = currentData;
-        
+        const validFormData = { ...currentData };
+        delete validFormData.categorias;
+
         const cleanedData = cleanEmptyStrings(validFormData);
         
         return {
           ...cleanedData,
           content: finalContent,
-          publishedAt: parsedPublishedAt
+          publishedAt: parsedPublishedAt,
+          categoriasIds: cleanedData.categoriasIds || []
         };
       }
     );
+  };
+
+  const handleCategoriaToggle = (catId) => {
+    setFormData(prev => {
+      const currentIds = prev.categoriasIds || [];
+      const isSelected = currentIds.includes(catId);
+      let newIds;
+      if (isSelected) {
+        newIds = currentIds.filter(id => id !== catId);
+      } else {
+        newIds = [...currentIds, catId];
+      }
+      return { ...prev, categoriasIds: newIds };
+    });
   };
 
   return (
@@ -119,7 +145,7 @@ function NoticiaForm() {
       <div className="form-group">
         <label>Título *</label>
         <input type="text" name="title" value={formData.title || ''} onChange={handleChange} required />
-        {fieldErrors.title && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.title}</span>}
+        {fieldErrors.title && <span className="admin-field-error">{fieldErrors.title}</span>}
       </div>
 
       <div className="form-group">
@@ -136,7 +162,7 @@ function NoticiaForm() {
             uploadFolder="noticias"
           />
         )}
-        {fieldErrors.content && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.content}</span>}
+        {fieldErrors.content && <span className="admin-field-error">{fieldErrors.content}</span>}
       </div>
 
       <CoverImageFields 
@@ -158,12 +184,22 @@ function NoticiaForm() {
       <div className="form-group">
         <label>Data e Hora de Publicação</label>
         <input type="datetime-local" name="publishedAt" value={formData.publishedAt || ''} onChange={handleChange} />
-        {fieldErrors.publishedAt && <span style={{ color: '#d9534f', fontSize: '0.85rem', marginTop: '4px', display: 'block' }}>{fieldErrors.publishedAt}</span>}
+        {fieldErrors.publishedAt && <span className="admin-field-error">{fieldErrors.publishedAt}</span>}
       </div>
 
       <div className="form-group form-group-checkbox">
         <input type="checkbox" name="destaque" id="destaque" checked={formData.destaque || false} onChange={handleChange} />
         <label htmlFor="destaque">Destacar esta notícia na página inicial?</label>
+      </div>
+
+      <div className="form-group">
+        <label>Categorias</label>
+        <CategoryCheckboxGroup 
+          categoriasAtivas={categoriasAtivas} 
+          selectedIds={formData.categoriasIds || []} 
+          onChange={handleCategoriaToggle} 
+          loading={loadingCategorias}
+        />
       </div>
     </AdminFormLayout>
   );

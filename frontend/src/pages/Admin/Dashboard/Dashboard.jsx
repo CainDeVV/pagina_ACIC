@@ -12,7 +12,8 @@ import {
   LogOut,
   Image as ImageIcon,
   Award,
-  ShieldCheck
+  ShieldCheck,
+  Tags
 } from 'lucide-react';
 import '@/components/Admin/AdminGlobal.css';
 import './Dashboard.css';
@@ -58,6 +59,7 @@ function Dashboard() {
     { name: 'Diretoria', path: '/admin/diretoria', icon: <Briefcase size={32} strokeWidth={1.5} /> },
     { name: 'Serviços', path: '/admin/servicos', icon: <Settings size={32} strokeWidth={1.5} /> },
     { name: 'Patrocinadores', path: '/admin/patrocinadores', icon: <Award size={32} strokeWidth={1.5} /> },
+    { name: 'Categorias', path: '/admin/categorias', icon: <Tags size={32} strokeWidth={1.5} /> },
     { name: 'Eventos', path: '/admin/eventos', icon: <CalendarDays size={32} strokeWidth={1.5} /> },
     { name: 'Notícias', path: '/admin/noticias', icon: <Newspaper size={32} strokeWidth={1.5} /> },
   ];

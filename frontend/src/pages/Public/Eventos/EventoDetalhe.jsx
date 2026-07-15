@@ -10,6 +10,7 @@ import { formatDateTime } from '@/utils/dateUtils';
 import { CONTENT_STATUS } from '@/constants/status';
 import { getEventBadge } from '@/utils/eventUtils';
 import { FaCalendarAlt } from 'react-icons/fa';
+import '@/components/Layout/PublicDetailLayout.css';
 import './Eventos.css';
 
 function EventoDetalhe() {
@@ -25,13 +26,9 @@ function EventoDetalhe() {
         const dados = await eventosService.buscarPorSlugPublico(slug);
         setEvento(dados);
 
-        const todosEventos = await eventosService.buscarTodosPublico();
-        const agora = new Date();
+        const todosEventos = await eventosService.buscarTodosPublico({ limit: 5, upcomingOnly: true });
         const relacionados = (todosEventos?.data || [])
-          .filter(e => e.status !== CONTENT_STATUS.DRAFT && e.status !== CONTENT_STATUS.FINISHED && e.status !== CONTENT_STATUS.CANCELLED)
-          .filter(e => new Date(e.startsAt) > agora)
           .filter(e => e.id !== dados.id)
-          .sort((a, b) => new Date(a.startsAt) - new Date(b.startsAt))
           .slice(0, 3);
 
         setEventosRelacionados(relacionados);
@@ -78,22 +75,31 @@ function EventoDetalhe() {
     <>
       <Helmet><title>{`${evento.title} | ACIC`}</title></Helmet>
       <div className="eventos-page">
-        <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '24px 16px 40px' }}>
+        <div className="public-detail-wrapper">
           <Breadcrumb items={[{ label: 'Eventos', path: '/eventos' }, { label: evento.title }]} />
 
           {/* Cabeçalho Limpo (Novo Design) */}
-          <div className="evento-detalhe-header-limpo">
-            <div className="evento-detalhe-badges">
+          <div className="public-detail-header-limpo">
+            <div className="public-detail-badges">
               <span className="evento-badge">{getEventBadge(evento)}</span>
-              <div className="evento-detalhe-meta">
-                <div className="evento-meta-item">
+              <div className="public-detail-meta">
+                <div className="public-meta-item">
                   <FaCalendarAlt />
                   <span className="evento-data">{formatDateTime(evento.startsAt)}</span>
                 </div>
-                {evento.location && <span className="evento-local">📍 {evento.location}</span>}
+                {evento.location && <span className="public-meta-item">📍 {evento.location}</span>}
               </div>
             </div>
-            <h1 className="evento-detalhe-titulo">{evento.title}</h1>
+            {evento.categorias && evento.categorias.length > 0 && (
+              <div className="public-detail-categorias">
+                {evento.categorias.map(cat => (
+                  <span key={cat.id} className="public-detail-categoria-pill" style={{ backgroundColor: cat.color }}>
+                    {cat.name}
+                  </span>
+                ))}
+              </div>
+            )}
+            <h1 className="public-detail-titulo">{evento.title}</h1>
           </div>
 
           {/* Imagem de Capa Arredondada */}
@@ -107,15 +113,15 @@ function EventoDetalhe() {
           )}
 
           {/* Conteúdo Rico */}
-          <div className="evento-detalhe-conteudo-limpo">
+          <div className="public-detail-conteudo-limpo">
             <BlockRenderer blocks={contentBlocks} />
           </div>
 
           {/* Eventos Relacionados */}
           {eventosRelacionados.length > 0 && (
-            <div style={{ marginTop: '64px' }}>
-              <h2 className="eventos-section-titulo" style={{ margin: '0 0 24px 0' }}>Próximos Eventos</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px' }}>
+            <div className="public-detail-relacionados-wrapper">
+              <h2 className="public-detail-relacionados-titulo">Próximos Eventos</h2>
+              <div className="public-detail-relacionados-grid">
                 {eventosRelacionados.map(evento => (
                   <EventCard variant="grid" key={evento.id} evento={evento} />
                 ))}

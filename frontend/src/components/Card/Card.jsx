@@ -72,3 +72,28 @@ export const Description = ({ children, className = '' }) => {
 export const ActionText = ({ children, className = '' }) => (
   <span className={className}>{children}</span>
 );
+
+export const CategoryList = ({ destaque, categorias, fallbackType = 'event' }) => {
+  return (
+    <div className="card-category-list compact">
+      {destaque && (
+        <Badge className="card-category-pill card-category-destaque">
+          ★ Destaque
+        </Badge>
+      )}
+      {categorias && categorias.length > 0 ? (
+        categorias.slice(0, 2).map(cat => (
+          <Badge key={cat.id} className="card-category-pill" style={{ backgroundColor: cat.color }}>
+            {cat.name}
+          </Badge>
+        ))
+      ) : (
+        !destaque && (
+          <Badge className={`compact-category ${fallbackType}`}>
+            {fallbackType === 'event' ? 'Evento' : 'Notícia'}
+          </Badge>
+        )
+      )}
+    </div>
+  );
+};

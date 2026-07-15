@@ -77,6 +77,28 @@
   display: flex; justify-content: flex-end;
   opacity: 0; visibility: hidden; transition: opacity 0.3s ease;
 }
+
+/* Layout Updates */
+.servico-detalhe-page {
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.servico-detalhe-voltar {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.servico-detalhe-divider {
+  border-color: #eaeaea;
+  margin-bottom: 40px;
+}
+
+.servico-detalhe-desc {
+  line-height: 1.6;
+  color: var(--color-gray-medium);
+  font-size: 1.1rem;
+}
 .drawer-overlay.open { opacity: 1; visibility: visible; }
 
 .drawer-content {

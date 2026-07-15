@@ -94,3 +94,15 @@
 .institutional-pdf-link:hover {
   background-color: var(--color-primary-hover);
 }
+
+.inst-loading {
+  padding: 20px;
+}
+
+.inst-mb {
+  margin-bottom: 40px;
+}
+.inst-empty-center {
+  padding: 20px 0;
+  text-align: center;
+}

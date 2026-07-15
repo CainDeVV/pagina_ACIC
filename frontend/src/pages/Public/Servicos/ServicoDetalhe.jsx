@@ -38,7 +38,7 @@ function ServicoDetalhe() {
 
   if (carregando) {
     return (
-      <div className="servico-detalhe-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
+      <div className="servico-detalhe-page">
         <Helmet><title>Carregando Serviço... | ACIC</title></Helmet>
         <p>Carregando detalhes do serviço...</p>
       </div>
@@ -51,9 +51,9 @@ function ServicoDetalhe() {
         <Helmet>
           <title>Serviço não encontrado | ACIC</title>
         </Helmet>
-        <div className="servico-detalhe-page" style={{ padding: '100px 20px', textAlign: 'center' }}>
+        <div className="servico-detalhe-page">
           <h2>Serviço não encontrado.</h2>
-          <Link to="/servicos" style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>← Voltar para Serviços</Link>
+          <Link to="/servicos" className="servico-detalhe-voltar">← Voltar para Serviços</Link>
         </div>
       </>
     );
@@ -86,7 +86,7 @@ function ServicoDetalhe() {
 
         {outrosServicos.length > 0 && (
           <>
-            <hr style={{ borderColor: '#eaeaea', marginBottom: '40px' }} />
+            <hr className="servico-detalhe-divider" />
             <h2>Outros Serviços</h2>
             <div className="servicos-grid">
               {outrosServicos.slice(0, 3).map(servico => ( // Limitamos a 3 para a tela não ficar gigante
@@ -105,7 +105,7 @@ function ServicoDetalhe() {
             <button className="close-btn" onClick={() => setIsModalOpen(false)}>&times;</button>
           </div>
 
-          <p style={{ lineHeight: '1.6', color: 'var(--color-gray-medium)', fontSize: '1.1rem' }}>
+          <p className="servico-detalhe-desc">
             Para solicitar este serviço, entre em contato diretamente com a nossa equipe de atendimento.
             Estaremos prontos para te ajudar!
           </p>

@@ -101,7 +101,7 @@ function SlideForm() {
           onChange={handleChange}
           required
           placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
+          className="admin-form-group-margin"
         />
         {fieldErrors.imageUrl && <span className="field-error">{fieldErrors.imageUrl}</span>}
       </div>

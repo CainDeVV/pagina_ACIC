@@ -3,41 +3,68 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
 import { UpdateNoticiaDto } from './dto/update-noticia.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PublishStatus } from '@prisma/client';
+import { PublishStatus, Prisma } from '@prisma/client';
 import slugify from 'slugify';
 
 @Injectable()
 export class NoticiasService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(createNoticiaDto: CreateNoticiaDto, authorId?: string) {
+  async create(createNoticiaDto: CreateNoticiaDto, authorId: string) {
     const slug = slugify(createNoticiaDto.title, { lower: true, strict: true });
-    return await this.prisma.noticia.create({
+    const { categoriasIds, ...data } = createNoticiaDto;
+
+    return this.prisma.noticia.create({
       data: {
-        ...createNoticiaDto,
+        ...data,
         slug,
         authorId,
+        ...(categoriasIds &&
+          categoriasIds.length > 0 && {
+            categorias: {
+              connect: categoriasIds.map((id) => ({ id })),
+            },
+          }),
       },
     });
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 9, search, categoriasIds } = paginationDto;
     const skip = (page - 1) * limit;
+
+    const where: Prisma.NoticiaWhereInput = {
+      status: PublishStatus.PUBLISHED,
+      AND: [
+        { OR: [{ publishedAt: null }, { publishedAt: { lte: new Date() } }] },
+        ...(search
+          ? [
+              {
+                OR: [
+                  { title: { contains: search, mode: 'insensitive' as const } },
+                  {
+                    summary: { contains: search, mode: 'insensitive' as const },
+                  },
+                ],
+              },
+            ]
+          : []),
+      ],
+      ...(categoriasIds &&
+        categoriasIds.length > 0 && {
+          categorias: { some: { id: { in: categoriasIds } } },
+        }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.noticia.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where,
         skip,
-        take: limit,
-        orderBy: { publishedAt: 'desc' },
-        include: {
-          author: { select: { name: true, email: true } },
-        },
+        take: Number(limit),
+        orderBy: [{ destaque: 'desc' }, { createdAt: 'desc' }],
+        include: { author: { select: { name: true } }, categorias: true },
       }),
-      this.prisma.noticia.count({
-        where: { status: PublishStatus.PUBLISHED },
-      }),
+      this.prisma.noticia.count({ where }),
     ]);
 
     return {
@@ -52,19 +79,31 @@ export class NoticiasService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search, categoriasIds } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.NoticiaWhereInput = {
+      ...(search && {
+        OR: [{ title: { contains: search, mode: 'insensitive' as const } }],
+      }),
+      ...(categoriasIds &&
+        categoriasIds.length > 0 && {
+          categorias: { some: { id: { in: categoriasIds } } },
+        }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.noticia.findMany({
+        where,
         skip,
-        take: limit,
+        take: Number(limit),
         orderBy: { publishedAt: 'desc' },
         include: {
           author: { select: { name: true, email: true } },
+          categorias: true,
         },
       }),
-      this.prisma.noticia.count(),
+      this.prisma.noticia.count({ where }),
     ]);
 
     return {
@@ -83,11 +122,15 @@ export class NoticiasService {
       where: { slug, status: PublishStatus.PUBLISHED },
       include: {
         author: { select: { name: true, email: true } },
+        categorias: true,
       },
     });
 
     if (!noticia)
       throw new NotFoundException('Notícia não encontrada ou não publicada.');
+    if (noticia.publishedAt && new Date(noticia.publishedAt) > new Date()) {
+      throw new NotFoundException('Notícia não encontrada ou não publicada.');
+    }
     return noticia;
   }
 
@@ -96,6 +139,7 @@ export class NoticiasService {
       where: { id },
       include: {
         author: { select: { name: true, email: true } },
+        categorias: true,
       },
     });
 
@@ -104,18 +148,24 @@ export class NoticiasService {
   }
 
   async update(id: string, updateNoticiaDto: UpdateNoticiaDto) {
-    let slug: string | undefined;
+    await this.findOne(id);
 
-    if (updateNoticiaDto.title) {
-      slug = slugify(updateNoticiaDto.title, { lower: true, strict: true });
+    const { categoriasIds, ...data } = updateNoticiaDto;
+    const dataToUpdate: Prisma.NoticiaUpdateInput = { ...data };
+
+    if (data.title) {
+      dataToUpdate.slug = slugify(data.title, { lower: true, strict: true });
     }
 
-    return await this.prisma.noticia.update({
+    if (categoriasIds !== undefined) {
+      dataToUpdate.categorias = {
+        set: categoriasIds.map((catId) => ({ id: catId })),
+      };
+    }
+
+    return this.prisma.noticia.update({
       where: { id },
-      data: {
-        ...updateNoticiaDto,
-        ...(slug && { slug }),
-      },
+      data: dataToUpdate,
     });
   }
 

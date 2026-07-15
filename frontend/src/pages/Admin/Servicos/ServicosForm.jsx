@@ -144,7 +144,7 @@ function ServicosForm() {
           value={formData.imageUrl || ''}
           onChange={handleChange}
           placeholder="Ou cole uma URL direta da imagem aqui..."
-          style={{ marginTop: '10px' }}
+          className="admin-form-group-margin"
         />
       </div>
 

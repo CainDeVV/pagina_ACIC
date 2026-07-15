@@ -36,7 +36,7 @@ function GaleriaPresidentes() {
   if (carregando) {
     return (
       <SaibaMaisLayout titulo="Carregando...">
-        <p style={{ padding: '20px' }}>Carregando informações...</p>
+        <p className="inst-loading">Carregando informações...</p>
       </SaibaMaisLayout>
     );
   }
@@ -51,12 +51,12 @@ function GaleriaPresidentes() {
       
       {/* Cabeçalho Editável: Se houver dados no banco, usa o BlockRenderer. Se não, usa o texto padrão. */}
       {paginaIntro ? (
-        <div style={{ marginBottom: '40px' }}>
+        <div className="inst-mb">
           <BlockRenderer blocks={paginaIntro.content?.blocks || []} />
         </div>
       ) : (
-        <div style={{ marginBottom: '40px' }}>
-          <p style={{ padding: '20px' }}>Conteúdo introdutório ainda não publicado no painel administrativo.</p>
+        <div className="inst-mb">
+          <p className="inst-loading">Conteúdo introdutório ainda não publicado no painel administrativo.</p>
         </div>
       )}
 
@@ -91,7 +91,7 @@ function GaleriaPresidentes() {
           })}
         </div>
       ) : (
-        <p style={{ padding: '20px 0', textAlign: 'center' }}>
+        <p className="inst-empty-center">
           Nenhum presidente cadastrado no banco de dados no momento.
         </p>
       )}

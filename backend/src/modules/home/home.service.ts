@@ -39,41 +39,45 @@ export class HomeService {
       // 4. EVENTOS (PRÓXIMOS): Publicados, data maior que hoje e nao cancelados
       this.prisma.evento.findMany({
         where: {
-          status: PublishStatus.PUBLISHED,
+          status: 'PUBLISHED',
           startsAt: { gt: agora },
-          NOT: {
-            OR: [
-              {
-                status: 'FINISHED',
-              }, // Proteção caso o enum não tenha finished
-              {
-                status: 'CANCELLED',
-              },
-            ],
-          },
+          OR: [{ publishedAt: null }, { publishedAt: { lte: agora } }],
         },
         orderBy: { startsAt: 'asc' },
         take: 3,
       }),
 
-      // 4.5 EVENTOS (PASSADOS, FALBBACK): Caso não haja próximos eventos
+      // 4.5 EVENTOS (PASSADOS, FALBBACK): Caso não haja 3 próximos eventos
       this.prisma.evento.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where: {
+          status: { in: ['PUBLISHED', 'FINISHED'] },
+          startsAt: { lte: agora },
+          OR: [{ publishedAt: null }, { publishedAt: { lte: agora } }],
+        },
         orderBy: { startsAt: 'desc' },
         take: 3,
       }),
 
       // 5. NOTICIAS: Apenas as 3 mais recentes publicadas
       this.prisma.noticia.findMany({
-        where: { status: PublishStatus.PUBLISHED },
-        orderBy: { createdAt: 'desc' },
+        where: {
+          status: PublishStatus.PUBLISHED,
+          OR: [{ publishedAt: null }, { publishedAt: { lte: agora } }],
+        },
+        orderBy: [{ publishedAt: 'desc' }, { createdAt: 'desc' }],
         take: 3,
       }),
     ]);
 
-    // Tratar Eventos (Se tiver próximos usa, se não tiver usa os antigos)
-    const eventos =
-      proximosEventos.length > 0 ? proximosEventos : eventosPassados;
+    // Completar com eventos passados se os próximos não preencherem as 3 vagas
+    const proximosIds = proximosEventos.map((e) => e.id);
+    const eventosPassadosFiltrados = eventosPassados.filter(
+      (e) => !proximosIds.includes(e.id),
+    );
+    const eventos = [...proximosEventos, ...eventosPassadosFiltrados].slice(
+      0,
+      3,
+    );
 
     return {
       data: {
