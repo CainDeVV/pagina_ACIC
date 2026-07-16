@@ -7,7 +7,7 @@ export class CreateAssociadoDto {
     description: 'ID do usuário associado (User com role ASSOCIADO)',
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -15,7 +15,7 @@ export class CreateAssociadoDto {
 
   @ApiProperty({ description: 'Razão social da empresa' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -23,7 +23,7 @@ export class CreateAssociadoDto {
 
   @ApiProperty({ description: 'Nome fantasia', required: false })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -31,7 +31,7 @@ export class CreateAssociadoDto {
 
   @ApiProperty({ description: 'CNPJ da empresa' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -39,7 +39,7 @@ export class CreateAssociadoDto {
 
   @ApiProperty({ description: 'Telefone de contato', required: false })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -47,7 +47,7 @@ export class CreateAssociadoDto {
 
   @ApiProperty({ description: 'Endereço da empresa', required: false })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()

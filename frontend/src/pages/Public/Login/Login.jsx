@@ -33,10 +33,10 @@ function Login() {
                 password,
             });
 
-            const { access_token, user } = response.data;
+            const { access_token, refresh_token, user } = response.data;
 
             // Injeta dados no Cérebro (Context) que cuidará do localStorage de forma segura
-            login(user, access_token);
+            login(user, access_token, refresh_token);
 
             if (user.role === 'ADMIN' || user.role === 'EDITOR') {
                 navigate('/admin');

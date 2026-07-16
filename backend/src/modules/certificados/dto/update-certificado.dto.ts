@@ -11,7 +11,7 @@ export class UpdateCertificadoSolicitacaoDto extends PartialType(
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()

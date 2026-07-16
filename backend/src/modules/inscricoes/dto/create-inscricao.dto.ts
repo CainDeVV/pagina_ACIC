@@ -6,7 +6,7 @@ import { RegistrationStatus } from '@prisma/client';
 export class CreateInscricaoDto {
   @ApiProperty({ description: 'ID do Evento' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -14,7 +14,7 @@ export class CreateInscricaoDto {
 
   @ApiProperty({ description: 'ID do Associado' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()

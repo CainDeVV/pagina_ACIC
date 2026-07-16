@@ -3,12 +3,13 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEditorJs } from '../../../common/validators/is-editorjs.validator';
+import { EditorJsContent } from '../../../common/types/editor-js.type';
 
 export class CreateQuemSomosDto {
   @ApiProperty({
@@ -35,9 +36,9 @@ export class CreateQuemSomosDto {
     example: { blocks: [] },
     description: 'JSON estruturado do Editor.js',
   })
-  @IsObject()
+  @IsEditorJs()
   @IsNotEmpty()
-  content: any;
+  content: EditorJsContent;
 
   @ApiProperty({
     enum: PublishStatus,

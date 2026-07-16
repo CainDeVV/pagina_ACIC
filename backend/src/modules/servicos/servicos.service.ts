@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateServicoDto } from './dto/create-servico.dto';
 import { UpdateServicoDto } from './dto/update-servico.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PublishStatus } from '@prisma/client';
+import { PublishStatus, Prisma } from '@prisma/client';
 import slugify from 'slugify';
 
 @Injectable()
@@ -26,22 +26,27 @@ export class ServicosService {
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.ServicoWhereInput = {
+      status: PublishStatus.PUBLISHED,
+      ...(search && {
+        OR: [{ title: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.servico.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         include: {
           author: { select: { name: true, email: true } },
         },
       }),
-      this.prisma.servico.count({
-        where: { status: PublishStatus.PUBLISHED },
-      }),
+      this.prisma.servico.count({ where }),
     ]);
 
     return {
@@ -56,19 +61,26 @@ export class ServicosService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.ServicoWhereInput = {
+      ...(search && {
+        OR: [{ title: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.servico.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         include: {
           author: { select: { name: true, email: true } },
         },
       }),
-      this.prisma.servico.count(),
+      this.prisma.servico.count({ where }),
     ]);
 
     return {
@@ -114,6 +126,8 @@ export class ServicosService {
       slug = slugify(updateServicoDto.title, { lower: true, strict: true });
     }
 
+    await this.findOne(id);
+
     return await this.prisma.servico.update({
       where: { id },
       data: {
@@ -124,6 +138,7 @@ export class ServicosService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     return await this.prisma.servico.delete({
       where: { id },
     });

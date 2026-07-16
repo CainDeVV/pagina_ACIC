@@ -34,7 +34,7 @@ export class CreateUsuarioDto {
     minLength: 6,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @MinLength(6)

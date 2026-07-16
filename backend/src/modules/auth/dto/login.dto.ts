@@ -10,7 +10,7 @@ export class LoginDto {
   email!: string;
 
   @IsString({ message: 'A senha deve ser uma string.' })
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty({ message: 'A senha é obrigatória.' })

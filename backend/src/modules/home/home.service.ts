@@ -23,19 +23,19 @@ export class HomeService {
       // 1. SLIDES: Todos publicados e ordenados
       this.prisma.homeSlide.findMany({
         where: { status: PublishStatus.PUBLISHED },
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
       }),
 
       // 2. SERVIÇOS: Apenas os 6 primeiros publicados E em destaque
       this.prisma.servico.findMany({
         where: { status: PublishStatus.PUBLISHED, destaque: true },
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         take: 6,
       }),
 
       // 3. DIRETORIA: Pega apenas os 4 primeiros ordenados (sem agrupamento, ideal para Home)
       this.prisma.diretor.findMany({
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
         take: 4,
       }),
 

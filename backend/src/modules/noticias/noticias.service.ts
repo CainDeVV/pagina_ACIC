@@ -173,6 +173,7 @@ export class NoticiasService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     return await this.prisma.noticia.delete({
       where: { id },
     });

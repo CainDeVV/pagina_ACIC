@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
@@ -30,6 +32,7 @@ export class EventosController {
     description: 'Lista paginada de eventos publicados.',
   })
   @Get('eventos')
+  @UseInterceptors(CacheInterceptor)
   findAll(@Query() pagination: PaginationDto) {
     return this.eventosService.findAll(pagination);
   }
@@ -39,6 +42,7 @@ export class EventosController {
   @ApiResponse({ status: 200, description: 'Evento encontrado.' })
   @ApiResponse({ status: 404, description: 'Evento não encontrado.' })
   @Get('eventos/:slug')
+  @UseInterceptors(CacheInterceptor)
   findBySlug(@Param('slug') slug: string) {
     return this.eventosService.findBySlug(slug);
   }

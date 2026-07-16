@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateDiretoriaDto } from './dto/create-diretoria.dto';
 import { UpdateDiretoriaDto } from './dto/update-diretoria.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class DiretoriaService {
@@ -18,16 +19,23 @@ export class DiretoriaService {
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 100 } = paginationDto || {};
+    const { page = 1, limit = 100, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.DiretorWhereInput = {
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [diretores, total] = await Promise.all([
       this.prisma.diretor.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
       }),
-      this.prisma.diretor.count(),
+      this.prisma.diretor.count({ where }),
     ]);
 
     const categoriasMap = new Map<
@@ -56,16 +64,23 @@ export class DiretoriaService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 100 } = paginationDto || {};
+    const { page = 1, limit = 100, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.DiretorWhereInput = {
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [diretores, total] = await Promise.all([
       this.prisma.diretor.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { name: 'asc' }],
       }),
-      this.prisma.diretor.count(),
+      this.prisma.diretor.count({ where }),
     ]);
 
     const categoriasMap = new Map<
@@ -105,6 +120,7 @@ export class DiretoriaService {
   }
 
   async update(id: string, updateDiretoriaDto: UpdateDiretoriaDto) {
+    await this.findOne(id);
     return this.prisma.diretor.update({
       where: { id },
       data: updateDiretoriaDto,
@@ -112,6 +128,7 @@ export class DiretoriaService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     return this.prisma.diretor.delete({
       where: { id },
     });

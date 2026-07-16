@@ -3,6 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePresidenteDto } from './dto/create-presidente.dto';
 import { UpdatePresidenteDto } from './dto/update-presidente.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class PresidentesService {
@@ -18,16 +19,23 @@ export class PresidentesService {
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 100 } = paginationDto || {};
+    const { page = 1, limit = 100, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.PresidenteWhereInput = {
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.presidente.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { termStart: 'desc' }],
       }),
-      this.prisma.presidente.count(),
+      this.prisma.presidente.count({ where }),
     ]);
 
     return {
@@ -42,16 +50,23 @@ export class PresidentesService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 100 } = paginationDto || {};
+    const { page = 1, limit = 100, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.PresidenteWhereInput = {
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.presidente.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { termStart: 'desc' }],
       }),
-      this.prisma.presidente.count(),
+      this.prisma.presidente.count({ where }),
     ]);
 
     return {
@@ -76,6 +91,7 @@ export class PresidentesService {
   }
 
   async update(id: string, updatePresidenteDto: UpdatePresidenteDto) {
+    await this.findOne(id);
     return this.prisma.presidente.update({
       where: { id },
       data: updatePresidenteDto,
@@ -83,6 +99,7 @@ export class PresidentesService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     return this.prisma.presidente.delete({
       where: { id },
     });

@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { NoticiasService } from './noticias.service';
 import { CreateNoticiaDto } from './dto/create-noticia.dto';
@@ -27,6 +29,7 @@ export class NoticiasController {
   @ApiOperation({ summary: 'Listar notícias (Público)' })
   @ApiResponse({ status: 200, description: 'Lista de notícias retornada.' })
   @Get('noticias')
+  @UseInterceptors(CacheInterceptor)
   findAllPublic(@Query() paginationDto: PaginationDto) {
     return this.noticiasService.findAllPublic(paginationDto);
   }
@@ -35,6 +38,7 @@ export class NoticiasController {
   @ApiResponse({ status: 200, description: 'Notícia encontrada.' })
   @ApiResponse({ status: 404, description: 'Notícia não encontrada.' })
   @Get('noticias/:slug')
+  @UseInterceptors(CacheInterceptor)
   findBySlug(@Param('slug') slug: string) {
     return this.noticiasService.findBySlug(slug);
   }
