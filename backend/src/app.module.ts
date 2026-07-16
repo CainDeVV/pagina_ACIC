@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
+import { CacheModule } from '@nestjs/cache-manager';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
@@ -24,6 +25,7 @@ import { CategoriasModule } from './modules/categorias/categorias.module';
 
 @Module({
   imports: [
+    CacheModule.register({ isGlobal: true, ttl: 60000 }), // Cache em memória (TTL: 60s)
     ScheduleModule.forRoot(),
     ThrottlerModule.forRoot([
       {

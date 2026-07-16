@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { PrismaService } from '../../prisma/prisma.service';
-import { PublishStatus } from '@prisma/client';
+import { EventStatus } from '@prisma/client';
 
 @Injectable()
 export class EventosCronService {
@@ -17,13 +17,13 @@ export class EventosCronService {
     try {
       const result = await this.prisma.evento.updateMany({
         where: {
-          status: PublishStatus.DRAFT,
+          status: EventStatus.DRAFT,
           publishedAt: {
             lte: agora,
           },
         },
         data: {
-          status: PublishStatus.PUBLISHED,
+          status: EventStatus.PUBLISHED,
         },
       });
 

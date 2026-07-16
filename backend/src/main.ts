@@ -21,8 +21,10 @@ async function bootstrap() {
   app.use(
     helmet({
       crossOriginResourcePolicy: false, // Permite servir imagens
-      contentSecurityPolicy: false, // Permite exibir PDFs no iframe do Frontend
-      xFrameOptions: false, // Desativa o bloqueio de frames
+      // CSP e X-Frame-Options são habilitados automaticamente por padrão no Helmet.
+      // Desativamos o CSP APENAS em desenvolvimento para permitir o funcionamento do Swagger UI.
+      contentSecurityPolicy:
+        process.env.NODE_ENV === 'production' ? undefined : false,
     }),
   );
 
@@ -46,14 +48,18 @@ async function bootstrap() {
   );
 
   // --- CONFIGURAÇÃO DA PÁGINA VISUAL DO SWAGGER ---
-  const config = new DocumentBuilder()
-    .setTitle('API ACIC')
-    .setDescription('Documentação dos endpoints do painel administrativo ACIC')
-    .setVersion('1.0')
-    .addBearerAuth() // Deixa pronto o campo de Token JWT
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('API ACIC')
+      .setDescription(
+        'Documentação dos endpoints do painel administrativo ACIC',
+      )
+      .setVersion('1.0')
+      .addBearerAuth() // Deixa pronto o campo de Token JWT
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document);
+  }
 
   // Configura o NestJS para servir arquivos estáticos da pasta "uploads"
   app.useStaticAssets(join(process.cwd(), 'uploads'), {

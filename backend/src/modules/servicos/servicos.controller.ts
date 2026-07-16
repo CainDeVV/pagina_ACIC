@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   Query,
+  UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ServicosService } from './servicos.service';
 import { CreateServicoDto } from './dto/create-servico.dto';
@@ -27,6 +29,7 @@ export class ServicosController {
   @ApiOperation({ summary: 'Listar serviços (Público)' })
   @ApiResponse({ status: 200, description: 'Lista de serviços.' })
   @Get('servicos')
+  @UseInterceptors(CacheInterceptor)
   findAllPublic(@Query() paginationDto: PaginationDto) {
     return this.servicosService.findAllPublic(paginationDto);
   }
@@ -35,6 +38,7 @@ export class ServicosController {
   @ApiResponse({ status: 200, description: 'Serviço encontrado.' })
   @ApiResponse({ status: 404, description: 'Serviço não encontrado.' })
   @Get('servicos/:slug')
+  @UseInterceptors(CacheInterceptor)
   findBySlug(@Param('slug') slug: string) {
     return this.servicosService.findBySlug(slug);
   }

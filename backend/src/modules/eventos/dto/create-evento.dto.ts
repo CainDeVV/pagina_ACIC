@@ -3,7 +3,6 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   IsUrl,
@@ -13,6 +12,8 @@ import {
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
+import { IsEditorJs } from '../../../common/validators/is-editorjs.validator';
+import { EditorJsContent } from '../../../common/types/editor-js.type';
 
 export class CreateEventoDto {
   @ApiProperty({ example: '150 Anos da ACIC Crateús' })
@@ -20,9 +21,6 @@ export class CreateEventoDto {
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
-  @Transform(({ value }): any =>
-    typeof value === 'string' ? value.trim() : value,
-  )
   @IsNotEmpty({ message: 'O título é obrigatório.' })
   title!: string;
 
@@ -30,18 +28,15 @@ export class CreateEventoDto {
     example: { blocks: [] },
     description: 'JSON estruturado do Editor.js',
   })
-  @IsObject({ message: 'A descrição deve ser um objeto JSON válido.' })
+  @IsEditorJs()
   @IsNotEmpty({ message: 'A descrição do evento é obrigatória.' })
-  description: any;
+  description: EditorJsContent;
 
   @ApiProperty({ example: 'Sede da ACIC - Crateús, CE', required: false })
   @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
-  @Transform(({ value }): any =>
-    typeof value === 'string' ? value.trim() : value,
-  )
   @IsOptional()
   location?: string;
 
@@ -88,9 +83,6 @@ export class CreateEventoDto {
     typeof value === 'string' ? value.trim() : value,
   )
   @IsString()
-  @Transform(({ value }): any =>
-    typeof value === 'string' ? value.trim() : value,
-  )
   @IsOptional()
   coverImageCaption?: string;
 
@@ -124,7 +116,7 @@ export class CreateEventoDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   categoriasIds?: string[];

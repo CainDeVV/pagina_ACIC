@@ -5,7 +5,7 @@ import {
   IsEnum,
   IsInt,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { PublishStatus } from '@prisma/client';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
@@ -20,7 +20,7 @@ export class CreatePatrocinadorDto {
 
   @ApiProperty({ description: 'URL da logomarca' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -28,7 +28,7 @@ export class CreatePatrocinadorDto {
 
   @ApiPropertyOptional({ description: 'Link para o site do patrocinador' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -43,7 +43,8 @@ export class CreatePatrocinadorDto {
   status?: PublishStatus;
 
   @ApiPropertyOptional({ default: 0 })
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   sortOrder?: number;
 }

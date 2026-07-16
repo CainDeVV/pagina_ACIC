@@ -56,6 +56,7 @@ export class UsuariosService {
       where: {
         role: { in: [UserRole.ADMIN, UserRole.EDITOR] },
       },
+      orderBy: [{ name: 'asc' }, { createdAt: 'desc' }],
       select: USER_SELECT,
     });
   }
@@ -114,11 +115,27 @@ export class UsuariosService {
       dataToUpdate.passwordHash = await bcrypt.hash(password, 10);
     }
 
-    return this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       where: { id },
       data: dataToUpdate,
       select: USER_SELECT,
     });
+
+    // Expurga sessões ativas se houver rebaixamento de cargo, inativação ou troca de senha
+    if (
+      password ||
+      rest.active === false ||
+      (rest.role && rest.role !== userToUpdate.role)
+    ) {
+      await this.prisma.session.deleteMany({
+        where: { userId: id },
+      });
+      this.logger.log(
+        `Todas as sessões ativas do usuário ${id} foram invalidadas por alteração crítica.`,
+      );
+    }
+
+    return updatedUser;
   }
 
   async remove(id: string) {

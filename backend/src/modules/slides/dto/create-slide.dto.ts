@@ -7,7 +7,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateSlideDto {
@@ -25,7 +25,7 @@ export class CreateSlideDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -54,6 +54,7 @@ export class CreateSlideDto {
 
   @ApiProperty({ example: 1, required: false })
   @IsInt()
+  @Type(() => Number)
   @IsOptional()
   sortOrder?: number;
 }

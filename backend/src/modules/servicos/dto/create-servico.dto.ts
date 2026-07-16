@@ -3,13 +3,15 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   IsUrl,
+  IsInt,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEditorJs } from '../../../common/validators/is-editorjs.validator';
+import { EditorJsContent } from '../../../common/types/editor-js.type';
 
 export class CreateServicoDto {
   @ApiProperty({ example: 'Certificado Digital' })
@@ -25,7 +27,7 @@ export class CreateServicoDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -35,15 +37,13 @@ export class CreateServicoDto {
     example: { blocks: [] },
     description: 'JSON estruturado do Editor.js',
   })
-  @IsObject({
-    message: 'A descrição deve ser um objeto JSON válido do Editor.js.',
-  })
+  @IsEditorJs()
   @IsNotEmpty({ message: 'A descrição em formato de blocos é obrigatória.' })
-  description: any;
+  description: EditorJsContent;
 
   @ApiProperty({ example: '💻', required: false })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -80,5 +80,7 @@ export class CreateServicoDto {
     required: false,
   })
   @IsOptional()
+  @Type(() => Number)
+  @IsInt({ message: 'A ordem de exibição deve ser um número inteiro.' })
   sortOrder?: number;
 }

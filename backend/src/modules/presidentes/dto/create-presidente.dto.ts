@@ -5,7 +5,7 @@ import {
   IsString,
   IsUrl,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePresidenteDto {
@@ -18,13 +18,15 @@ export class CreatePresidenteDto {
   name!: string;
 
   @ApiProperty({ example: 2017 })
-  @IsInt()
   @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
   termStart!: number;
 
   @ApiProperty({ example: 2023, required: false })
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   termEnd?: number;
 
   @ApiProperty({
@@ -40,14 +42,15 @@ export class CreatePresidenteDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
   bio?: string;
 
   @ApiProperty({ example: 1, required: false })
-  @IsInt()
   @IsOptional()
+  @Type(() => Number)
+  @IsInt()
   sortOrder?: number;
 }

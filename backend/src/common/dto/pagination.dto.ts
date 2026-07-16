@@ -12,14 +12,14 @@ import {
 export class PaginationDto {
   @ApiPropertyOptional({ default: 1, minimum: 1 })
   @IsOptional()
-  @Type((): any => Number)
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   page: number = 1;
 
   @ApiPropertyOptional({ default: 10, minimum: 1, maximum: 100 })
   @IsOptional()
-  @Type((): any => Number)
+  @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(100)
@@ -33,7 +33,7 @@ export class PaginationDto {
   @ApiPropertyOptional({ description: 'Filtro por IDs de categorias' })
   @IsOptional()
   @IsArray()
-  @Transform(({ value }): any => {
+  @Transform(({ value }: { value: unknown }): unknown => {
     if (value === undefined) return undefined;
     const array = Array.isArray(value) ? value : [value];
     const filtered = array.filter((v) => v !== undefined && v !== '');
@@ -45,6 +45,9 @@ export class PaginationDto {
     description: 'Retornar apenas próximos itens (futuros)',
   })
   @IsOptional()
-  @Transform(({ value }): any => value === 'true' || value === true)
+  @Transform(
+    ({ value }: { value: unknown }): unknown =>
+      value === 'true' || value === true,
+  )
   upcomingOnly?: boolean;
 }

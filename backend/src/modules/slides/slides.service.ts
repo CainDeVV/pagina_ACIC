@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSlideDto } from './dto/create-slide.dto';
 import { UpdateSlideDto } from './dto/update-slide.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PublishStatus } from '@prisma/client';
+import { Prisma, PublishStatus } from '@prisma/client';
 
 @Injectable()
 export class SlidesService {
@@ -22,22 +22,30 @@ export class SlidesService {
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.HomeSlideWhereInput = {
+      status: PublishStatus.PUBLISHED,
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: 'insensitive' as const } },
+          { subtitle: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.homeSlide.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         include: {
           author: { select: { name: true, email: true } },
         },
       }),
-      this.prisma.homeSlide.count({
-        where: { status: PublishStatus.PUBLISHED },
-      }),
+      this.prisma.homeSlide.count({ where }),
     ]);
 
     return {
@@ -52,19 +60,29 @@ export class SlidesService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.HomeSlideWhereInput = {
+      ...(search && {
+        OR: [
+          { title: { contains: search, mode: 'insensitive' as const } },
+          { subtitle: { contains: search, mode: 'insensitive' as const } },
+        ],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.homeSlide.findMany({
+        where,
         skip,
         take: limit,
-        orderBy: { sortOrder: 'asc' },
+        orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
         include: {
           author: { select: { name: true, email: true } },
         },
       }),
-      this.prisma.homeSlide.count(),
+      this.prisma.homeSlide.count({ where }),
     ]);
 
     return {
@@ -94,6 +112,7 @@ export class SlidesService {
   }
 
   async update(id: string, updateSlideDto: UpdateSlideDto) {
+    await this.findOne(id);
     return await this.prisma.homeSlide.update({
       where: { id },
       data: updateSlideDto,
@@ -101,6 +120,7 @@ export class SlidesService {
   }
 
   async remove(id: string) {
+    await this.findOne(id);
     return await this.prisma.homeSlide.delete({
       where: { id },
     });

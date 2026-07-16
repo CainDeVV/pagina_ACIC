@@ -23,6 +23,62 @@ import {
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
 import { UserRole } from '@prisma/client';
 
+export const multerOptions = {
+  storage: diskStorage({
+    destination: (req, file, cb) => {
+      let folderName = (req.query.folder as string) || 'geral';
+      if (!/^[a-zA-Z0-9_-]+$/.test(folderName)) {
+        folderName = 'geral';
+      }
+
+      const uploadPath = join('./uploads', folderName);
+
+      if (!fs.existsSync(uploadPath)) {
+        fs.mkdirSync(uploadPath, { recursive: true });
+      }
+
+      cb(null, uploadPath);
+    },
+    filename: (req, file, cb) => {
+      const uniqueName = uuidv4() + extname(file.originalname);
+      cb(null, uniqueName);
+    },
+  }),
+  fileFilter: (req: Request, file: Express.Multer.File, cb: any) => {
+    const allowedMimeTypes = [
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'image/webp',
+      'application/pdf',
+      'application/msword', // .doc
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+      'application/vnd.ms-excel', // .xls
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
+      'text/csv', // .csv
+      'application/zip', // .zip
+      'application/x-zip-compressed', // .zip (windows)
+      'application/vnd.rar', // .rar
+      'application/x-rar-compressed', // .rar
+      'application/vnd.ms-powerpoint', // .ppt
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
+    ];
+
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      return cb(
+        new BadRequestException(
+          'Formato de arquivo não permitido pelas políticas de segurança do servidor.',
+        ),
+        false,
+      );
+    }
+    cb(null, true);
+  },
+  limits: {
+    fileSize: 100 * 1024 * 1024, // 100MB global
+  },
+};
+
 @ApiTags('Upload')
 @Controller('upload')
 export class UploadController {
@@ -43,63 +99,7 @@ export class UploadController {
       },
     },
   })
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: (req, file, cb) => {
-          let folderName = (req.query.folder as string) || 'geral';
-          if (!/^[a-zA-Z0-9_-]+$/.test(folderName)) {
-            folderName = 'geral';
-          }
-
-          const uploadPath = join('./uploads', folderName);
-
-          if (!fs.existsSync(uploadPath)) {
-            fs.mkdirSync(uploadPath, { recursive: true });
-          }
-
-          cb(null, uploadPath);
-        },
-        filename: (req, file, cb) => {
-          const uniqueName = uuidv4() + extname(file.originalname);
-          cb(null, uniqueName);
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        const allowedMimeTypes = [
-          'image/jpeg',
-          'image/png',
-          'image/gif',
-          'image/webp',
-          'application/pdf',
-          'application/msword', // .doc
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
-          'application/vnd.ms-excel', // .xls
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
-          'text/csv', // .csv
-          'application/zip', // .zip
-          'application/x-zip-compressed', // .zip (windows)
-          'application/vnd.rar', // .rar
-          'application/x-rar-compressed', // .rar
-          'application/vnd.ms-powerpoint', // .ppt
-          'application/vnd.openxmlformats-officedocument.presentationml.presentation', // .pptx
-        ];
-
-        if (!allowedMimeTypes.includes(file.mimetype)) {
-          return cb(
-            new BadRequestException(
-              'Formato de arquivo não permitido pelas políticas de segurança do servidor.',
-            ),
-            false,
-          );
-        }
-        cb(null, true);
-      },
-      limits: {
-        fileSize: 100 * 1024 * 1024, // 100MB global
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Req() req: Request,
@@ -123,16 +123,22 @@ export class UploadController {
       const webpFilename = uuidv4() + '.webp';
       const webpPath = join(uploadDir, webpFilename);
 
-      await sharp(file.path)
-        .resize({ width: 3840, withoutEnlargement: true })
-        .webp({ quality: 80 })
-        .toFile(webpPath);
+      try {
+        await sharp(file.path)
+          .resize({ width: 3840, withoutEnlargement: true })
+          .webp({ quality: 80 })
+          .toFile(webpPath);
 
-      // Deleta a imagem original pesada que o multer salvou no disco
-      await fs.promises.unlink(file.path).catch(() => null);
-
-      finalFilename = webpFilename;
-      finalMimetype = 'image/webp';
+        finalFilename = webpFilename;
+        finalMimetype = 'image/webp';
+      } catch (_error) {
+        throw new BadRequestException(
+          'Falha ao processar a imagem. O arquivo pode estar corrompido.',
+        );
+      } finally {
+        // Deleta a imagem original pesada que o multer salvou no disco
+        await fs.promises.unlink(file.path).catch(() => null);
+      }
     }
 
     const fileUrl = `${req.protocol}://${req.get('host')}/uploads/${folderName}/${finalFilename}`;

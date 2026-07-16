@@ -6,7 +6,7 @@ import { CertificateStatus } from '@prisma/client';
 export class CreateCertificadoSolicitacaoDto {
   @ApiProperty({ description: 'ID do Associado solicitante' })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsNotEmpty()
@@ -17,7 +17,7 @@ export class CreateCertificadoSolicitacaoDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -28,7 +28,7 @@ export class CreateCertificadoSolicitacaoDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()

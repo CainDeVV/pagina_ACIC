@@ -4,7 +4,6 @@ import {
   IsDateString,
   IsEnum,
   IsNotEmpty,
-  IsObject,
   IsOptional,
   IsString,
   IsUrl,
@@ -12,6 +11,8 @@ import {
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEditorJs } from '../../../common/validators/is-editorjs.validator';
+import { EditorJsContent } from '../../../common/types/editor-js.type';
 
 export class CreateNoticiaDto {
   @ApiProperty({ example: 'ACIC realiza evento de networking para associados' })
@@ -27,7 +28,7 @@ export class CreateNoticiaDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -37,11 +38,9 @@ export class CreateNoticiaDto {
     example: { blocks: [] },
     description: 'JSON estruturado do Editor.js',
   })
-  @IsObject({
-    message: 'O conteúdo deve ser um objeto JSON válido do Editor.js.',
-  })
+  @IsEditorJs()
   @IsNotEmpty({ message: 'O conteúdo da notícia é obrigatório.' })
-  content: any;
+  content: EditorJsContent;
 
   @ApiProperty({
     example: 'https://imagens.acic.com/noticia.jpg',
@@ -59,7 +58,7 @@ export class CreateNoticiaDto {
     required: false,
   })
   @IsString()
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   @IsOptional()
@@ -104,7 +103,7 @@ export class CreateNoticiaDto {
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
-  @Transform(({ value }): any =>
+  @Transform(({ value }: { value: unknown }): unknown =>
     typeof value === 'string' ? value.trim() : value,
   )
   categoriasIds?: string[];

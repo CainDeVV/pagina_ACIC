@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict c7u3U0zdpEvION220ribazyKoUJpWS9MgOxafFc3Tj8k4MOUpPdJXJZO1gUKCwp
+\restrict jocDBPxS33DgYRhLIE0sL9b2E3oxb4eQIrXWhQT2842m0GbledX8AlJqAf14FIE
 
 -- Dumped from database version 16.14
 -- Dumped by pg_dump version 16.14
@@ -346,6 +346,21 @@ CREATE TABLE public."Servico" (
 ALTER TABLE public."Servico" OWNER TO postgres;
 
 --
+-- Name: Session; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public."Session" (
+    id text NOT NULL,
+    "userId" text NOT NULL,
+    "tokenHash" text NOT NULL,
+    "expiresAt" timestamp(3) without time zone NOT NULL,
+    "createdAt" timestamp(3) without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+
+ALTER TABLE public."Session" OWNER TO postgres;
+
+--
 -- Name: User; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -568,11 +583,22 @@ COPY public."Servico" (id, title, slug, summary, description, icon, "imageUrl", 
 
 
 --
+-- Data for Name: Session; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."Session" (id, "userId", "tokenHash", "expiresAt", "createdAt") FROM stdin;
+8165fe38-cb52-48ab-88dd-7098f0b91386	fe449d86-1afe-41a3-861d-2c5a1d2c572d	0d5bb5bb3dc76e759449478f4f3c4729e343ce4c00be57746c79b22895721e09	2026-07-23 13:25:29.443	2026-07-16 13:25:29.444
+37dcd548-6660-4fbd-9afa-dd2625c0b2ac	fe449d86-1afe-41a3-861d-2c5a1d2c572d	fdc28c95e8c5342b601e710c46197ac5731c8f5bc17d575ae6b35f9c98d7fe7b	2026-07-23 15:08:36.511	2026-07-16 15:08:36.512
+aa8f7553-4f97-43b3-89d7-349220db0a4c	fe449d86-1afe-41a3-861d-2c5a1d2c572d	d99f6772b2c98147d1c72dd467172de098b3d30e5c2d7dcb4f51e7b6a6720ae3	2026-07-23 15:08:52.787	2026-07-16 15:08:52.788
+\.
+
+
+--
 -- Data for Name: User; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public."User" (id, name, email, "passwordHash", role, active, "createdAt", "updatedAt") FROM stdin;
-fe449d86-1afe-41a3-861d-2c5a1d2c572d	Administrador ACIC	admin@acic.local	$2b$10$n9NWI9iehqdhbqa9d1.rpOp7V38HT9wkuUPylv71YE4BOPLyAZWYW	ADMIN	t	2026-07-04 13:41:14.321	2026-07-04 13:41:14.321
+fe449d86-1afe-41a3-861d-2c5a1d2c572d	Administrador ACIC	admin@acic.local	$2b$10$Tnu1gL3ZC.sAg/lY3kfBeOGunYs2i1dr.abUZYl3.Ue7wzswjMt/u	ADMIN	t	2026-07-04 13:41:14.321	2026-07-15 22:40:52.408
 \.
 
 
@@ -614,6 +640,8 @@ ba697132-5412-4f71-a04e-a4e2f27fa7e1	5d2a4b83c6b6f4656f84189281bad7ce8cb0d614117
 867f2c6f-7edd-49e1-8e61-609f06cf4a2c	e916f28cd574eae2bda4c66f5c9f1abd70aeb7171e14541b3bdbd2d4e30a2949	2026-07-05 14:22:23.62882+00	20260705142223_add_cover_image_options	\N	\N	2026-07-05 14:22:23.614276+00	1
 360d6579-7d99-436f-899b-a7aee10ff402	7846778ce89bd8e03e08c20ff5d1465bcf8d60a6abcff2224a697ffbec48fcf9	2026-07-05 18:41:35.321927+00	20260705184135_add_sponsors	\N	\N	2026-07-05 18:41:35.293662+00	1
 87860303-9d54-4a31-b7e9-793db911ed35	0a3668cc40f698c54c13567ada7d2e731f27229d253190091cd4965402b28b81	2026-07-05 20:24:34.11353+00	20260705202434_add_sort_order_servico	\N	\N	2026-07-05 20:24:34.101921+00	1
+b93527c2-d9e8-4014-ac47-17e388f58424	afa18db30cc470c138594132e028169dec241301a69ce426fed56af06e4e713c	\N	20260715220923_init_session	A migration failed to apply. New migrations cannot be applied before the error is recovered from. Read more about how to resolve migration issues in a production database: https://pris.ly/d/migrate-resolve\n\nMigration name: 20260715220923_init_session\n\nDatabase error code: 42701\n\nDatabase error:\nERROR: column "publishedAt" of relation "Evento" already exists\n\nDbError { severity: "ERROR", parsed_severity: Some(Error), code: SqlState(E42701), message: "column \\"publishedAt\\" of relation \\"Evento\\" already exists", detail: None, hint: None, position: None, where_: None, schema: None, table: None, column: None, datatype: None, constraint: None, file: Some("tablecmds.c"), line: Some(7347), routine: Some("check_for_column_name_collision") }\n\n   0: sql_schema_connector::apply_migration::apply_script\n           with migration_name="20260715220923_init_session"\n             at schema-engine\\connectors\\sql-schema-connector\\src\\apply_migration.rs:106\n   1: schema_core::commands::apply_migrations::Applying migration\n           with migration_name="20260715220923_init_session"\n             at schema-engine\\core\\src\\commands\\apply_migrations.rs:91\n   2: schema_core::state::ApplyMigrations\n             at schema-engine\\core\\src\\state.rs:226	2026-07-15 22:38:04.673472+00	2026-07-15 22:37:46.764939+00	0
+bea63051-81b0-42ac-bfde-4c0e5e6702fb	afa18db30cc470c138594132e028169dec241301a69ce426fed56af06e4e713c	2026-07-15 22:38:04.678493+00	20260715220923_init_session		\N	2026-07-15 22:38:04.678493+00	0
 \.
 
 
@@ -714,6 +742,14 @@ ALTER TABLE ONLY public."Servico"
 
 
 --
+-- Name: Session Session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session"
+    ADD CONSTRAINT "Session_pkey" PRIMARY KEY (id);
+
+
+--
 -- Name: User User_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -790,6 +826,20 @@ CREATE UNIQUE INDEX "QuemSomosSection_key_key" ON public."QuemSomosSection" USIN
 --
 
 CREATE UNIQUE INDEX "Servico_slug_key" ON public."Servico" USING btree (slug);
+
+
+--
+-- Name: Session_tokenHash_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX "Session_tokenHash_key" ON public."Session" USING btree ("tokenHash");
+
+
+--
+-- Name: Session_userId_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX "Session_userId_idx" ON public."Session" USING btree ("userId");
 
 
 --
@@ -900,6 +950,14 @@ ALTER TABLE ONLY public."Servico"
 
 
 --
+-- Name: Session Session_userId_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."Session"
+    ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES public."User"(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: _CategoriaToEvento _CategoriaToEvento_A_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -942,5 +1000,5 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 -- PostgreSQL database dump complete
 --
 
-\unrestrict c7u3U0zdpEvION220ribazyKoUJpWS9MgOxafFc3Tj8k4MOUpPdJXJZO1gUKCwp
+\unrestrict jocDBPxS33DgYRhLIE0sL9b2E3oxb4eQIrXWhQT2842m0GbledX8AlJqAf14FIE
 

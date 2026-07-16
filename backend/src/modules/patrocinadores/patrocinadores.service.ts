@@ -3,7 +3,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { CreatePatrocinadorDto } from './dto/create-patrocinador.dto';
 import { UpdatePatrocinadorDto } from './dto/update-patrocinador.dto';
 import { PaginationDto } from '../../common/dto/pagination.dto';
-import { PublishStatus } from '@prisma/client';
+import { PublishStatus, Prisma } from '@prisma/client';
 
 @Injectable()
 export class PatrocinadoresService {
@@ -19,19 +19,24 @@ export class PatrocinadoresService {
   }
 
   async findAllPublic(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.PatrocinadorWhereInput = {
+      status: PublishStatus.PUBLISHED,
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.patrocinador.findMany({
-        where: { status: PublishStatus.PUBLISHED },
+        where,
         skip,
         take: limit,
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
       }),
-      this.prisma.patrocinador.count({
-        where: { status: PublishStatus.PUBLISHED },
-      }),
+      this.prisma.patrocinador.count({ where }),
     ]);
 
     return {
@@ -46,16 +51,23 @@ export class PatrocinadoresService {
   }
 
   async findAllAdmin(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10 } = paginationDto || {};
+    const { page = 1, limit = 10, search } = paginationDto || {};
     const skip = (page - 1) * limit;
+
+    const where: Prisma.PatrocinadorWhereInput = {
+      ...(search && {
+        OR: [{ name: { contains: search, mode: 'insensitive' as const } }],
+      }),
+    };
 
     const [data, total] = await Promise.all([
       this.prisma.patrocinador.findMany({
+        where,
         skip,
         take: limit,
         orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
       }),
-      this.prisma.patrocinador.count(),
+      this.prisma.patrocinador.count({ where }),
     ]);
 
     return {

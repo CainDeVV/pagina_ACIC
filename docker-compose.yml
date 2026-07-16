@@ -29,8 +29,9 @@ services:
     restart: always
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-acic_db}
-      JWT_SECRET: ${JWT_SECRET:-sua_chave_secreta_aqui}
+      JWT_SECRET: ${JWT_SECRET}
       NODE_ENV: ${NODE_ENV:-development}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
       CHOKIDAR_USEPOLLING: "true"
       WATCHPACK_POLLING: "true"
     ports:

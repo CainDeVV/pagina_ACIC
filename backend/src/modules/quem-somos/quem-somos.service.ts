@@ -96,6 +96,7 @@ export class QuemSomosService {
   }
 
   async update(id: string, updateQuemSomosDto: UpdateQuemSomosDto) {
+    await this.findOneAdmin(id);
     return await this.prisma.quemSomosSection.update({
       where: { id },
       data: updateQuemSomosDto,
@@ -103,6 +104,7 @@ export class QuemSomosService {
   }
 
   async remove(id: string) {
+    await this.findOneAdmin(id);
     return await this.prisma.quemSomosSection.delete({
       where: { id },
     });
