@@ -45,7 +45,11 @@ function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>&copy; 2026 ACIC. Todos os direitos reservados.</p>
+        <p>
+          <Link to="/login" style={{ color: 'inherit', textDecoration: 'none', cursor: 'default' }} title="Acesso Restrito">
+            &copy;
+          </Link> 2026 ACIC. Todos os direitos reservados.
+        </p>
       </div>
     </footer>
   );

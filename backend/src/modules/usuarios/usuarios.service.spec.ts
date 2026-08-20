@@ -123,14 +123,28 @@ describe('UsuariosService', () => {
         id: '1',
         role: UserRole.EDITOR,
       } as any);
+      
+      prisma.user.findUnique.mockResolvedValueOnce({
+        id: 'admin-id',
+        otpCode: 'hashed-otp',
+        otpExpiresAt: new Date(Date.now() + 10000),
+      } as any);
+
+      const crypto = require('crypto');
+      jest.spyOn(crypto, 'createHash').mockReturnValue({
+        update: jest.fn().mockReturnThis(),
+        digest: jest.fn().mockReturnValue('hashed-otp')
+      } as any);
+
       prisma.user.update.mockResolvedValue({ id: '1' } as any);
 
-      await service.update('1', { password: 'nova' });
+      await service.update('1', { password: 'nova', otpCode: '123456' }, 'admin-id');
 
       expect(prisma.user.update).toHaveBeenCalled();
       expect(prisma.session.deleteMany).toHaveBeenCalledWith({
         where: { userId: '1' },
       });
+      jest.restoreAllMocks();
     });
   });
 

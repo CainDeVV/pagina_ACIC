@@ -40,20 +40,22 @@ enum CertificateStatus {
 }
 
 model User {
-  id           String      @id @default(uuid())
-  name         String
-  email        String      @unique
-  passwordHash String
-  role         UserRole    @default(EDITOR)
-  active       Boolean     @default(true)
-  associado    Associado?
-  noticias     Noticia[]   @relation("NoticiaAuthor")
-  eventos      Evento[]    @relation("EventoAuthor")
-  servicos     Servico[]   @relation("ServicoAuthor")
-  slides       HomeSlide[] @relation("SlideAuthor")
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
-  sessions     Session[]
+  id             String      @id @default(uuid())
+  name           String
+  email          String      @unique
+  passwordHash   String
+  role           UserRole    @default(EDITOR)
+  active         Boolean     @default(true)
+  otpCode        String?
+  otpExpiresAt   DateTime?
+  associado      Associado?
+  noticias       Noticia[]   @relation("NoticiaAuthor")
+  eventos        Evento[]    @relation("EventoAuthor")
+  servicos       Servico[]   @relation("ServicoAuthor")
+  slides         HomeSlide[] @relation("SlideAuthor")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  sessions       Session[]
 }
 
 model Session {

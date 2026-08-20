@@ -5,6 +5,8 @@ import { PrismaModule } from '../../prisma/prisma.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { SessionCleanupService } from './session-cleanup.service';
+import { EmailModule } from '../email/email.module';
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -13,12 +15,11 @@ if (!jwtSecret) {
   );
 }
 
-import { SessionCleanupService } from './session-cleanup.service';
-
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
+    EmailModule,
     JwtModule.register({
       secret: jwtSecret,
       signOptions: { expiresIn: '15m' }, // 15 minutos de expiração (uso de refresh token opaco)

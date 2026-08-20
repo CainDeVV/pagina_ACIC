@@ -76,9 +76,9 @@ describe('UsuariosController', () => {
 
       service.update.mockResolvedValueOnce(mockResult);
 
-      const result = await controller.update('1', dto);
+      const result = await controller.update('1', dto, { sub: 'admin-id' });
 
-      expect(service.update).toHaveBeenCalledWith('1', dto);
+      expect(service.update).toHaveBeenCalledWith('1', dto, 'admin-id');
       expect(result).toEqual(mockResult);
     });
   });

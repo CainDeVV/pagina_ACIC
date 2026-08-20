@@ -23,17 +23,12 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('deve repassar o DTO para o AuthService e retornar o token', async () => {
-      const loginDto = { email: 'admin@acic.com', password: '123' };
-      const expectedResult = {
-        access_token: 'fake_access',
-        refresh_token: 'fake_refresh',
-        user: {
-          id: '1',
-          email: 'admin@acic.com',
-          name: 'Admin',
-          role: 'ADMIN' as const,
-        },
+    it('deve realizar login (Etapa 1 - envio de OTP)', async () => {
+      const loginDto = { email: 'test@test.com', password: '123' };
+      const expectedResult = { 
+        message: 'Código de verificação enviado.', 
+        requiresOtp: true, 
+        email: loginDto.email 
       };
 
       authService.login.mockResolvedValueOnce(expectedResult);

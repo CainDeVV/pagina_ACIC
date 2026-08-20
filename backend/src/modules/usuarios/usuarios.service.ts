@@ -10,6 +10,7 @@ import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { UserRole, Prisma } from '@prisma/client';
 import * as bcrypt from 'bcryptjs';
+import * as crypto from 'crypto';
 
 const USER_SELECT: Prisma.UserSelect = {
   id: true,
@@ -73,9 +74,44 @@ export class UsuariosService {
     return user;
   }
 
-  async update(id: string, updateUsuarioDto: UpdateUsuarioDto) {
+  async update(id: string, updateUsuarioDto: UpdateUsuarioDto, adminId?: string) {
     const userToUpdate = await this.findOne(id);
-    const { password, ...rest } = updateUsuarioDto;
+    const { password, otpCode, ...rest } = updateUsuarioDto;
+
+    // Se estiver tentando alterar a senha, exija OTP do Admin logado
+    if (password) {
+      if (!adminId) {
+        throw new ForbiddenException('Ação não autorizada. ID do administrador não fornecido.');
+      }
+      
+      const adminUser = await this.prisma.user.findUnique({ where: { id: adminId } });
+      if (!adminUser || !adminUser.otpCode || !adminUser.otpExpiresAt) {
+        throw new ForbiddenException('OTP_REQUIRED');
+      }
+
+      if (adminUser.otpExpiresAt < new Date()) {
+        await this.prisma.user.update({
+          where: { id: adminId },
+          data: { otpCode: null, otpExpiresAt: null },
+        });
+        throw new ForbiddenException('OTP_EXPIRED');
+      }
+
+      if (!otpCode) {
+        throw new ForbiddenException('OTP_REQUIRED');
+      }
+
+      const codeHash = crypto.createHash('sha256').update(otpCode).digest('hex');
+      if (codeHash !== adminUser.otpCode) {
+        throw new ForbiddenException('Código OTP incorreto.');
+      }
+
+      // Consome o OTP
+      await this.prisma.user.update({
+        where: { id: adminId },
+        data: { otpCode: null, otpExpiresAt: null },
+      });
+    }
 
     if (rest.email && rest.email !== userToUpdate.email) {
       const existingUser = await this.prisma.user.findUnique({

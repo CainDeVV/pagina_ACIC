@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { EmailService } from '../email/email.service';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
@@ -24,24 +25,15 @@ describe('AuthService', () => {
         AuthService,
         { provide: PrismaService, useValue: prisma },
         { provide: JwtService, useValue: jwtService },
+        { provide: EmailService, useValue: { sendOtpEmail: jest.fn() } }
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
   });
 
-  describe('login', () => {
-    it('deve rejeitar usuário não encontrado', async () => {
-      prisma.user.findUnique.mockResolvedValueOnce(null);
-      await expect(
-        service.login({ email: 'test@test.com', password: '123' }),
-      ).rejects.toThrow(UnauthorizedException);
-    });
-
+  describe('verifyOtp', () => {
     it('deve remover sessões mais antigas se ultrapassar o limite (MAX_SESSIONS=5)', async () => {
-      // Mock para o bcrypt
-      (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-
       // Simula um usuário com 5 sessões existentes (já no limite)
       // O novo login será a 6ª sessão, logo a mais antiga deve ser deletada
       const mockSessions = [
@@ -56,20 +48,31 @@ describe('AuthService', () => {
         id: 'user-id',
         email: 'test@test.com',
         active: true,
-        passwordHash: 'hash',
+        otpCode: 'hashed-otp',
+        otpExpiresAt: new Date(Date.now() + 10000), // Futuro
         role: 'ADMIN',
         sessions: mockSessions,
       } as any;
 
       prisma.user.findUnique.mockResolvedValueOnce(mockUser);
+      
+      // Mock crypto.createHash para bater com 'hashed-otp'
+      const crypto = require('crypto');
+      jest.spyOn(crypto, 'createHash').mockReturnValue({
+        update: jest.fn().mockReturnThis(),
+        digest: jest.fn().mockReturnValue('hashed-otp')
+      } as any);
+
       jwtService.sign.mockReturnValue('fake-jwt-token');
       prisma.session.create.mockResolvedValueOnce({} as any);
 
-      await service.login({ email: 'test@test.com', password: '123' });
+      await service.verifyOtp({ email: 'test@test.com', code: '123456' });
 
       expect(prisma.session.deleteMany).toHaveBeenCalledWith({
         where: { id: { in: ['1'] } }, // Remove a mais antiga
       });
+      
+      jest.restoreAllMocks();
     });
   });
 

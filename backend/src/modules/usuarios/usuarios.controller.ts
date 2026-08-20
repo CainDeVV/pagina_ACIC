@@ -13,6 +13,7 @@ import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 import { AdminAuth } from '../../common/decorators/admin-auth.decorator';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { UserRole } from '@prisma/client';
 
 @ApiTags('Usuarios')
@@ -50,8 +51,9 @@ export class UsuariosController {
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUsuarioDto: UpdateUsuarioDto,
+    @CurrentUser() user: any,
   ) {
-    return this.usuariosService.update(id, updateUsuarioDto);
+    return this.usuariosService.update(id, updateUsuarioDto, user.sub);
   }
 
   @ApiOperation({ summary: 'Remover usuário' })
